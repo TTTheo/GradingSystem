@@ -1,3 +1,5 @@
 # Ignore compiled class files
 *.class
 tags
+.DS_STORE
+.Trashes
