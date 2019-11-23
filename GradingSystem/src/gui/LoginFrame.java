@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import backend.UserBackend;
 import objects.User;
 
+// Reuses parts of ATM's Login class
 public class LoginFrame extends JFrame {
 	private JPanel contentPane;
 	private JLabel usernameLabel;
@@ -23,7 +24,7 @@ public class LoginFrame extends JFrame {
 	private JButton loginBtn;
 	private JButton signupBtn;
 
-	// userBackend is an "API" that we can call.
+	// userBackend exposes functions that we can call.
 	private UserBackend userBackend;
 	
 	public LoginFrame() {
@@ -87,10 +88,8 @@ public class LoginFrame extends JFrame {
 				try {
 					User login = userBackend.loginUser(user, pass);
 					if (login == null) {
-						// Invalid login
 						alert("Invalid login, try again");
 					} else {
-						// Successful login
 						alert("Login successful!");
 					}
 				} catch (SQLException ex) {
@@ -99,6 +98,8 @@ public class LoginFrame extends JFrame {
 			}
 		}); 
 
+		// This function should get and validate user input
+		// then call the backend eg: userBackend.signup(user, pass);
 		signupBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				alert("Not implemented yet!");

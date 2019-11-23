@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public abstract class Dao<T> {
 	final String url = "jdbc:sqlite:grader.db";
-	private Connection conn;
 
 	// Calls executeUpdate in a try-with-resources statement 
 	// Automatically closes connections and statements
@@ -29,6 +28,7 @@ public abstract class Dao<T> {
 		return conn;
 	}
 
+	// Implement these later
 	// public abstract boolean insert(T t);
 	// public abstract boolean delete(String s);
 	// public abstract boolean update(T t);
