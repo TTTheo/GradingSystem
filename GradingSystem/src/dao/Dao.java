@@ -21,16 +21,11 @@ public abstract class Dao<T> {
 		}
 	}
 
-	public abstract ArrayList<T> executeQuery(String query) throws SQLException;
-
 	public Connection getConnection() throws SQLException {
 		Connection conn = DriverManager.getConnection(url);
 		return conn;
 	}
 
-	// Implement these later
-	// public abstract boolean insert(T t);
-	// public abstract boolean delete(String s);
-	// public abstract boolean update(T t);
-	// public abstract T select(String s);
+	public abstract ArrayList<T> executeQuery(String query) throws SQLException;
+	public abstract void insert(T t) throws SQLException;
 }

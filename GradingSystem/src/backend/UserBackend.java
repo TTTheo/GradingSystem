@@ -25,4 +25,19 @@ public class UserBackend {
 		User existingUser = userList.get(0);
 		return existingUser;
 	}
+
+	// Adds a user to the database.
+	// Returns null if another user already exists with the same username.
+	public User signUp(String user, String pass) throws SQLException {
+		ArrayList<User> userList = dao.getUsersByName(user);
+
+		if (userList.size() != 0) {
+			// username already exists
+			return null;
+		}
+
+		User newUser = new User(user, pass);
+		dao.insert(newUser);
+		return newUser;
+	}
 }

@@ -102,7 +102,18 @@ public class LoginFrame extends JFrame {
 		// then call the backend eg: userBackend.signup(user, pass);
 		signupBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				alert("Not implemented yet!");
+				String user = username.getText();
+				String pass = String.valueOf(password.getPassword());
+				try {
+					User newUser = userBackend.signUp(user, pass);
+					if (newUser == null) {
+						alert("Username " + user + " already exists!");
+					} else {
+						alert("Successfully signed up");
+					}
+				} catch (SQLException ex) {
+				    alert(ex.toString());
+				}
 			}
 		}); 
 	}

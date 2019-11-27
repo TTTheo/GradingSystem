@@ -30,8 +30,7 @@ public class UserDao extends Dao<User> {
 		return users;
 	}
 
-	// Gets all users with username = user, and password = pass (should just
-	// be one).
+	// Gets all users with username = user, and password = pass (should just be one).
 	public ArrayList<User> getUsersByLogin(String user, String pass) throws SQLException {
 		String query = String.format(
 			"SELECT * FROM User WHERE User.username = '%s' AND User.password = '%s'",
@@ -40,5 +39,25 @@ public class UserDao extends Dao<User> {
 		);
 
 		return executeQuery(query);
+	}
+
+	// Gets users by username
+	public ArrayList<User> getUsersByName(String username) throws SQLException {
+		String query = String.format(
+				"SELECT * FROM User WHERE User.username = '%s'",
+				username
+		);
+
+		return executeQuery(query);
+	}
+
+	public void insert(User user) throws SQLException {
+		String query = String.format(
+				"INSERT INTO User (username, password) VALUES ('%s', '%s')",
+				user.getUsername(),
+				user.getPassword()
+		);
+
+		executeUpdate(query);
 	}
 }
