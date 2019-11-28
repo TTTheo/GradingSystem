@@ -14,7 +14,7 @@ import backend.UserBackend;
 import objects.User;
 
 // Reuses parts of ATM's Login class
-public class LoginFrame extends JFrame {
+public class LoginFrame extends JFrame implements FrameActions {
 	private JPanel contentPane;
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
@@ -36,13 +36,7 @@ public class LoginFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		userBackend = new UserBackend();
-
-		init();
-		addAction();
-	}
-	
-	public void init(){
+		// Create buttons and labels
 		usernameLabel = new JLabel("Username: ");
 		usernameLabel.setBounds(76, 56, 93, 22);
 		contentPane.add(usernameLabel);
@@ -71,16 +65,32 @@ public class LoginFrame extends JFrame {
 		signupBtn = new JButton("Sign up");
 		signupBtn.setBounds(258, 234, 154, 23);
 		contentPane.add(signupBtn);
+		userBackend = new UserBackend();
+
+		// Define button handlers
+		addActions();
 	}
 
-	public void alert(String str){
-		JOptionPane.showMessageDialog(null, str);
+	// Open the semester frame next
+	public void openNext() {
+		SemesterFrame next = new SemesterFrame();
+		next.setVisible(true);
+		dispose();
+	}
+
+	// This is the first window, no previous window exists
+	public void openPrevious() {
+		dispose();
+	}
+
+	public void alert(String message){
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	// Use userBackend as an abstraction. We don't directly look up into
 	// the db or authenticate, just call the backend function "loginUser()"
 	// Handle any exceptions that the backend may throw
-	public void addAction() { 
+	public void addActions() {
 		loginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String user = username.getText();
@@ -90,7 +100,8 @@ public class LoginFrame extends JFrame {
 					if (login == null) {
 						alert("Invalid login, try again");
 					} else {
-						alert("Login successful!");
+					    // Login was successful
+						openNext();
 					}
 				} catch (SQLException ex) {
 					alert(ex.toString());
@@ -110,6 +121,7 @@ public class LoginFrame extends JFrame {
 						alert("Username " + user + " already exists!");
 					} else {
 						alert("Successfully signed up");
+						openNext();
 					}
 				} catch (SQLException ex) {
 				    alert(ex.toString());
