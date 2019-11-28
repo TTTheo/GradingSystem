@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -83,10 +82,6 @@ public class LoginFrame extends JFrame implements FrameActions {
 		dispose();
 	}
 
-	public void alert(String message){
-		JOptionPane.showMessageDialog(null, message);
-	}
-
 	// Use userBackend as an abstraction. We don't directly look up into
 	// the db or authenticate, just call the backend function "loginUser()"
 	// Handle any exceptions that the backend may throw
@@ -98,13 +93,13 @@ public class LoginFrame extends JFrame implements FrameActions {
 				try {
 					User login = userBackend.loginUser(user, pass);
 					if (login == null) {
-						alert("Invalid login, try again");
+						FrameActions.alert("Invalid login, try again");
 					} else {
 					    // Login was successful
 						openNext();
 					}
 				} catch (SQLException ex) {
-					alert(ex.toString());
+					FrameActions.alert(ex.toString());
 				}
 			}
 		}); 
@@ -118,13 +113,13 @@ public class LoginFrame extends JFrame implements FrameActions {
 				try {
 					User newUser = userBackend.signUp(user, pass);
 					if (newUser == null) {
-						alert("Username " + user + " already exists!");
+						FrameActions.alert("Username " + user + " already exists!");
 					} else {
-						alert("Successfully signed up");
+						FrameActions.alert("Successfully signed up");
 						openNext();
 					}
 				} catch (SQLException ex) {
-				    alert(ex.toString());
+				    FrameActions.alert(ex.toString());
 				}
 			}
 		}); 
