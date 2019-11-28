@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
-public class semesterFrame extends JFrame {
+public class SemesterFrame extends JFrame {
 
 	private JPanel contentPane;
 
@@ -18,7 +18,7 @@ public class semesterFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public semesterFrame() {
+	public SemesterFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 362, 392);
 		contentPane = new JPanel();
