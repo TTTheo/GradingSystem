@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -69,6 +70,10 @@ public class LoginFrame extends JFrame implements FrameActions {
 		// Define button handlers
 		addActions();
 	}
+	
+	public void alert(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
 
 	// Open the semester frame next
 	public void openNext() {
@@ -93,13 +98,14 @@ public class LoginFrame extends JFrame implements FrameActions {
 				try {
 					User login = userBackend.loginUser(user, pass);
 					if (login == null) {
-						FrameActions.alert("Invalid login, try again");
+						alert("Invalid login, try again");
 					} else {
 					    // Login was successful
 						openNext();
 					}
 				} catch (SQLException ex) {
-					FrameActions.alert(ex.toString());
+					//FrameActions.alert(ex.toString());
+					alert(ex.toString());
 				}
 			}
 		}); 
@@ -113,13 +119,13 @@ public class LoginFrame extends JFrame implements FrameActions {
 				try {
 					User newUser = userBackend.signUp(user, pass);
 					if (newUser == null) {
-						FrameActions.alert("Username " + user + " already exists!");
+						alert("Username " + user + " already exists!");
 					} else {
-						FrameActions.alert("Successfully signed up");
+						alert("Successfully signed up");
 						openNext();
 					}
 				} catch (SQLException ex) {
-				    FrameActions.alert(ex.toString());
+				    alert(ex.toString());
 				}
 			}
 		}); 

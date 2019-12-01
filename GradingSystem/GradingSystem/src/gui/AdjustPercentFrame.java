@@ -7,19 +7,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class AdjustPercentFrame extends JFrame {
+public class AdjustPercentFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTable table;
-
+	private JScrollPane scrollPane;		
+	private JButton btnSave;
+	private JButton btnUpdate;
 
 
 	/**
@@ -32,8 +37,13 @@ public class AdjustPercentFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		init();
+		addActions();
 		
-		JScrollPane scrollPane = new JScrollPane();
+	}
+	
+	public void init(){
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(26, 30, 337, 283);
 		contentPane.add(scrollPane);
 		
@@ -57,16 +67,40 @@ public class AdjustPercentFrame extends JFrame {
 		scrollPane.setViewportView(table);
         table.isCellEditable(0,2);
         		
-		JButton btnSave = new JButton("Save");
+		btnSave = new JButton("Save");
 		btnSave.setBounds(270, 339, 93, 23);
 		contentPane.add(btnSave);
 		
-		JButton btnUpdate = new JButton("Update");
+		btnUpdate = new JButton("Update");
 		btnUpdate.setBounds(26, 339, 93, 23);
 		contentPane.add(btnUpdate);
 	}
 	
-	
+	public void addActions(){
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+	}
 
+	public void alert(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
 
+	// Open the semester frame next
+	public void openNext() {
+		SemesterFrame next = new SemesterFrame();
+		next.setVisible(true);
+		dispose();
+	}
+
+	// This is the first window, no previous window exists
+	public void openPrevious() {
+		dispose();
+	}
 }

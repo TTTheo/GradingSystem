@@ -8,15 +8,23 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class AddPartFrame extends JFrame {
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class AddPartFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-
+	private JLabel lblCategory;	
+	private JComboBox comboBox;	
+	private JLabel lblNameOfPart;		
+	private JLabel lblPercentage;		
+	private JButton btnAdd;
 	/**
 	 * Create the frame.
 	 */
@@ -27,16 +35,20 @@ public class AddPartFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblCategory = new JLabel("Category:");
+		init();
+		addActions();
+	}
+	
+	public void init(){
+		lblCategory = new JLabel("Category:");
 		lblCategory.setBounds(45, 34, 104, 15);
 		contentPane.add(lblCategory);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setBounds(44, 59, 227, 21);
 		contentPane.add(comboBox);
 		
-		JLabel lblNameOfPart = new JLabel("Name of Part:");
+		lblNameOfPart = new JLabel("Name of Part:");
 		lblNameOfPart.setBounds(45, 113, 155, 15);
 		contentPane.add(lblNameOfPart);
 		
@@ -45,7 +57,7 @@ public class AddPartFrame extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblPercentage = new JLabel("Percentage:");
+		lblPercentage = new JLabel("Percentage:");
 		lblPercentage.setBounds(45, 189, 118, 15);
 		contentPane.add(lblPercentage);
 		
@@ -54,9 +66,32 @@ public class AddPartFrame extends JFrame {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JButton btnAdd = new JButton("Add");
+		btnAdd = new JButton("Add");
 		btnAdd.setBounds(178, 293, 93, 23);
 		contentPane.add(btnAdd);
+	}
+	
+	public void addActions(){
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+	}
+	
+	public void alert(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+	// Open the semester frame next
+	public void openNext() {
+		SemesterFrame next = new SemesterFrame();
+		next.setVisible(true);
+		dispose();
+	}
+
+	// This is the first window, no previous window exists
+	public void openPrevious() {
+		dispose();
 	}
 
 }

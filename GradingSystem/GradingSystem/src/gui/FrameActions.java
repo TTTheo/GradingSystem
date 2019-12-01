@@ -9,7 +9,5 @@ public interface FrameActions {
 
     // Opens a popup window with a message
     // Use this method like this: FrameActions.alert("message here");
-    public static void alert(String message) {
-        JOptionPane.showMessageDialog(null, message);
-    }
+    public void alert(String message);
 }

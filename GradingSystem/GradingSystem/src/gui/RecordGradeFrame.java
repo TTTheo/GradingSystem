@@ -7,17 +7,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class RecordGradeFrame extends JFrame {
+public class RecordGradeFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-
+	private JLabel lblStudentsName;
+	private JLabel lblScore;
+	private JLabel lbltotalScore;
+	private JLabel lblComment;
+	private JButton btnPrevious;	
+	private JButton btnNext;
 
 	/**
 	 * Create the frame.
@@ -29,12 +36,16 @@ public class RecordGradeFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblStudentsName = new JLabel("Student's name");
+		init();
+		addActions();
+	}
+	
+	public void init(){
+		lblStudentsName = new JLabel("Student's name");
 		lblStudentsName.setBounds(50, 26, 100, 15);
 		contentPane.add(lblStudentsName);
 		
-		JLabel lblScore = new JLabel("Score:");
+		lblScore = new JLabel("Score:");
 		lblScore.setBounds(50, 65, 66, 15);
 		contentPane.add(lblScore);
 		
@@ -43,11 +54,11 @@ public class RecordGradeFrame extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lbltotalScore = new JLabel("/total score");
+		lbltotalScore = new JLabel("/total score");
 		lbltotalScore.setBounds(162, 94, 92, 15);
 		contentPane.add(lbltotalScore);
 		
-		JLabel lblComment = new JLabel("Comment:");
+		lblComment = new JLabel("Comment:");
 		lblComment.setBounds(48, 142, 102, 15);
 		contentPane.add(lblComment);
 		
@@ -56,17 +67,41 @@ public class RecordGradeFrame extends JFrame {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JButton btnPrevious = new JButton("Previous");
+		btnPrevious = new JButton("Previous");
+		btnPrevious.setBounds(46, 312, 93, 23);
+		contentPane.add(btnPrevious);
+		
+		btnNext = new JButton("Next");
+		btnNext.setBounds(211, 312, 93, 23);
+		contentPane.add(btnNext);
+	}
+	
+	public void addActions(){
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnPrevious.setBounds(46, 312, 93, 23);
-		contentPane.add(btnPrevious);
 		
-		JButton btnNext = new JButton("Next");
-		btnNext.setBounds(211, 312, 93, 23);
-		contentPane.add(btnNext);
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+	}
+	
+	public void alert(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+	// Open the semester frame next
+	public void openNext() {
+		SemesterFrame next = new SemesterFrame();
+		next.setVisible(true);
+		dispose();
+	}
+
+	// This is the first window, no previous window exists
+	public void openPrevious() {
+		dispose();
 	}
 
 }

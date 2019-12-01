@@ -7,16 +7,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
-public class AddCourseFrame extends JFrame {
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class AddCourseFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-
+	private JLabel lblCourseName;
+	private JLabel lblNumberOfCategories;
+	private JLabel lblApplyOldStructure;	
+	private JComboBox comboBox;	
+	JButton btnNext;
 	/**
 	 * Create the frame.
 	 */
@@ -27,12 +35,16 @@ public class AddCourseFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblCourseName = new JLabel("Course name:");
+		init();
+		addActions();
+	}
+	
+	public void init(){
+		lblCourseName = new JLabel("Course name:");
 		lblCourseName.setBounds(38, 40, 111, 15);
 		contentPane.add(lblCourseName);
 		
-		JLabel lblNumberOfCategories = new JLabel("Number of categories:");
+		lblNumberOfCategories = new JLabel("Number of categories:");
 		lblNumberOfCategories.setBounds(38, 173, 179, 15);
 		contentPane.add(lblNumberOfCategories);
 		
@@ -41,7 +53,7 @@ public class AddCourseFrame extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblApplyOldStructure = new JLabel("Apply old structure:");
+		lblApplyOldStructure = new JLabel("Apply old structure:");
 		lblApplyOldStructure.setBounds(38, 108, 152, 15);
 		contentPane.add(lblApplyOldStructure);
 		
@@ -50,12 +62,35 @@ public class AddCourseFrame extends JFrame {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setBounds(38, 133, 220, 21);
 		contentPane.add(comboBox);
 		
-		JButton btnNext = new JButton("Next");
+		btnNext = new JButton("Next");
 		btnNext.setBounds(177, 279, 93, 23);
 		contentPane.add(btnNext);
+	}
+	
+	public void addActions(){
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+	}
+	
+	public void alert(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+	// Open the semester frame next
+	public void openNext() {
+		SemesterFrame next = new SemesterFrame();
+		next.setVisible(true);
+		dispose();
+	}
+
+	// This is the first window, no previous window exists
+	public void openPrevious() {
+		dispose();
 	}
 }
