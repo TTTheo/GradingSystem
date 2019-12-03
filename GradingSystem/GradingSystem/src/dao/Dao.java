@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public abstract class Dao<T> {
-	final String url = "jdbc:sqlite:grader.db";
+	final String url = "jdbc:sqlite:GradingSystem/grader.db";
 
 	// Calls executeUpdate in a try-with-resources statement 
 	// Automatically closes connections and statements
