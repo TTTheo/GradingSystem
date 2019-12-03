@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
+import backend.CourseBackend;
 import backend.UserBackend;
 import objects.User;
 
@@ -25,6 +26,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 	private JButton signupBtn;
 
 	// userBackend exposes functions that we can call.
+	private User currentUser;
 	private UserBackend userBackend;
 	
 	public LoginFrame() {
@@ -77,6 +79,8 @@ public class LoginFrame extends JFrame implements FrameActions {
 
 	// Open the semester frame next
 	public void openNext() {
+		CourseBackend cb = new CourseBackend(currentUser);
+		// should pass cb to the semester frame
 		SemesterFrame next = new SemesterFrame();
 		next.setVisible(true);
 		dispose();
@@ -101,6 +105,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 						alert("Invalid login, try again");
 					} else {
 					    // Login was successful
+						currentUser = login;
 						openNext();
 					}
 				} catch (SQLException ex) {
@@ -121,6 +126,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 					if (newUser == null) {
 						alert("Username " + user + " already exists!");
 					} else {
+						currentUser = newUser;
 						alert("Successfully signed up");
 						openNext();
 					}
