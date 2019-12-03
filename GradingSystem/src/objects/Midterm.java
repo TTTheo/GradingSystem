@@ -1,5 +1,5 @@
 package objects;
 
-public class Midterm extends Work{
+public class Midterm extends Category{
 
 }

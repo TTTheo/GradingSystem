@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import backend.UserBackend;
 import objects.User;
+import java.awt.Font;
 
 // Reuses parts of ATM's Login class
 public class LoginFrame extends JFrame implements FrameActions {
@@ -19,6 +20,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
 	private JLabel signupLabel;
+	private JLabel welcomeLabel ;
 	private JTextField username;
 	private JPasswordField password;
 	private JButton loginBtn;
@@ -31,6 +33,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 457, 320);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -38,33 +41,38 @@ public class LoginFrame extends JFrame implements FrameActions {
 
 		// Create buttons and labels
 		usernameLabel = new JLabel("Username: ");
-		usernameLabel.setBounds(76, 56, 93, 22);
+		usernameLabel.setBounds(71, 100, 74, 32);
 		contentPane.add(usernameLabel);
 
 		passwordLabel = new JLabel("Password:");
-		passwordLabel.setBounds(76, 103, 74, 15);
+		passwordLabel.setBounds(71, 144, 74, 32);
 		contentPane.add(passwordLabel);
 
 		signupLabel = new JLabel("Don't have an account?");
-		signupLabel.setBounds(48, 238, 200, 15);
+		signupLabel.setBounds(257, 204, 200, 15);
 		contentPane.add(signupLabel);
 
 		username = new JTextField();
-		username.setBounds(158, 57, 179, 21);
+		username.setBounds(157, 100, 198, 32);
 		contentPane.add(username);
 		username.setColumns(10);
 
 		password = new JPasswordField();
-		password.setBounds(160, 100, 177, 21);
+		password.setBounds(157, 144, 198, 32);
 		contentPane.add(password);
 
 		loginBtn = new JButton("Login");
-		loginBtn.setBounds(173, 170, 93, 23);
+		loginBtn.setBounds(89, 222, 116, 23);
 		contentPane.add(loginBtn);
 
 		signupBtn = new JButton("Sign up");
-		signupBtn.setBounds(258, 234, 154, 23);
+		signupBtn.setBounds(278, 222, 116, 23);
 		contentPane.add(signupBtn);
+		
+		welcomeLabel = new JLabel("Welcom to Grading System");
+		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 20));
+		welcomeLabel.setBounds(112, 31, 251, 57);
+		contentPane.add(welcomeLabel);
 		userBackend = new UserBackend();
 
 		// Define button handlers
@@ -72,7 +80,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 	}
 	
 	public void alert(String message){
-        JOptionPane.showMessageDialog(null, message);
+        JOptionPane.showMessageDialog(this, message);
     }
 
 	// Open the semester frame next

@@ -8,15 +8,15 @@ public class Course {
 	private List<Instructor> instructors ; 
 	private int capacity ;
 	private List<Student> students ;
-	private List<Work> works ;
+	private List<Category> categories ;
 	
-	public Course(String name, String cid, List<Instructor> instructors, int capacity, List<Student> students, List<Work> works) {
+	public Course(String name, String cid, List<Instructor> instructors, int capacity, List<Student> students, List<Category> categories) {
 		this.name = name ;
 		this.cid = cid ;
 		this.instructors = instructors ;
 		this.capacity = capacity ;
 		this.students = students ;
-		this.works = works ;
+		this.categories = categories ;
 	}
 
 	public String getName() {
@@ -59,13 +59,15 @@ public class Course {
 		this.students = students;
 	}
 
-	public List<Work> getWorks() {
-		return works;
+	public List<Category> getCategories() {
+		return categories;
 	}
 
-	public void setWorks(List<Work> works) {
-		this.works = works;
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
+
+	
 	
 	
 }
