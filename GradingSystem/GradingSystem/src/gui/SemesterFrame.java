@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import backend.CourseBackend;
 public class SemesterFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
@@ -21,6 +22,8 @@ public class SemesterFrame extends JFrame implements FrameActions{
 	private JLabel lblSemester;
 	private JComboBox comboBox;
 	private JButton btnSure;
+
+	private CourseBackend backend = new CourseBackend();
 
 	/**
 	 * Create the frame.
@@ -65,15 +68,15 @@ public class SemesterFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
+	// Open ?? next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 
-	// This is the first window, no previous window exists
+	// Go back to the login page
 	public void openPrevious() {
+	    LoginFrame login = new LoginFrame();
+	    login.setVisible(true);
 		dispose();
 	}
 }
