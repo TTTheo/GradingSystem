@@ -1,9 +1,12 @@
 package objects;
 
+import java.util.*;
+
 public class Semester {
     private String term;
     private int year;
-
+    private List<String> cid ;
+    
     public Semester() {
         term = "";
         year = 0;
@@ -29,4 +32,13 @@ public class Semester {
     public void setYear(int year) {
         this.year = year;
     }
+
+	public List<String> getCid() {
+		return cid;
+	}
+
+	public void setCid(List<String> cid) {
+		this.cid = cid;
+	}
+    
 }
