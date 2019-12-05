@@ -13,6 +13,7 @@ import backend.CourseBackend;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 public class SemesterFrame extends JFrame implements FrameActions{
 
@@ -40,8 +41,17 @@ public class SemesterFrame extends JFrame implements FrameActions{
 		contentPane.setLayout(null);
 		String[][] data = {{"2019", "Fall","1"},{"2020", "Spring","1"} }; 
 		String[] columnNames = { "Year", "Season", "Number of Courses" };
+
 		semesterTable = new JTable(data, columnNames);
-		
+		DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
+		semesterTable.setModel(tableModel);
+
 		semesterTable.setBounds(52, 69, 333, 221);
 		semesterTable.addMouseListener(new java.awt.event.MouseAdapter() {
 	            public void mouseClicked(java.awt.event.MouseEvent evt) {
