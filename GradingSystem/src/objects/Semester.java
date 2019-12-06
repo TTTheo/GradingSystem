@@ -4,17 +4,32 @@ import java.util.*;
 
 public class Semester {
     private String term;
-    private int year;
-    private List<String> cid ;
-    
+    private Integer year;
+    private List<Course> courses ;
+
+    public static final String[] TERMS = new String[] {"SPRING","SUMMER","FALL","WINTER"};
+
+    @Override
+    public String toString() {
+        return term + " " + year;
+    }
+
     public Semester() {
-        term = "";
-        year = 0;
+        this("", 0, new ArrayList<Course>());
     }
 
     public Semester(String term, int year) {
+        this(term, year, new ArrayList<Course>());
+    }
+
+    public Semester(String term, int year, ArrayList<Course> courses) {
         this.term = term;
         this.year = year;
+        this.courses = courses;
+    }
+
+    public Integer getNumCourses () {
+        return courses.size();
     }
 
     public String getTerm() {
@@ -25,7 +40,7 @@ public class Semester {
         this.term = term;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
@@ -33,12 +48,16 @@ public class Semester {
         this.year = year;
     }
 
-	public List<String> getCid() {
-		return cid;
-	}
+    public List<Course> getCourses() {
+        return courses;
+    }
 
-	public void setCid(List<String> cid) {
-		this.cid = cid;
-	}
-    
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public static boolean isValidTerm(String term) {
+        term = term.toUpperCase();
+        return Arrays.asList(TERMS).contains(term);
+    }
 }

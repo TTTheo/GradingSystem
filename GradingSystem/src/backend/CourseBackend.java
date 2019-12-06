@@ -32,6 +32,10 @@ public class CourseBackend {
         return currentSemester;
     }
 
+    public void addSemester(Semester s) throws SQLException {
+        semesterDao.insert(s);
+    }
+
     public void setCurrentSemester(Semester currentSemester) {
         this.currentSemester = currentSemester;
     }

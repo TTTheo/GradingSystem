@@ -16,7 +16,7 @@ public class SemesterDao extends Dao<Semester> {
         ) {
             while (rs.next()) {
                 String term = rs.getString("term");
-                int year = rs.getObject("year", Integer.class);
+                Integer year = (Integer) rs.getObject("year");
                 Semester sem = new Semester(term, year);
                 semesters.add(sem);
             }
