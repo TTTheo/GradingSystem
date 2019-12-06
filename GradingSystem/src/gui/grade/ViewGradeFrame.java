@@ -19,19 +19,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Color;
+import javax.swing.JTree;
 
 public class ViewGradeFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private JButton btnApplyStatistics;
-	private JButton btnCalculateFinal;
-	private JButton btnCurveFinalGrade;
 	private JLabel CourseNameLabel;
-	private JButton EditStudentBtn;
-	private JButton ApplyChangesBtn;
-	private JButton DisposeChangesBtn;
 	/**
 	 * Create the frame.
 	 */
@@ -41,7 +36,6 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		init();
 		addActions();
 	}
@@ -50,67 +44,28 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		Object[] title={"name","category1","category2"};
 		Object[][] content=new Object[2][3];
+		contentPane.setLayout(null);
 		table = new JTable(content, title);
 		
 		scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(6, 57, 568, 461);
+		scrollPane.setBounds(203, 57, 568, 461);
 		contentPane.add(scrollPane);
-		
-		btnApplyStatistics = new JButton("Apply Statistics");
-		btnApplyStatistics.setBounds(614, 180, 129, 35);
-		contentPane.add(btnApplyStatistics);
-		
-		btnCalculateFinal = new JButton("Calculate Final");
-		btnCalculateFinal.setBounds(614, 261, 129, 35);
-		contentPane.add(btnCalculateFinal);
-		
-		btnCurveFinalGrade = new JButton("Curve Final Grade");
-		btnCurveFinalGrade.setBounds(614, 339, 129, 35);
-		contentPane.add(btnCurveFinalGrade);
 		
 		CourseNameLabel = new JLabel("<Course Name>");
 		CourseNameLabel.setBounds(32, 18, 172, 16);
 		contentPane.add(CourseNameLabel);
 		
-		EditStudentBtn = new JButton("Edit Student...");
-		EditStudentBtn.setBounds(216, 10, 129, 35);
-		contentPane.add(EditStudentBtn);
+		JButton EditModeBtn = new JButton("Edit Mode");
+		EditModeBtn.setBounds(341, 530, 129, 35);
+		EditModeBtn.setForeground(Color.RED);
+		contentPane.add(EditModeBtn);
 		
-		ApplyChangesBtn = new JButton("Apply Changes");
-		ApplyChangesBtn.setBackground(new Color(0, 0, 255));
-		ApplyChangesBtn.setForeground(Color.BLUE);
-		ApplyChangesBtn.setBounds(118, 519, 129, 35);
-		contentPane.add(ApplyChangesBtn);
-		
-		DisposeChangesBtn = new JButton("Dispose Changes");
-		DisposeChangesBtn.setForeground(Color.red);
-		DisposeChangesBtn.setBounds(343, 519, 129, 35);
-		contentPane.add(DisposeChangesBtn);
-		
-		JButton EditCategoriesBtn = new JButton("Edit Categories...");
-		EditCategoriesBtn.setBounds(374, 10, 129, 35);
-		contentPane.add(EditCategoriesBtn);
-		
-		JButton AddCommentBtn = new JButton("Add Comment");
-		AddCommentBtn.setBounds(614, 98, 129, 35);
-		contentPane.add(AddCommentBtn);
+		JTree CategoryTree = new JTree();
+		CategoryTree.setBounds(15, 57, 188, 457);
+		contentPane.add(CategoryTree);
 	}
 	
 	public void addActions(){
-		btnApplyStatistics.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
-		btnCalculateFinal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
-		btnCurveFinalGrade.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 	}
 	
 	public void alert(String message){

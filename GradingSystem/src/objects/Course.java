@@ -4,18 +4,18 @@ import java.util.*;
 
 public class Course {
 	private String name ;
-	private String cid ;
+	private String courseid ;
 	private List<Student> students ;
 	private List<Category> categories ;
 	
 	public Course(String name) {
 		this.name = name ;
-		this.cid = "C" + User.cidCount++ ;
+		this.courseid = "C" + User.courseidCount++ ;
 	}
 	
 	public Course(String name, List<Student> students, List<Category> categories) {
 		this.name = name ;
-		this.cid = "C" + User.cidCount++ ;
+		this.courseid = "C" + User.cidCount++ ;
 		this.students = students ;
 		this.categories = categories ;
 	}
@@ -28,14 +28,13 @@ public class Course {
 		this.name = name;
 	}
 
-	public String getCid() {
-		return cid;
+	public String getCourseid() {
+		return courseid;
 	}
 
-	public void setCid(String cid) {
-		this.cid = cid;
+	public void setCourseid(String courseid) {
+		this.courseid = courseid;
 	}
-
 
 	public List<Student> getStudents() {
 		return students;

@@ -1,24 +1,14 @@
 package objects;
 
 public class Grade {
-	private String wid ;
-	private String sid ;
 	private String cid ;
+	private String sid ;
 	private double grade ;
 	
-	public Grade(String wid, String sid, String cid, double grade) {
-		this.wid = wid ;
+	public Grade(String cid, String sid, double grade) {
 		this.sid = sid ;
 		this.cid = cid ;
 		this.grade = grade ;
-	}
-
-	public String getWid() {
-		return wid;
-	}
-
-	public void setWid(String wid) {
-		this.wid = wid;
 	}
 
 	public String getSid() {
