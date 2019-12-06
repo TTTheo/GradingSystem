@@ -5,15 +5,18 @@ import java.util.*;
 public class Student {
 	private String fname ;
 	private String lname ;
-	private String gender ;
 	private String sid ;
 	private List<Course> courses ;
 	
-	public Student(String fname, String lname, String gender, String sid, List<Course> courses) {
+	public Student(String fname, String lname) {
 		this.fname = fname ;
 		this.lname = lname ;
-		this.gender = gender ;
-		this.sid = sid ;
+		this.sid = "U" + User.sidCount++ ;
+	}
+	public Student(String fname, String lname, String sid, List<Course> courses) {
+		this.fname = fname ;
+		this.lname = lname ;
+		this.sid = "U" + User.sidCount++ ;
 		this.courses = courses ;
 	}
 
@@ -31,14 +34,6 @@ public class Student {
 
 	public void setLname(String lname) {
 		this.lname = lname;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
 	}
 
 	public String getSid() {

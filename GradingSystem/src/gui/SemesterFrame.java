@@ -58,7 +58,7 @@ public class SemesterFrame extends JFrame implements FrameActions{
 	                jTableMouseClicked(evt);
 	            }
 	        });
-		contentPane.add(semesterTable);
+//		contentPane.add(semesterTable);
 		
 		SemesterMenuLabel = new JLabel("Semester Menu");
 		SemesterMenuLabel.setBounds(57, 20, 135, 37);

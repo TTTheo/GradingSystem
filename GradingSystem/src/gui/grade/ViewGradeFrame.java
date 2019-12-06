@@ -1,4 +1,4 @@
-package gui;
+package gui.grade;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import gui.FrameActions;
+import gui.SemesterFrame;
+
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -13,6 +17,8 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import java.awt.Color;
 
 public class ViewGradeFrame extends JFrame implements FrameActions{
 
@@ -22,12 +28,16 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private JButton btnApplyStatistics;
 	private JButton btnCalculateFinal;
 	private JButton btnCurveFinalGrade;
+	private JLabel CourseNameLabel;
+	private JButton AddStudentBtn;
+	private JButton ApplyChangesBtn;
+	private JButton DisposeChangesBtn;
 	/**
 	 * Create the frame.
 	 */
 	public ViewGradeFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 491, 478);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -37,26 +47,49 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init(){
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 20, 452, 355);
-		contentPane.add(scrollPane);
 		
 		Object[] title={"name","category1","category2"};
 		Object[][] content=new Object[2][3];
 		table = new JTable(content, title);
-		scrollPane.setViewportView(table);
+		
+		scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 46, 568, 461);
+		contentPane.add(scrollPane);
 		
 		btnApplyStatistics = new JButton("Apply Statistics");
-		btnApplyStatistics.setBounds(26, 395, 129, 23);
+		btnApplyStatistics.setBounds(614, 355, 129, 35);
 		contentPane.add(btnApplyStatistics);
 		
 		btnCalculateFinal = new JButton("Calculate Final");
-		btnCalculateFinal.setBounds(165, 395, 129, 23);
+		btnCalculateFinal.setBounds(614, 402, 129, 35);
 		contentPane.add(btnCalculateFinal);
 		
 		btnCurveFinalGrade = new JButton("Curve Final Grade");
-		btnCurveFinalGrade.setBounds(304, 395, 142, 23);
+		btnCurveFinalGrade.setBounds(614, 449, 129, 35);
 		contentPane.add(btnCurveFinalGrade);
+		
+		CourseNameLabel = new JLabel("<Course Name>");
+		CourseNameLabel.setBounds(32, 18, 172, 16);
+		contentPane.add(CourseNameLabel);
+		
+		AddStudentBtn = new JButton("Add Student...");
+		AddStudentBtn.setBounds(614, 80, 129, 35);
+		contentPane.add(AddStudentBtn);
+		
+		ApplyChangesBtn = new JButton("Apply Changes");
+		ApplyChangesBtn.setBackground(new Color(0, 0, 255));
+		ApplyChangesBtn.setForeground(Color.BLUE);
+		ApplyChangesBtn.setBounds(118, 519, 129, 35);
+		contentPane.add(ApplyChangesBtn);
+		
+		DisposeChangesBtn = new JButton("Dispose Changes");
+		DisposeChangesBtn.setForeground(Color.red);
+		DisposeChangesBtn.setBounds(343, 519, 129, 35);
+		contentPane.add(DisposeChangesBtn);
+		
+		JButton EditCategoriesBtn = new JButton("Edit Categories...");
+		EditCategoriesBtn.setBounds(614, 127, 129, 35);
+		contentPane.add(EditCategoriesBtn);
 	}
 	
 	public void addActions(){
@@ -91,5 +124,4 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	public void openPrevious() {
 		dispose();
 	}
-
 }

@@ -5,16 +5,17 @@ import java.util.*;
 public class Course {
 	private String name ;
 	private String cid ;
-	private List<Instructor> instructors ; 
-	private int capacity ;
 	private List<Student> students ;
 	private List<Category> categories ;
 	
-	public Course(String name, String cid, List<Instructor> instructors, int capacity, List<Student> students, List<Category> categories) {
+	public Course(String name) {
 		this.name = name ;
-		this.cid = cid ;
-		this.instructors = instructors ;
-		this.capacity = capacity ;
+		this.cid = "C" + User.cidCount++ ;
+	}
+	
+	public Course(String name, List<Student> students, List<Category> categories) {
+		this.name = name ;
+		this.cid = "C" + User.cidCount++ ;
 		this.students = students ;
 		this.categories = categories ;
 	}
@@ -35,21 +36,6 @@ public class Course {
 		this.cid = cid;
 	}
 
-	public List<Instructor> getInstructors() {
-		return instructors;
-	}
-
-	public void setInstructors(List<Instructor> instructors) {
-		this.instructors = instructors;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
 
 	public List<Student> getStudents() {
 		return students;

@@ -1,6 +1,8 @@
 package objects;
 
 public class User {
+	public static int cidCount = 1 ;
+	public static int sidCount = 1000 ;
 	private String username;
 	private String password;
 
