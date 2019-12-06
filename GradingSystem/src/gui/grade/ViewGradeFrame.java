@@ -29,7 +29,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private JButton btnCalculateFinal;
 	private JButton btnCurveFinalGrade;
 	private JLabel CourseNameLabel;
-	private JButton AddStudentBtn;
+	private JButton EditStudentBtn;
 	private JButton ApplyChangesBtn;
 	private JButton DisposeChangesBtn;
 	/**
@@ -53,28 +53,28 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		table = new JTable(content, title);
 		
 		scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(10, 46, 568, 461);
+		scrollPane.setBounds(6, 57, 568, 461);
 		contentPane.add(scrollPane);
 		
 		btnApplyStatistics = new JButton("Apply Statistics");
-		btnApplyStatistics.setBounds(614, 355, 129, 35);
+		btnApplyStatistics.setBounds(614, 180, 129, 35);
 		contentPane.add(btnApplyStatistics);
 		
 		btnCalculateFinal = new JButton("Calculate Final");
-		btnCalculateFinal.setBounds(614, 402, 129, 35);
+		btnCalculateFinal.setBounds(614, 261, 129, 35);
 		contentPane.add(btnCalculateFinal);
 		
 		btnCurveFinalGrade = new JButton("Curve Final Grade");
-		btnCurveFinalGrade.setBounds(614, 449, 129, 35);
+		btnCurveFinalGrade.setBounds(614, 339, 129, 35);
 		contentPane.add(btnCurveFinalGrade);
 		
 		CourseNameLabel = new JLabel("<Course Name>");
 		CourseNameLabel.setBounds(32, 18, 172, 16);
 		contentPane.add(CourseNameLabel);
 		
-		AddStudentBtn = new JButton("Add Student...");
-		AddStudentBtn.setBounds(614, 80, 129, 35);
-		contentPane.add(AddStudentBtn);
+		EditStudentBtn = new JButton("Edit Student...");
+		EditStudentBtn.setBounds(216, 10, 129, 35);
+		contentPane.add(EditStudentBtn);
 		
 		ApplyChangesBtn = new JButton("Apply Changes");
 		ApplyChangesBtn.setBackground(new Color(0, 0, 255));
@@ -88,8 +88,12 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		contentPane.add(DisposeChangesBtn);
 		
 		JButton EditCategoriesBtn = new JButton("Edit Categories...");
-		EditCategoriesBtn.setBounds(614, 127, 129, 35);
+		EditCategoriesBtn.setBounds(374, 10, 129, 35);
 		contentPane.add(EditCategoriesBtn);
+		
+		JButton AddCommentBtn = new JButton("Add Comment");
+		AddCommentBtn.setBounds(614, 98, 129, 35);
+		contentPane.add(AddCommentBtn);
 	}
 	
 	public void addActions(){

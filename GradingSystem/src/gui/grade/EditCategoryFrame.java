@@ -19,27 +19,24 @@ import javax.swing.JTable;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTable table;
-	private JLabel lblCategoryName;
-	private JLabel lblNumberOfParts;
-	private JLabel lblPercentageOfThis;	
+	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
-	private JButton btnNext;
-	private JButton btnSetParts;
+	private JButton AddNewBtn;
+	private JButton DeleteBtn;
+	private JTextField textField;
+	private JButton EditSelectedButton;
 
 	/**
 	 * Create the frame.
 	 */
 	public EditCategoryFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 372, 449);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -49,62 +46,55 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init(){
-		lblCategoryName = new JLabel("Category name:");
-		lblCategoryName.setBounds(30, 26, 112, 15);
-		contentPane.add(lblCategoryName);
-		
-		lblNumberOfParts = new JLabel("Number of parts in this category:");
-		lblNumberOfParts.setBounds(30, 82, 236, 15);
-		contentPane.add(lblNumberOfParts);
-		
-		textField = new JTextField();
-		textField.setBounds(30, 51, 282, 21);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(30, 107, 282, 21);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		lblPercentageOfThis = new JLabel("Percentage of this category:");
-		lblPercentageOfThis.setBounds(30, 138, 282, 15);
-		contentPane.add(lblPercentageOfThis);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(30, 163, 282, 21);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(30, 249, 282, 107);
+		scrollPane.setBounds(28, 118, 520, 378);
 		contentPane.add(scrollPane);
 		
 		Object[][] content=new Object[2][3];
 		Object[] title={"Name","Percentage","Total score"};
-		table = new JTable(content,title);
-		scrollPane.setViewportView(table);
+		CategoryTable = new JTable(content,title);
+		scrollPane.setViewportView(CategoryTable);
 		
+		AddNewBtn = new JButton("Add New");
+		AddNewBtn.setBounds(605, 291, 129, 35);
+		contentPane.add(AddNewBtn);
 		
-		btnNext = new JButton("Next");
-		btnNext.setBounds(219, 366, 93, 23);
-		contentPane.add(btnNext);
+		DeleteBtn = new JButton("Delete Selected");
+		DeleteBtn.setBounds(605, 197, 129, 35);
+		contentPane.add(DeleteBtn);
 		
-		btnSetParts = new JButton("Set parts");
-		btnSetParts.setBounds(219, 198, 93, 23);
-		contentPane.add(btnSetParts);
+		JLabel CourseNameLabel = new JLabel("<Course Name>");
+		CourseNameLabel.setBounds(28, 46, 163, 16);
+		contentPane.add(CourseNameLabel);
+		
+		JLabel lblNewLabel = new JLabel("Selected:");
+		lblNewLabel.setBounds(605, 119, 79, 16);
+		contentPane.add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setEditable(false);
+		textField.setBounds(605, 145, 130, 26);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JButton ApplyChangesButton = new JButton("Apply Changes");
+		ApplyChangesButton.setForeground(Color.BLUE);
+		ApplyChangesButton.setBackground(Color.BLUE);
+		ApplyChangesButton.setBounds(116, 522, 129, 35);
+		contentPane.add(ApplyChangesButton);
+		
+		JButton CancelButton = new JButton("Cancel");
+		CancelButton.setForeground(Color.RED);
+		CancelButton.setBounds(326, 522, 129, 35);
+		contentPane.add(CancelButton);
+		
+		EditSelectedButton = new JButton("Edit Selected");
+		EditSelectedButton.setBounds(605, 244, 129, 35);
+		contentPane.add(EditSelectedButton);
 	}
 	
 	public void addActions(){
-		btnSetParts.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
-		btnNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 	}
 	
 	public void alert(String message){
