@@ -79,12 +79,12 @@ public class EditGradeFrame extends JFrame implements FrameActions{
 		ApplyChangesBtn = new JButton("Apply Changes");
 		ApplyChangesBtn.setBackground(new Color(0, 0, 255));
 		ApplyChangesBtn.setForeground(Color.BLUE);
-		ApplyChangesBtn.setBounds(614, 443, 129, 35);
+		ApplyChangesBtn.setBounds(614, 436, 129, 35);
 		contentPane.add(ApplyChangesBtn);
 		
 		DisposeChangesBtn = new JButton("Dispose Changes");
 		DisposeChangesBtn.setForeground(Color.red);
-		DisposeChangesBtn.setBounds(614, 490, 129, 35);
+		DisposeChangesBtn.setBounds(614, 483, 129, 35);
 		contentPane.add(DisposeChangesBtn);
 		
 		JButton EditCategoriesBtn = new JButton("Edit Categories...");

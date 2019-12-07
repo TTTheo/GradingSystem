@@ -8,3 +8,4 @@ tags
 # Ignore built files
 bin
 /jgoodies-forms-1.8.0-sources.jar
+/jgoodies-common-1.8.0-sources.jar

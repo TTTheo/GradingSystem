@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Course {
 	private String name ;
-	private String cid ;
+	private String courseid ;
 	private int categoryCount;
 	private ArrayList<Student> students ;
 	private ArrayList<Category> categories ;
@@ -16,7 +16,7 @@ public class Course {
 	public Course(String name) {
 		this();
 		this.name = name ;
-		this.cid = "C" + User.cidCount++ ;
+		this.courseid = "CAS" + User.courseidCount++ ;
 	}
 	
 	public Course(String name, int categoryCount) {
@@ -37,15 +37,23 @@ public class Course {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getCid() {
-		return cid;
-	}
-
-	public void setCid(String cid) {
-		this.cid = cid;
-	}
 	
+	public String getCourseid() {
+		return courseid;
+	}
+
+	public void setCourseid(String courseid) {
+		this.courseid = courseid;
+	}
+
+	public void setCategoryCount(int categoryCount) {
+		this.categoryCount = categoryCount;
+	}
+
+	public void setCategories(ArrayList<Category> categories) {
+		this.categories = categories;
+	}
+
 	public List<Student> getStudents() {
 		return students;
 	}

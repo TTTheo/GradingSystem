@@ -4,6 +4,7 @@ public class User {
 	public static int courseidCount = 1 ;
 	public static int cidCount = 1 ;
 	public static int sidCount = 1 ;
+	public static int pidCount = 1 ;
 	private String username;
 	private String password;
 
