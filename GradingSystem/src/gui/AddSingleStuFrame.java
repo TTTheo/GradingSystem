@@ -22,7 +22,6 @@ public class AddSingleStuFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JTextField textField_2;
 	private JLabel lblStudentName;	
 	private JLabel lblStudentId;	
 	private JLabel lblStudentEmail;	
@@ -66,24 +65,15 @@ public class AddSingleStuFrame extends JFrame implements FrameActions{
 		textField_1.setColumns(10);
 		
 		lblStudentEmail = new JLabel("Email:");
-		lblStudentEmail.setBounds(51, 342, 108, 15);
+		lblStudentEmail.setBounds(51, 286, 108, 15);
 		contentPane.add(lblStudentEmail);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(51, 297, 335, 21);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
-		
 		btnAdd = new JButton("Add");
-		btnAdd.setBounds(293, 419, 93, 23);
+		btnAdd.setBounds(293, 392, 93, 23);
 		contentPane.add(btnAdd);
 		
-		JLabel lblStudentGender = new JLabel("Gender:");
-		lblStudentGender.setBounds(51, 268, 124, 16);
-		contentPane.add(lblStudentGender);
-		
 		textField_3 = new JTextField();
-		textField_3.setBounds(51, 370, 335, 22);
+		textField_3.setBounds(51, 314, 335, 22);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
@@ -103,9 +93,9 @@ public class AddSingleStuFrame extends JFrame implements FrameActions{
 				String fname=textField.getText();
 				String lname=textField_4.getText();
 				String ID=textField_1.getText();
-				String gender=textField_2.getText();
+				//String gender=textField_2.getText();
 				String email=textField_3.getText();
-				Student singleStu=new Student(fname,lname,gender,ID,email);
+				Student singleStu=new Student(fname,lname,ID,null);
 				students.add(singleStu);
 			}
 		});
