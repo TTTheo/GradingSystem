@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 
 import gui.FrameActions;
 import gui.SemesterFrame;
+import objects.Category;
+import objects.Course;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,6 +32,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JButton DeleteBtn;
 	private JTextField textField;
 	private JButton EditSelectedButton;
+	private Course course = new Course();
 
 	/**
 	 * Create the frame.
@@ -45,16 +48,19 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		addActions();
 	}
 	
+	public EditCategoryFrame(Course course) {
+		this();
+		this.course = course;
+		System.out.println(this.course.getName());
+	}
+	
 	public void init(){
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 118, 520, 378);
 		contentPane.add(scrollPane);
 		
-		Object[][] content=new Object[2][3];
-		Object[] title={"Name","Percentage","Total score"};
-		CategoryTable = new JTable(content,title);
-		scrollPane.setViewportView(CategoryTable);
+		this.generateTable(course);
 		
 		AddNewBtn = new JButton("Add New");
 		AddNewBtn.setBounds(605, 291, 129, 35);
@@ -92,6 +98,18 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		EditSelectedButton = new JButton("Edit Selected");
 		EditSelectedButton.setBounds(605, 244, 129, 35);
 		contentPane.add(EditSelectedButton);
+	}
+	
+	public void generateTable(Course course) {
+		int rowToGenerate = 0;
+		rowToGenerate += course.getCategoryCount();
+		for (Category c : course.getCategories()) {
+			rowToGenerate += c.getPartNum();
+		}
+		Object[][] content=new Object[rowToGenerate][4];
+		Object[] title={"Category","Part","Percentage","Total score"};
+		CategoryTable = new JTable(content,title);
+		scrollPane.setViewportView(CategoryTable);
 	}
 	
 	public void addActions(){

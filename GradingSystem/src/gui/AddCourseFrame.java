@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import objects.Course;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -74,6 +77,12 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String courseName = textField.getText();
+				int categoryNum = Integer.parseInt(textField_1.getText());
+				Course newCourse = new Course(courseName, categoryNum);
+				AddCategoryFrame nextFrame = new AddCategoryFrame(newCourse, categoryNum);
+				nextFrame.setVisible(true);
+				dispose();
 			}
 		});
 	}
