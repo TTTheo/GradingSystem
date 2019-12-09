@@ -78,11 +78,15 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String courseName = textField.getText();
-				int categoryNum = Integer.parseInt(textField_1.getText());
-				Course newCourse = new Course(courseName, categoryNum);
-				AddCategoryFrame nextFrame = new AddCategoryFrame(newCourse, categoryNum);
-				nextFrame.setVisible(true);
-				dispose();
+				try {
+					int categoryNum = Integer.parseInt(textField_1.getText());
+					Course newCourse = new Course(courseName, categoryNum);
+					AddCategoryFrame nextFrame = new AddCategoryFrame(newCourse, categoryNum);
+					nextFrame.setVisible(true);
+					dispose();
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Invalid Input for the number of categories");
+				}
 			}
 		});
 	}

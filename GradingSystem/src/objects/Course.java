@@ -65,6 +65,10 @@ public class Course {
 	public List<Category> getCategories() {
 		return categories;
 	}
+	
+	public Category getCategoryAt(int index) {
+		return categories.get(index);
+	}
 
 	public void addCategory(Category category) {
 		this.categories.add(category);

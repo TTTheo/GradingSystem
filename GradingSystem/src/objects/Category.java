@@ -71,6 +71,10 @@ public class Category {
 	public void addPart(Part part) {
 		this.partList.add(part) ;
 	}
+	
+	public Part getPartAt(int index) {
+		return partList.get(index);
+	}
 
 	public ArrayList<Part> getPartList() {
 		return partList;
@@ -78,7 +82,6 @@ public class Category {
 
 	public void setPartList(ArrayList<Part> partList) {
 		this.partList = partList;
-	}
-	
+	}	
 	
 }

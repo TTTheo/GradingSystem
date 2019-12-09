@@ -104,7 +104,24 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnSetParts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int partNum = Integer.parseInt(textField_1.getText());
+				int partNum = 0;
+				double cPercentage = 0;
+				try {
+					partNum = Integer.parseInt(textField_1.getText());
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Invalid Input for the number of parts");
+					return;
+				}
+				try {
+					cPercentage = Double.parseDouble(textField_2.getText());
+					if (cPercentage > 100) {
+						JOptionPane.showMessageDialog(null, "Percentage cover for a single category shall not exceed 100");
+						return;
+					}
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Invalid Input for the percentage of this category");
+					return;
+				}
 				Object[][] content=new Object[partNum][3];
 				Object[] title={"Name","Percentage","Total score"};
 				table = new JTable(content,title);
@@ -118,7 +135,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 				String categoryName = textField.getText();
 				int partNum = Integer.parseInt(textField_1.getText());
 				double cPercentage = Double.parseDouble(textField_2.getText());
-				Category newCategory = new Category (categoryName, partNum, cPercentage);
+				Category newCategory = new Category (categoryName, partNum, course.getCourseid(), cPercentage);
 				
 				
 				//Ready A Single Part for current new Category
@@ -132,31 +149,53 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 								partName = (String) table.getValueAt(rowNum, colNum);
 								break;
 							case 1:
-								percentage = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
-								break;
+								try {
+									percentage = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
+									break;
+								} catch (NumberFormatException e1) {
+									JOptionPane.showMessageDialog(null, "Invalid Input for the percentage of " + partName);
+								}
 							case 2:
-								totalScore = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
-								break;
+								try {
+									totalScore = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
+									break;
+								} catch (NumberFormatException e1) {
+									JOptionPane.showMessageDialog(null, "Invalid Input for the score of " + partName);
+								}
 							default:
-								System.out.println("Something went Wrong");
-								break;
+								//Prevent from passing incorrect data to the next frame
+								return;
 						}						
 					}
-					Part newPart = new Part(partName, totalScore, percentage);
+					Part newPart = new Part(partName, course.getCourseid(), totalScore, percentage);
 					newCategory.addPart(newPart);
 				}
-				
+				double p_PercentageSum = 0;
+				for (Part p : newCategory.getPartList()) {
+					p_PercentageSum += p.getPercentage();
+				}
+				if (p_PercentageSum > cPercentage) {
+					JOptionPane.showMessageDialog(null, "Percentages of Parts DON'T add up, please CHECK");
+					return;
+				}
 				course.addCategory(newCategory);
 				
 				//Check the Number of Remaining Categories to Create
 				if (categoryLeft > 1) {
 					categoryLeft--;
-					System.out.println(categoryLeft);
+					//System.out.println(categoryLeft);
 					AddCategoryFrame nextFrame = new AddCategoryFrame(course, categoryLeft);
 					nextFrame.setVisible(true);
 					dispose();
 				} else {
-//					System.out.println(course.getCategoryCount());
+					//System.out.println(course.getCategoryCount());
+					double c_PercentageSum = 0;
+					for (Category c : course.getCategories()) {
+						c_PercentageSum += c.getPercentage();
+					}
+					if (c_PercentageSum > 100) {
+						JOptionPane.showMessageDialog(null, "Percentages of all Categories DON'T add up, please EDIT THEM");
+					}
 					EditCategoryFrame nextFrame = new EditCategoryFrame(course);
 					nextFrame.setVisible(true);
 					dispose();
