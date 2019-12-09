@@ -1,122 +1,90 @@
 package gui.grade;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
-import gui.FrameActions;
-import gui.SemesterFrame;
-import objects.Category;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.JCheckBox;
+import javax.swing.ScrollPaneConstants;
 import java.util.ArrayList;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import java.awt.Color;
-import javax.swing.JTree;
 
-public class ViewGradeFrame extends JFrame implements FrameActions{
+import objects.Category;
+import objects.Part;
+import java.awt.GridLayout;
 
-	
-	// Frames
+public class ViewGradeFrame extends JFrame {
+
 	private JPanel contentPane;
 	private JTable table;
+	private JLabel lblCourseName;
 	private JScrollPane scrollPane;
-	private JLabel CourseNameLabel;
-	private JTree CategoryTree ;
-	
-	// Objects
-	private List<String> cids = new ArrayList<>() ;
-	
-	
-	
+	private JScrollPane scrollPane_1;
+	private JPanel panel;
+	private ArrayList<Category> category=new ArrayList<Category>();
+
+	/**
+	 * Create the frame.
+	 */
 	public ViewGradeFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 895, 584);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		init();
-		addActions();
-	}
-
-	
-	public void init(){
-		
-		Object[] title={"Student","hw1","hw2","Midterm","Final"};
-		Object[][] content=new Object[2][5];
 		contentPane.setLayout(null);
-		table = new JTable(content, title);
+		init();
+
+	}
+	
+	public void init() {
+		category.add(new Category("Homework",3,"C01",20));
+		ArrayList<Part> partList=new ArrayList<Part>();
+		partList.add(new Part("homework1","C01",100,30));
+		partList.add(new Part("homework2","C01",100,30));
+		partList.add(new Part("homework3","C01",100,40));
+		category.get(0).setPartList(partList);
+		category.add(new Category("Exam",2,"C01",20));
+		ArrayList<Part> partList2=new ArrayList<Part>();
+		partList.add(new Part("midterm","C01",100,60));
+		partList.add(new Part("final","C01",100,40));
+		category.get(1).setPartList(partList2);
+		category.add(new Category("Attending",1,"C01",20));
+		ArrayList<Part> partList3=new ArrayList<Part>();
+		partList.add(new Part("attending","C01",5,100));
+		category.get(2).setPartList(partList3);
+		category.add(new Category("Bonus",1,"C01",0));
+		ArrayList<Part> partList4=new ArrayList<Part>();
+		partList.add(new Part("Bonus","C01",10,100));
+		category.get(3).setPartList(partList4);
 		
-		scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(203, 57, 568, 461);
+		lblCourseName = new JLabel("Course name");
+		lblCourseName.setBounds(62, 35, 118, 16);
+		contentPane.add(lblCourseName);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(190, 78, 617, 387);
 		contentPane.add(scrollPane);
 		
-		CourseNameLabel = new JLabel("<Course Name>");
-		CourseNameLabel.setBounds(32, 18, 172, 16);
-		contentPane.add(CourseNameLabel);
+		table = new JTable();
+		scrollPane.setViewportView(table);
 		
-		JButton EditModeBtn = new JButton("Edit Mode");
-		EditModeBtn.setBounds(341, 530, 129, 35);
-		EditModeBtn.setForeground(Color.RED);
-		contentPane.add(EditModeBtn);
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setBounds(51, 78, 140, 387);
+		contentPane.add(scrollPane_1);
 		
-//		String[] cats = {"hw","exam"} ;
-		CategoryTree = new JTree();
-		DefaultMutableTreeNode cat1 = new DefaultMutableTreeNode("Categories") ;
-		DefaultMutableTreeNode cat1_1 = new DefaultMutableTreeNode("hw") ;
-		DefaultMutableTreeNode cat1_2 = new DefaultMutableTreeNode("exam") ;
-		cat1.add(cat1_1);
-		cat1.add(cat1_2);
-		DefaultMutableTreeNode cat1_1_1 = new DefaultMutableTreeNode("hw1") ;
-		DefaultMutableTreeNode cat1_1_2 = new DefaultMutableTreeNode("hw2") ;
-		DefaultMutableTreeNode cat1_2_1 = new DefaultMutableTreeNode("midterm") ;
-		DefaultMutableTreeNode cat1_2_2 = new DefaultMutableTreeNode("final") ;
-		cat1_1.add(cat1_1_1);
-		cat1_1.add(cat1_1_2);
-		cat1_2.add(cat1_2_1);
-		cat1_2.add(cat1_2_2);
-		DefaultTreeModel treeModel = new DefaultTreeModel(cat1) ;
-		CategoryTree.setModel(treeModel);
-		CategoryTree.setBounds(15, 57, 188, 457);
-		contentPane.add(CategoryTree);
-	}
-	
-//	public void jTree1MouseClicked(java.awt.event.MouseEvent evt) {
-//		  TreeSelectionModel smd = CategoryTree.getSelectionModel();
-//	        if(smd.getSelectionCount() > 0){
-//	            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) CategoryTree.getSelectionPath().getLastPathComponent();
-//	            jTextField1.setText(selectedNode.getUserObject().toString());
-//	        }
-//	                                     
-//
-//	}
-	
-	public void addActions(){
-	}
-	
-	public void alert(String message){
-        JOptionPane.showMessageDialog(null, message);
-    }
-
-	// Open the semester frame next
-	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
-		dispose();
-	}
-
-	// This is the first window, no previous window exists
-	public void openPrevious() {
-		dispose();
+		panel = new JPanel();
+		scrollPane_1.setViewportView(panel);
+		panel.setLayout(new GridLayout(10, 0, 0, 0));
+		
+		ArrayList<JCheckBox> check=new ArrayList<JCheckBox>();
+		for(int i=0;i<category.size();i++) {
+			check.add(new JCheckBox(category.get(i).getName()));
+			panel.add(check.get(i));
+		}
+		
+		
 	}
 }
