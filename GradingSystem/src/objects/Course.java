@@ -3,6 +3,7 @@ package objects;
 import java.util.*;
 
 public class Course {
+	private Semester semster ;
 	private String name ;
 	private String courseid ;
 	private int categoryCount;
@@ -13,17 +14,32 @@ public class Course {
 		//do nothing
 	}
 	
-	public Course(String name) {
-		this();
+	public Course(Semester semester, String name) {
+		this.semster = semester ;
 		this.name = name ;
 		this.courseid = "CAS" + User.courseidCount++ ;
 	}
 	
 	public Course(String name, int categoryCount) {
-		this(name);
+		this.name = name ;
 		this.categoryCount = categoryCount;
 		this.students = new ArrayList<Student>();
 		this.categories = new ArrayList<Category>();
+	}
+	
+	public Course(Semester semester,String name, int categoryCount) {
+		this(semester,name);
+		this.categoryCount = categoryCount;
+		this.students = new ArrayList<Student>();
+		this.categories = new ArrayList<Category>();
+	}
+
+	public Semester getSemster() {
+		return semster;
+	}
+
+	public void setSemster(Semester semster) {
+		this.semster = semster;
 	}
 
 	public String getName() {
@@ -54,7 +70,7 @@ public class Course {
 		this.categories = categories;
 	}
 
-	public List<Student> getStudents() {
+	public ArrayList<Student> getStudents() {
 		return students;
 	}
 
@@ -62,7 +78,7 @@ public class Course {
 		this.students = students;
 	}
 
-	public List<Category> getCategories() {
+	public ArrayList<Category> getCategories() {
 		return categories;
 	}
 	

@@ -14,19 +14,11 @@ import objects.User;
 
 // Logic for everything course related, including
 // semesters, courses, categories, and parts
-public class CourseBackend {
+public class SemesterBackend {
     private SemesterDao semesterDao = new SemesterDao();
 
-    private User currentUser;
     private Semester currentSemester;
-
-    // Temporary constructor until gui is fixed
-    public CourseBackend() {
-    }
-
-    public CourseBackend(User currentUser) {
-        this.currentUser = currentUser;
-    }
+    
 
     public Semester getCurrentSemester() {
         return currentSemester;

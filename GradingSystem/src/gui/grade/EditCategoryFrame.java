@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
+import backend.CourseBackend;
 import gui.FrameActions;
 import gui.SemesterFrame;
 import objects.Category;
@@ -28,6 +29,7 @@ import java.awt.Color;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
+	private CourseBackend coursebackend = new CourseBackend() ;
 	private JPanel contentPane;
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
@@ -36,6 +38,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JTextField textField;
 	private JButton EditSelectedButton, ApplyChangesButton;
 	private Course course = new Course();
+
 
 	/**
 	 * Create the frame.
@@ -47,7 +50,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-//		init();
+		init();
 	}
 	
 	public EditCategoryFrame(Course course) {
@@ -64,6 +67,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		scrollPane.setBounds(28, 118, 520, 378);
 		contentPane.add(scrollPane);
 		
+		this.course = coursebackend.getCourse("CAS1") ;
 		this.generateTable(course);
 		
 		AddNewBtn = new JButton("Add New");
@@ -103,6 +107,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void generateTable(Course course) {
+//		final String[] columnNames = {"Category", "Number of Parts", "Percentage"};
 		CategoryTable = new JTable(new MyTableModel());
 		scrollPane.setViewportView(CategoryTable);
 	}
@@ -158,7 +163,11 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 			// TODO Auto-generated method stub
 			return rowCount;
 		}
-
+		@Override
+		public String getColumnName(int col) {
+		    return columnNames[col];
+		}
+		
 		@Override
 		public int getColumnCount() {
 			// TODO Auto-generated method stub

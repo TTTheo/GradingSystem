@@ -87,7 +87,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 
 	// Open the semester frame next
 	public void openNext() {
-		CourseBackend cb = new CourseBackend(currentUser);
+//		CourseBackend cb = new CourseBackend(currentUser);
 		// should pass cb to the semester frame
 		SemesterFrame next = new SemesterFrame();
 		next.setVisible(true);
