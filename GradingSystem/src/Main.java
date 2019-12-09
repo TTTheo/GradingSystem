@@ -1,4 +1,5 @@
 import gui.LoginFrame;
+import gui.grade.EditCategoryFrame;
 import gui.grade.ViewGradeFrame;
 
 import java.sql.SQLException;
@@ -10,9 +11,11 @@ import objects.* ;
 
 public class Main {
 	public static void main(String[] args) throws SQLException {
-		LoginFrame login = new LoginFrame();
-		login.setVisible(true);
-		
+//		LoginFrame login = new LoginFrame();
+//		login.setVisible(true);
+		EditCategoryFrame frame = new EditCategoryFrame() ;
+		frame.setVisible(true);
+
 		
 		/*
 		 * test

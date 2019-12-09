@@ -9,6 +9,7 @@ import objects.Part;
 
 public class CategoryBackend {
 	private CategoryDao cd = new CategoryDao() ;
+	private PartBackEnd pb = new PartBackEnd() ;
 	private ArrayList<Category> cats ;
 	
 	
@@ -16,6 +17,10 @@ public class CategoryBackend {
 		cats = new ArrayList<>() ;
 		cats = cd.getAll(courseid) ;
 		if(cats.size() == 0) return null ;
+		for(Category cat : cats) {
+			ArrayList<Part> parts = pb.getParts(cat.getCid()) ;
+			cat.setPartList(parts);
+		}
 		return cats ;
 	}
 	
@@ -26,9 +31,8 @@ public class CategoryBackend {
 			cd.insert(category);
 			ArrayList<Part> parts = category.getPartList() ;
 			if(parts != null && parts.size() != 0) {
-				PartDao pd = new PartDao() ;
 				for(Part part : parts) {
-					pd.insert(part);
+					pb.addPart(part) ;
 				}
 			}
 			return true ;
@@ -39,13 +43,20 @@ public class CategoryBackend {
 		cats = cd.select(cid) ;
 		if(cats.size() != 1) return null ;
 		else {
-			return cats.get(0) ;
+			Category cat = cats.get(0) ;
+			cat.setPartList(pb.getParts(cid));
+			return cat ;
 		}
 	}
 	
 	public boolean createCategory(Category category) {
 		try {
 			cd.insert(category);
+			if(category.getPartList() != null) {
+				for(Part part : category.getPartList()){
+					pb.addPart(part) ;
+				}
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,9 +73,8 @@ public class CategoryBackend {
 		if(cd.update(category)) {
 			ArrayList<Part> parts = new ArrayList<>() ;
 			if(parts != null && parts.size() != 0) {
-				PartDao pd = new PartDao() ;
 				for(Part part : parts) {
-					 pd.update(part) ;
+					 pb.updatePart(part) ;
 				}
 			}
 			return true ;

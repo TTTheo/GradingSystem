@@ -8,7 +8,8 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import backend.SemesterBackend;
+
+import backend.* ;
 import objects.Semester;
 
 import javax.swing.JScrollPane;
@@ -37,7 +38,6 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	private JTextField selectedSemesterField;
 	private SemesterBackend backend = new SemesterBackend();
 	private Semester selectedSemester;
-
 	/**
 	 * Create the frame.
 	 */
@@ -48,7 +48,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		final String[] columnNames = { "Year", "Term", "Number of Courses" };
+		final String[] columnNames = { "Year", "Term"};
 
 		Semester demo = new Semester("Fall", 2019);
 		ArrayList<Semester> data;

@@ -6,88 +6,81 @@ import java.util.ArrayList;
 import objects.Course;
 import objects.Category;
 import objects.Part;
-
+import objects.Semester;
 import dao.*;
 
 // Logic for everything specific to one course, including
 // categories, parts, students, grades
 public class CourseBackend {
-    private CategoryDao cd = new CategoryDao();
-    private PartDao pd = new PartDao();
-
-    private Course currentCourse;
-
-    public CourseBackend () {
-        currentCourse = null;
+    private CourseDao cd = new CourseDao() ;
+    private CategoryBackend catb = new CategoryBackend() ;
+    
+    public ArrayList<Course> getAllCourse(Semester semester) {
+    	ArrayList<Course> courses = null;
+    	try {
+			courses = cd.getAll(semester.getTerm(), semester.getYear()) ;
+			if(courses != null) {
+				for(Course course : courses) {
+					ArrayList<Category> cats = catb.getCategories(course.getCourseid()) ;
+					course.setCategories(cats);
+					course.setCategoryCount(cats.size());
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return courses ;
     }
-
-    public CourseBackend(Course course) {
-        currentCourse = course;
+    
+    public Course getCourse(String courseid) {
+    	ArrayList<Course> courses = null ;
+    	Course course = null ;
+    	try {
+    		courses = cd.getCourse(courseid) ;
+    		if(courses == null) return null ;
+    		course = courses.get(0) ;
+    		ArrayList<Category> cats = new ArrayList<>() ;
+    		cats = catb.getCategories(courseid) ;
+    		course.setCategories(cats);
+    		course.setCategoryCount(cats.size());
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	return course ;
     }
-
-    public Course getCurrentCourse() {
-        return currentCourse;
+    
+    public boolean addCourse(Course course) {
+    	if(course == null) return false ;
+    	try {
+    		cd.insert(course);
+    		ArrayList<Category> cats = course.getCategories() ;
+    		if(cats != null) {
+    			for(Category cat : cats) {
+    				catb.addCategory(cat) ;
+    			}
+    		}
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		return false ;
+    	}
+    	return true ;
     }
-
-    public void setCurrentCourse(Course c) {
-        currentCourse = c;
-    }
-
-
-    /* Category Backend Methods */
-
-    // Get all categories belonging to currentCourse
-    // Returns null if course has no categories
-    public ArrayList<Category> getCourseCategories() throws SQLException {
-        ArrayList<Category> categories = cd.getAll(currentCourse.getCourseid());
-        if (categories.size() == 0) {
-            return null;
-        }
-        return categories;
-    }
-
-    // Adds one category (and all its parts, if any) to the currentCourse
-    // Returns true if successfully added, false if category already exists
-    public boolean addCategory(Category category) throws SQLException {
-        // TODO: add check if category already exists
-        cd.insert(category);
-
-        ArrayList<Part> parts = category.getPartList();
-        if (parts != null && parts.size() != 0) {
-            PartDao pd = new PartDao();
-            for (Part part : parts) {
-                pd.insert(part);
-            }
-        }
-        return true;
-    }
-
-
-    /* Part Backend Methods */
-
-    // Get all parts belonging to currentCourse
-    // Returns null if course has no parts
-    public ArrayList<Part> getCourseParts() throws SQLException {
-        ArrayList<Part> parts = pd.getAll(currentCourse.getCourseid());
-        if (parts.size() == 0) {
-            return null;
-        }
-        return parts;
-    }
-
-    // Adds a part to current course, returns true if successful,
-    // returns false if part already exists
-    public boolean addPart(Part part) throws SQLException {
-        // TODO: add check if already exists
-        pd.insert(part);
-        return true;
-    }
-
-    public boolean deletePart(Part part) {
-        return pd.delete(part.getPid());
-    }
-
-    public boolean updatePart(Part part) {
-        return pd.update(part);
+    
+    public boolean updateCourse(Course course) {
+    	if(course == null) return false ;
+    	try {
+    		cd.update(course);
+    		ArrayList<Category> cats = course.getCategories() ;
+    		if(cats != null) {
+    			for(Category cat : cats) {
+    				catb.updateCategory(cat) ;
+    			}
+    		}
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    		return false ;
+    	}
+    	return true ;
     }
 }

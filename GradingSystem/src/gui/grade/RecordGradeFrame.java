@@ -62,7 +62,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	private JTextField textField_2;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private Course course=new Course("CS591",1);
+	private Course course=new Course(new Semester("Spring",2019), "CS591",1);
 	private Category category=new Category("Homework",2,"C01", "CC01",30);
 	private Part part=new Part("P01","Homwork","C09",100,20);
 	private String stuID;
