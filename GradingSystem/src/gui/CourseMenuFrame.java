@@ -7,6 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import gui.grade.RecordGradeFrame;
+import gui.grade.ViewGradeFrame;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
@@ -68,26 +72,35 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnManageStudents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ManageStudentsFrame manageStu=new ManageStudentsFrame();
+				manageStu.setVisible(true);
 			}
 		});
 		
 		btnRecordGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				RecordGradeFrame recordGrade=new RecordGradeFrame();
+				recordGrade.setVisible(true);
 			}
 		});
 		
 		btnViewGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ViewGradeFrame viewGrade=new ViewGradeFrame();
+				viewGrade.setVisible(true);
 			}
 		});
 		
 		btnManageCourseStrcuture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ManageCourseFrame manageCourse=new ManageCourseFrame();
+				manageCourse.setVisible(true);
 			}
 		});
 		
 		btnOriginalGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 	}
