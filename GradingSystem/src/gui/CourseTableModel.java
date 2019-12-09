@@ -1,22 +1,22 @@
 package gui;
 
-import objects.Semester;
+import objects.Course;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 // Source: https://stackoverflow.com/q/12559287/10634812
-public class SemesterTableModel extends AbstractTableModel {
+public class CourseTableModel extends AbstractTableModel {
 
-    private ArrayList<Semester> semesters;
+    private ArrayList<Course> courses;
     private String[] columnNames;
 
-    public SemesterTableModel () {
-        this(new ArrayList<Semester>(), new String[]{});
+    public CourseTableModel() {
+        this(new ArrayList<Course>(), new String[]{});
     }
 
-    public SemesterTableModel (ArrayList<Semester> semesters, String[] columnNames) {
-        this.semesters = semesters;
+    public CourseTableModel(ArrayList<Course> courses, String[] columnNames) {
+        this.courses = courses;
         this.columnNames = columnNames;
     }
 
@@ -31,7 +31,7 @@ public class SemesterTableModel extends AbstractTableModel {
     }
     @Override
     public int getRowCount() {
-        return semesters.size();
+        return courses.size();
     }
 
     @Override
@@ -42,17 +42,14 @@ public class SemesterTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object value = "";
-        Semester s = this.semesters.get(rowIndex);
+        Course c = this.courses.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
-                value = s.getYear();
+                value = c.getName();
                 break;
             case 1:
-                value = s.getTerm();
-                break;
-            case 2:
-                value = s.getNumCourses();
+                value = c.getStudents().size();
                 break;
         }
         return value;
@@ -65,13 +62,13 @@ public class SemesterTableModel extends AbstractTableModel {
 
     // Custom methods for convenience
 
-    public Semester getSemesterAt(int rowIndex) {
-        return semesters.get(rowIndex);
+    public Course getCourseAt(int rowIndex) {
+        return courses.get(rowIndex);
     }
 
-    public void addRow(Semester s) {
-        int rowIndex = semesters.size();
-        semesters.add(rowIndex, s);
+    public void addRow(Course s) {
+        int rowIndex = courses.size();
+        courses.add(rowIndex, s);
         fireTableRowsInserted(rowIndex, rowIndex);
     }
 }

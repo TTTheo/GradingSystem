@@ -8,14 +8,12 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import backend.CourseBackend;
+import backend.SemesterBackend;
 import objects.Semester;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 public class SemesterFrame extends JFrame implements FrameActions {
 
 	private JPanel contentPane;
@@ -37,7 +35,8 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	private JButton addBtn ;
 	private JScrollPane semesterTableScrollPane ;
 	private JTextField selectedSemesterField;
-	private CourseBackend backend = new CourseBackend();
+	private SemesterBackend backend = new SemesterBackend();
+	private Semester selectedSemester;
 
 	/**
 	 * Create the frame.
@@ -102,6 +101,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		contentPane.add(selectedSemesterField);
 		selectedSemesterField.setColumns(10);
 
+		selectedSemester = null;
 		selectedSemesterLabel = new JLabel("Selected Semester");
 		selectedSemesterLabel.setBounds(431, 69, 123, 16);
 		contentPane.add(selectedSemesterLabel);
@@ -122,6 +122,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		termField.setBounds(250, 310, 125, 25);
 		contentPane.add(termField);
 
+		viewBtn.setEnabled(false);  // enabled when a semester is selected
 		addActions();
 	}
 
@@ -155,24 +156,34 @@ public class SemesterFrame extends JFrame implements FrameActions {
 				tableModel.addRow(s);
 			}
 		});
+
+		viewBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				backend.setCurrentSemester(selectedSemester);
+			    openNext();
+			}
+		});
 	}
 
 	public void jTableMouseClicked(java.awt.event.MouseEvent evt) {
         // Get the semester at the selected row index
         int selectedRowIndex = semesterTable.getSelectedRow();
-        Semester selectedSemester = tableModel.getSemesterAt(selectedRowIndex);
+        selectedSemester = tableModel.getSemesterAt(selectedRowIndex);
 
         // set the selected row data into jtextfields
         String semesterInfo = selectedSemester.toString();
         selectedSemesterField.setText(semesterInfo);
+		viewBtn.setEnabled(true);
     }
 
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open cousre view next
+	// Open course view next
 	public void openNext() {
+		CourseFrame c = new CourseFrame(backend);
+		c.setVisible(true);
 		dispose();
 	}
 
