@@ -1,5 +1,6 @@
 package gui;
 
+import backend.CourseBackend;
 import backend.SemesterBackend;
 import objects.Course;
 import objects.Semester;
@@ -17,7 +18,7 @@ public class CourseFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
 
 	private JTable courseTable ;
-	private SemesterTableModel tableModel ;
+	private CourseTableModel tableModel ;
 	private SemesterBackend backend ;
 
 	private JButton viewBtn ;
@@ -49,19 +50,17 @@ public class CourseFrame extends JFrame implements FrameActions{
 		lblSemesterName.setBounds(57, 20, 135, 37);
 		contentPane.add(lblSemesterName);
 
-		Semester demo = new Semester("Fall", 2019);
-		ArrayList<Semester> data;
+		Course demo = new Course("cs591", 1);
+		ArrayList<Course> data;
 		try {
-			data = backend.getAllSemesters();
+			data = backend.getCourses();
 		} catch (SQLException e) {
-			alert(e.toString());
 			data = new ArrayList<>();
 			data.add(demo);
 		}
 
-		tableModel = new SemesterTableModel(data, columnNames);
+		tableModel = new CourseTableModel(data, columnNames);
 		courseTable = new JTable(tableModel);  // Create JTable with custom model
-
 
 		courseTable.setBounds(52, 69, 333, 221);
 		courseTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,17 +109,18 @@ public class CourseFrame extends JFrame implements FrameActions{
 	public void jTableMouseClicked(java.awt.event.MouseEvent evt) {
 		// Get the semester at the selected row index
 		int selectedRowIndex = courseTable.getSelectedRow();
-//		selectedSemester = tableModel.getSemesterAt(selectedRowIndex);
-//
-//		// set the selected row data into jtextfields
-//		String semesterInfo = selectedSemester.toString();
-//		selectedSemesterField.setText(semesterInfo);
+		selectedCourse = tableModel.getCourseAt(selectedRowIndex);
+
+		// set the selected row data into jtextfields
+		String courseInfo = selectedCourse.getName();
+		selectedCourseField.setText(courseInfo);
 		viewBtn.setEnabled(true);
 	}
 
 	public void addActions(){
-		addBtn.addActionListener(new ActionListener() {
+		viewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				openNext();
 			}
 		});
 	}
@@ -129,9 +129,10 @@ public class CourseFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
+	// Open the course menu frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
+		CourseBackend cb = new CourseBackend(selectedCourse);  // TODO: pass this
+		CourseMenuFrame next = new CourseMenuFrame();
 		next.setVisible(true);
 		dispose();
 	}
