@@ -14,6 +14,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class AddPartFrame extends JFrame implements FrameActions{
 
@@ -25,12 +26,13 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	private JLabel lblNameOfPart;		
 	private JLabel lblPercentage;		
 	private JButton btnAdd;
+	private JButton btnNewButton;
 	/**
 	 * Create the frame.
 	 */
 	public AddPartFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 335, 383);
+		setBounds(100, 100, 589, 609);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -41,34 +43,43 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		lblCategory = new JLabel("Category:");
-		lblCategory.setBounds(45, 34, 104, 15);
+		lblCategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblCategory.setBounds(65, 62, 104, 23);
 		contentPane.add(lblCategory);
 		
 		comboBox = new JComboBox();
-		comboBox.setBounds(44, 59, 227, 21);
+		comboBox.setBounds(65, 98, 423, 31);
 		contentPane.add(comboBox);
 		
 		lblNameOfPart = new JLabel("Name of Part:");
-		lblNameOfPart.setBounds(45, 113, 155, 15);
+		lblNameOfPart.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNameOfPart.setBounds(65, 160, 155, 28);
 		contentPane.add(lblNameOfPart);
 		
 		textField = new JTextField();
-		textField.setBounds(45, 138, 226, 21);
+		textField.setBounds(65, 201, 423, 31);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		lblPercentage = new JLabel("Percentage:");
-		lblPercentage.setBounds(45, 189, 118, 15);
+		lblPercentage.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblPercentage.setBounds(67, 258, 118, 23);
 		contentPane.add(lblPercentage);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(45, 214, 226, 21);
+		textField_1.setBounds(67, 294, 421, 31);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		btnAdd = new JButton("Add");
-		btnAdd.setBounds(178, 293, 93, 23);
+		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnAdd.setBounds(395, 394, 93, 23);
 		contentPane.add(btnAdd);
+		
+		btnNewButton = new JButton("Back");
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnNewButton.setBounds(72, 393, 97, 25);
+		contentPane.add(btnNewButton);
 	}
 	
 	public void addActions(){

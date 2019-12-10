@@ -14,6 +14,7 @@ import backend.CourseBackend;
 import backend.UserBackend;
 import objects.User;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 // Reuses parts of ATM's Login class
 public class LoginFrame extends JFrame implements FrameActions {
@@ -34,7 +35,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 	public LoginFrame() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 457, 320);
+		setBounds(100, 100, 684, 451);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -43,37 +44,43 @@ public class LoginFrame extends JFrame implements FrameActions {
 
 		// Create buttons and labels
 		usernameLabel = new JLabel("Username: ");
-		usernameLabel.setBounds(71, 100, 74, 32);
+		usernameLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		usernameLabel.setBounds(151, 153, 102, 32);
 		contentPane.add(usernameLabel);
 
 		passwordLabel = new JLabel("Password:");
-		passwordLabel.setBounds(71, 144, 74, 32);
+		passwordLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		passwordLabel.setBounds(151, 215, 102, 32);
 		contentPane.add(passwordLabel);
 
 		signupLabel = new JLabel("Don't have an account?");
-		signupLabel.setBounds(257, 204, 200, 15);
+		signupLabel.setBounds(449, 305, 200, 15);
 		contentPane.add(signupLabel);
 
 		username = new JTextField();
-		username.setBounds(157, 100, 198, 32);
+		username.setBounds(284, 153, 198, 32);
 		contentPane.add(username);
 		username.setColumns(10);
 
 		password = new JPasswordField();
-		password.setBounds(157, 144, 198, 32);
+		password.setBounds(284, 215, 198, 32);
 		contentPane.add(password);
 
 		loginBtn = new JButton("Login");
-		loginBtn.setBounds(89, 222, 116, 23);
+		loginBtn.setBackground(SystemColor.controlHighlight);
+		loginBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		loginBtn.setBounds(124, 333, 116, 32);
 		contentPane.add(loginBtn);
 
 		signupBtn = new JButton("Sign up");
-		signupBtn.setBounds(278, 222, 116, 23);
+		signupBtn.setBackground(SystemColor.controlHighlight);
+		signupBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		signupBtn.setBounds(463, 333, 116, 32);
 		contentPane.add(signupBtn);
 		
 		welcomeLabel = new JLabel("Welcom to Grading System");
 		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 20));
-		welcomeLabel.setBounds(112, 31, 251, 57);
+		welcomeLabel.setBounds(198, 49, 251, 57);
 		contentPane.add(welcomeLabel);
 		userBackend = new UserBackend();
 

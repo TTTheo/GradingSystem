@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import backend.CategoryBackend;
+import backend.PartBackEnd;
 import gui.FrameActions;
 import gui.SemesterFrame;
 
@@ -17,6 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import java.util.ArrayList;
 
 import objects.Category;
+import objects.Course;
 import objects.Grade;
 import objects.Part;
 import objects.Student;
@@ -24,7 +27,9 @@ import objects.Student;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class ViewGradeFrame extends JFrame implements FrameActions{
 
@@ -49,17 +54,22 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private JButton btnCurveFinalGrade;
 	private String[] finals;
 	private String[] curve;
+	private JButton btnCancel;
+	private Course course;
+	private CategoryBackend categoryBack=new CategoryBackend();
+	private PartBackEnd partBack=new PartBackEnd();
 
 	/**
 	 * Create the frame.
 	 */
-	public ViewGradeFrame() {
+	public ViewGradeFrame(Course course) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 895, 584);
+		setBounds(100, 100, 895, 618);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.course=course;
 		init();
 		addActions();
 	}
@@ -69,6 +79,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init() {
+		/*try {
+			category=categoryBack.getCategories(course.getCourseid());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 		category.add(new Category("Homework",3,"C01",20));
 		ArrayList<Part> partList=new ArrayList<Part>();
 		partList.add(new Part("P01","homework1","C01",100,30));
@@ -90,8 +107,10 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		category.get(3).setPartList(partList4);
 		
 		lblCourseName = new JLabel("Course name");
+		lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblCourseName.setBounds(62, 35, 118, 16);
 		contentPane.add(lblCourseName);
+		lblCourseName.setText(course.getName());
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(190, 78, 617, 387);
@@ -134,20 +153,29 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		panel.setLayout(new GridLayout(10, 0, 0, 0));
 		
 		btnApply = new JButton("Apply");
+		btnApply.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnApply.setBounds(51, 478, 97, 25);
 		contentPane.add(btnApply);
 		
 		btnStatistic = new JButton("Statistic");
-		btnStatistic.setBounds(422, 478, 97, 25);
+		btnStatistic.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnStatistic.setBounds(372, 478, 97, 25);
 		contentPane.add(btnStatistic);
 		
 		btnCalculateFinal = new JButton("Calculate Final");
-		btnCalculateFinal.setBounds(531, 478, 124, 25);
+		btnCalculateFinal.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnCalculateFinal.setBounds(486, 478, 140, 25);
 		contentPane.add(btnCalculateFinal);
 		
 		btnCurveFinalGrade = new JButton("Curve Final Grade");
-		btnCurveFinalGrade.setBounds(667, 478, 140, 25);
+		btnCurveFinalGrade.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnCurveFinalGrade.setBounds(638, 478, 169, 25);
 		contentPane.add(btnCurveFinalGrade);
+		
+		btnCancel = new JButton("Back");
+		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnCancel.setBounds(710, 31, 97, 25);
+		contentPane.add(btnCancel);
 		
 		for(int i=0;i<category.size();i++) {
 			check.add(new JCheckBox(category.get(i).getName()));
@@ -188,6 +216,8 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		btnStatistic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
 			}
 		});
 		
@@ -229,6 +259,12 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					curve.setVisible(true);
 				}
 				
+			}
+		});
+		
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
 			}
 		});
 	}

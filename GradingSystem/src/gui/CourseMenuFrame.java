@@ -16,6 +16,8 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.awt.SystemColor;
 
 public class CourseMenuFrame extends JFrame implements FrameActions{
 
@@ -33,7 +35,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	 */
 	public CourseMenuFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 365, 394);
+		setBounds(100, 100, 574, 583);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -45,27 +47,38 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	public void init(){
 		
 		lblNameOfCourse = new JLabel("Name of course");
-		lblNameOfCourse.setBounds(60, 32, 162, 15);
+		lblNameOfCourse.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNameOfCourse.setBounds(164, 24, 162, 26);
 		contentPane.add(lblNameOfCourse);
 		
 		btnManageStudents = new JButton("Manage students");
-		btnManageStudents.setBounds(59, 81, 216, 23);
+		btnManageStudents.setBackground(SystemColor.controlHighlight);
+		btnManageStudents.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnManageStudents.setBounds(164, 82, 236, 36);
 		contentPane.add(btnManageStudents);
 		
 		btnRecordGrades = new JButton("Record grades");
-		btnRecordGrades.setBounds(60, 128, 215, 23);
+		btnRecordGrades.setBackground(SystemColor.controlHighlight);
+		btnRecordGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnRecordGrades.setBounds(164, 163, 236, 36);
 		contentPane.add(btnRecordGrades);
 		
 		btnViewGrades = new JButton("View grades");
-		btnViewGrades.setBounds(60, 174, 215, 23);
+		btnViewGrades.setBackground(SystemColor.controlHighlight);
+		btnViewGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnViewGrades.setBounds(164, 245, 236, 36);
 		contentPane.add(btnViewGrades);
 		
 		btnManageCourseStrcuture = new JButton("Manage Course Strcuture");
-		btnManageCourseStrcuture.setBounds(60, 221, 215, 23);
+		btnManageCourseStrcuture.setBackground(SystemColor.controlHighlight);
+		btnManageCourseStrcuture.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnManageCourseStrcuture.setBounds(164, 324, 236, 36);
 		contentPane.add(btnManageCourseStrcuture);
 		
 		btnOriginalGrades = new JButton("Original grades");
-		btnOriginalGrades.setBounds(60, 266, 215, 23);
+		btnOriginalGrades.setBackground(SystemColor.controlHighlight);
+		btnOriginalGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnOriginalGrades.setBounds(164, 402, 236, 36);
 		contentPane.add(btnOriginalGrades);
 	}
 	

@@ -17,6 +17,9 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class AddCourseFrame extends JFrame implements FrameActions{
 
@@ -28,12 +31,13 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	private JLabel lblApplyOldStructure;	
 	private JComboBox comboBox;	
 	JButton btnNext;
+	private JButton btnCancel;
 	/**
 	 * Create the frame.
 	 */
 	public AddCourseFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 317, 362);
+		setBounds(100, 100, 552, 585);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,34 +48,47 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		lblCourseName = new JLabel("Course name:");
-		lblCourseName.setBounds(38, 40, 111, 15);
+		lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblCourseName.setBounds(76, 53, 220, 32);
 		contentPane.add(lblCourseName);
 		
 		lblNumberOfCategories = new JLabel("Number of categories:");
-		lblNumberOfCategories.setBounds(38, 173, 179, 15);
+		lblNumberOfCategories.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNumberOfCategories.setBounds(79, 282, 204, 32);
 		contentPane.add(lblNumberOfCategories);
 		
 		textField = new JTextField();
-		textField.setBounds(38, 64, 220, 21);
+		textField.setBounds(76, 98, 361, 32);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		lblApplyOldStructure = new JLabel("Apply old structure:");
-		lblApplyOldStructure.setBounds(38, 108, 152, 15);
+		lblApplyOldStructure.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblApplyOldStructure.setBounds(76, 157, 220, 34);
 		contentPane.add(lblApplyOldStructure);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(38, 198, 220, 21);
+		textField_1.setBounds(76, 327, 361, 32);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		comboBox = new JComboBox();
-		comboBox.setBounds(38, 133, 220, 21);
+		comboBox.setBackground(SystemColor.control);
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		comboBox.setBounds(76, 205, 361, 34);
 		contentPane.add(comboBox);
 		
 		btnNext = new JButton("Next");
-		btnNext.setBounds(177, 279, 93, 23);
+		btnNext.setBackground(SystemColor.controlHighlight);
+		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnNext.setBounds(330, 413, 107, 32);
 		contentPane.add(btnNext);
+		
+		btnCancel = new JButton("Cancel");
+		btnCancel.setBackground(SystemColor.controlHighlight);
+		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnCancel.setBounds(76, 413, 107, 32);
+		contentPane.add(btnCancel);
 	}
 	
 	public void addActions(){

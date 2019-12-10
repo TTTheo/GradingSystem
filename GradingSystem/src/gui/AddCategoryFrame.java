@@ -17,6 +17,7 @@ import gui.grade.EditCategoryFrame;
 import objects.Category;
 import objects.Course;
 import objects.Part;
+import java.awt.Font;
 
 public class AddCategoryFrame extends JFrame implements FrameActions{
 
@@ -33,13 +34,14 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 	private JButton btnSetParts;
 	private Course course;
 	private int categoryLeft;
+	private JButton btnBack;
 
 	/**
 	 * Create the frame.
 	 */
 	public AddCategoryFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 372, 449);
+		setBounds(100, 100, 590, 622);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,49 +58,63 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		lblCategoryName = new JLabel("Category name:");
-		lblCategoryName.setBounds(30, 26, 112, 15);
+		lblCategoryName.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblCategoryName.setBounds(50, 38, 190, 22);
 		contentPane.add(lblCategoryName);
 		
 		lblNumberOfParts = new JLabel("Number of parts in this category:");
-		lblNumberOfParts.setBounds(30, 82, 236, 15);
+		lblNumberOfParts.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNumberOfParts.setBounds(50, 116, 350, 21);
 		contentPane.add(lblNumberOfParts);
 		
 		textField = new JTextField();
-		textField.setBounds(30, 51, 282, 21);
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		textField.setBounds(50, 73, 466, 30);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(30, 107, 282, 21);
+		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		textField_1.setBounds(49, 150, 466, 30);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		lblPercentageOfThis = new JLabel("Percentage of this category:");
-		lblPercentageOfThis.setBounds(30, 138, 282, 15);
+		lblPercentageOfThis.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblPercentageOfThis.setBounds(49, 179, 282, 30);
 		contentPane.add(lblPercentageOfThis);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(30, 163, 282, 21);
+		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		textField_2.setBounds(50, 212, 466, 30);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(30, 249, 282, 107);
+		scrollPane.setBounds(50, 313, 466, 171);
 		contentPane.add(scrollPane);
 		
 		Object[][] content=new Object[1][3];
 		Object[] title={"Name","Percentage","Total score"};
 		table = new JTable(content,title);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		scrollPane.setViewportView(table);
 		
 		
 		btnNext = new JButton("Next");
-		btnNext.setBounds(219, 366, 93, 23);
+		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnNext.setBounds(423, 512, 93, 23);
 		contentPane.add(btnNext);
 		
 		btnSetParts = new JButton("Set parts");
-		btnSetParts.setBounds(219, 198, 93, 23);
+		btnSetParts.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnSetParts.setBounds(391, 262, 125, 23);
 		contentPane.add(btnSetParts);
+		
+		btnBack = new JButton("Back");
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnBack.setBounds(50, 511, 97, 25);
+		contentPane.add(btnBack);
 	}
 	
 	public void addActions(){

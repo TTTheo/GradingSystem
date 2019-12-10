@@ -30,6 +30,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.SystemColor;
 
 public class ManageStudentsFrame extends JFrame implements FrameActions{
 
@@ -69,14 +71,20 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		btnAddStudent = new JButton("Add Student");
+		btnAddStudent.setBackground(SystemColor.controlHighlight);
+		btnAddStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAddStudent.setBounds(650, 293, 170, 23);
 		contentPane.add(btnAddStudent);
 		
 		btnDeleteStudent = new JButton("Delete Student");
+		btnDeleteStudent.setBackground(SystemColor.controlHighlight);
+		btnDeleteStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnDeleteStudent.setBounds(647, 343, 173, 23);
 		contentPane.add(btnDeleteStudent);
 		
 		btnWithdrawStudent = new JButton("Withdraw Student");
+		btnWithdrawStudent.setBackground(SystemColor.controlHighlight);
+		btnWithdrawStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnWithdrawStudent.setBounds(650, 394, 173, 23);
 		contentPane.add(btnWithdrawStudent);
 		
@@ -99,42 +107,53 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		scrollPane.setViewportView(table);
 		
 		lblCourse = new JLabel("Course");
-		lblCourse.setBounds(35, 34, 91, 16);
+		lblCourse.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblCourse.setBounds(35, 27, 91, 23);
 		contentPane.add(lblCourse);
 		lblCourse.setText(course.getName());
 		
 		lblName = new JLabel("Name:");
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblName.setBounds(653, 63, 56, 16);
 		contentPane.add(lblName);
 		
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(647, 92, 173, 22);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		lblId = new JLabel("ID:");
-		lblId.setBounds(653, 130, 56, 16);
+		lblId.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblId.setBounds(653, 127, 78, 19);
 		contentPane.add(lblId);
 		
 		textField_1 = new JTextField();
+		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_1.setBounds(647, 159, 173, 22);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(653, 206, 56, 16);
+		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblEmail.setBounds(653, 199, 78, 23);
 		contentPane.add(lblEmail);
 		
 		textField_2 = new JTextField();
+		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_2.setBounds(647, 233, 173, 22);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
 		btnImportStudent = new JButton("Import Student");
+		btnImportStudent.setBackground(SystemColor.controlHighlight);
+		btnImportStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnImportStudent.setBounds(651, 451, 169, 25);
 		contentPane.add(btnImportStudent);
 		
 		btnCancel = new JButton("Cancel");
+		btnCancel.setBackground(SystemColor.controlHighlight);
+		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCancel.setBounds(35, 451, 97, 25);
 		contentPane.add(btnCancel);
 	}

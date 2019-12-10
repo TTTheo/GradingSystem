@@ -62,9 +62,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	private JTextField textField_2;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private Course course=new Course(new Semester("Spring",2019), "CS591",1);
-	private Category category=new Category("Homework",2,"C01", "CC01",30);
-	private Part part=new Part("P01","Homwork","C09",100,20);
+	private Course course;//=new Course(new Semester("Spring",2019), "CS591",1);
+	private Category category;//=new Category("Homework",2,"C01", "CC01",30);
+	private Part part;//=new Part("P01","Homwork","C09",100,20);
 	private String stuID;
 	private List<Grade> grades=new ArrayList<Grade>();
 	private String[][] data={{"Mary", "U09",""},
@@ -76,7 +76,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	/**
 	 * Create the frame.
 	 */
-	public RecordGradeFrame() {
+	public RecordGradeFrame(Course course,Category category,Part part) {
 		setBackground(new Color(255, 248, 220));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 933, 584);
@@ -85,6 +85,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.course=course;
+		this.category=category;
+		this.part=part;
 		init();
 		addActions();
 	}
@@ -262,7 +265,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		
 		JLabel lblCourseCategory = new JLabel(course.getName()+" - "+category.getName()+" - "+part.getName());
 		lblCourseCategory.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblCourseCategory.setBounds(50, 31, 252, 28);
+		lblCourseCategory.setBounds(50, 31, 496, 28);
 		contentPane.add(lblCourseCategory);
 	}
 	

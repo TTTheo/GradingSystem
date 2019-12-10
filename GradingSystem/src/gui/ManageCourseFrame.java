@@ -11,6 +11,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class ManageCourseFrame extends JFrame implements FrameActions{
 
@@ -23,7 +24,7 @@ public class ManageCourseFrame extends JFrame implements FrameActions{
 	 */
 	public ManageCourseFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 315, 343);
+		setBounds(100, 100, 532, 524);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -35,31 +36,40 @@ public class ManageCourseFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		btnAddCategory = new JButton("Add Category");
-		btnAddCategory.setBounds(67, 52, 164, 23);
+		btnAddCategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnAddCategory.setBounds(167, 111, 188, 37);
 		contentPane.add(btnAddCategory);
 		
 		btnAddPart = new JButton("Add Part");
-		btnAddPart.setBounds(67, 112, 164, 23);
+		btnAddPart.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnAddPart.setBounds(167, 209, 188, 37);
 		contentPane.add(btnAddPart);
 		
 		btnAdjustPercentage = new JButton("Adjust Percentage");
-		btnAdjustPercentage.setBounds(67, 174, 164, 23);
+		btnAdjustPercentage.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnAdjustPercentage.setBounds(167, 307, 188, 37);
 		contentPane.add(btnAdjustPercentage);
 	}
 	
 	public void addActions(){
 		btnAddCategory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AddCategoryFrame addCategory=new AddCategoryFrame();
+				addCategory.setVisible(true);
 			}
 		});
 		
 		btnAddPart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AddPartFrame addPart=new AddPartFrame();
+				addPart.setVisible(true);
 			}
 		});
 		
 		btnAdjustPercentage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AdjustPercentFrame adjust=new AdjustPercentFrame();
+				adjust.setVisible(true);
 			}
 		});
 	}
