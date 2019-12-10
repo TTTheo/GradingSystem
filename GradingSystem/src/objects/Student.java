@@ -13,6 +13,7 @@ public class Student {
 		this.lname = lname ;
 		this.sid = "U" + User.sidCount++ ;
 	}
+
 	public Student(String fname, String lname, String sid, List<Course> courses) {
 		this.fname = fname ;
 		this.lname = lname ;

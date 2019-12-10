@@ -14,6 +14,20 @@ import dao.*;
 public class CourseBackend {
     private CourseDao cd = new CourseDao() ;
     private CategoryBackend catb = new CategoryBackend() ;
+
+    Course currentCourse;
+
+	public CourseBackend () {
+		currentCourse = null;
+	}
+
+	public CourseBackend(Course course) {
+		currentCourse = course;
+	}
+
+	public void setCurrentCourse(Course c) {
+		currentCourse = c;
+	}
     
     public ArrayList<Course> getAllCourse(Semester semester) {
     	ArrayList<Course> courses = null;
@@ -83,4 +97,6 @@ public class CourseBackend {
     	}
     	return true ;
     }
+
+	/* Category Backend Methods */
 }
