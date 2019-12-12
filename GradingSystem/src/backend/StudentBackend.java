@@ -3,7 +3,7 @@ import java.util.*;
 import objects.* ;
 public class StudentBackend {
 	
-	public boolean deleteStudent(String sid) {
+	public boolean deleteStudent(Student student) {
 		return true ;
 	}
 	
