@@ -115,20 +115,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(190, 78, 617, 387);
 		contentPane.add(scrollPane);
-		
-		grades.add(new Grade("U09","P01",50));
-		grades.add(new Grade("U10","P01",89));
-		grades.add(new Grade("U11","P01",100));
-		students.add(new Student("Jerry","U09","1@bu.edu"));
-		students.add(new Student("Emma","U10","2@bu.edu"));
-		students.add(new Student("Lisa","U11","3@bu.edu"));
-		grades.add(new Grade("U09","P02",20));
-		grades.add(new Grade("U10","P02",40));
-		grades.add(new Grade("U11","P02",88));
-		grades.add(new Grade("U09","P05",87));
-		grades.add(new Grade("U10","P05",89));
-		grades.add(new Grade("U11","P05",88));
-		
+
 		//ArrayList<Part> parts=new ArrayList<Part>();
 		for(int i=0;i<category.size();i++) {
 			for(int j=0;j<category.get(i).getPartList().size();j++) {

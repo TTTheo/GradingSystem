@@ -11,10 +11,11 @@ import objects.* ;
 
 public class Main {
 	public static void main(String[] args) throws SQLException {
-//		LoginFrame login = new LoginFrame();
-//		login.setVisible(true);
-		EditCategoryFrame frame = new EditCategoryFrame() ;
-		frame.setVisible(true);
+		LoginFrame login = new LoginFrame();
+		login.setVisible(true);
+//		CourseBackend cb = new CourseBackend() ;
+//		ViewGradeFrame frame = new ViewGradeFrame(cb.getCourse("cs101"));
+//		frame.setVisible(true);
 
 		
 		/*
