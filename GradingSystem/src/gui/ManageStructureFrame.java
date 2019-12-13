@@ -1,5 +1,7 @@
 package gui;
 
+import backend.CourseBackend;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -19,10 +21,14 @@ public class ManageCourseFrame extends JFrame implements FrameActions{
 	private JButton btnAddCategory;
 	private JButton btnAddPart;
 	private JButton btnAdjustPercentage;
+
+	private CourseBackend courseBackend;
 	/**
 	 * Create the frame.
 	 */
-	public ManageCourseFrame() {
+	public ManageCourseFrame(CourseBackend c) {
+	    courseBackend = c;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 532, 524);
 		contentPane = new JPanel();
