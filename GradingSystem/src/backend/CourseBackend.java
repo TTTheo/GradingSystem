@@ -36,16 +36,15 @@ public class CourseBackend {
 
 	// Course methods
 
-	// Gets every single course from the database in semester
+	// Gets every single course semester
 	public ArrayList<Course> getAllCourse(Semester semester) {
 		ArrayList<Course> courses = null;
 		try {
-			courses = courseDao.getAll(semester.getTerm(), semester.getYear());
+			courses = courseDao.getAll(semester);
 			if (courses != null) {
 				for (Course course : courses) {
 					ArrayList<Category> cats = getCategories(course);
 					course.setCategories(cats);
-					course.setCategoryCount(cats.size());
 				}
 			}
 		} catch (SQLException e) {
@@ -65,7 +64,6 @@ public class CourseBackend {
 			course = courses.get(0);
 			ArrayList<Category> cats = getCategories(course);
 			course.setCategories(cats);
-			course.setCategoryCount(cats.size());  // TODO remove this useless field
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

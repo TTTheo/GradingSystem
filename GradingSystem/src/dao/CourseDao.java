@@ -18,10 +18,10 @@ public class CourseDao extends Dao<Course>{
                 ResultSet rs = st.executeQuery(query);
         ) {
             while (rs.next()) {
-            	String term = rs.getString("term") ;
-            	int year = rs.getInt("year") ;
+            	String courseId = rs.getString("course_id") ;
+            	int semesterId = rs.getInt("semester_id");
                 String name = rs.getString("name") ;
-                Course course = new Course(new Semester(term,year),name) ;
+                Course course = new Course(courseId, semesterId, name) ;
                 courses.add(course);
             }
         }
@@ -32,44 +32,49 @@ public class CourseDao extends Dao<Course>{
     public void insert(Course course) throws SQLException {
 
         String query = String.format(
-                "INSERT INTO Course (term, year, courseid, name) VALUES ('%s',%d,'%s', '%s')",
-                course.getSemster().getTerm(),
-                course.getSemster().getYear(),
+                "INSERT INTO Course (course_id, semester_id, name) VALUES ('%s', %d, '%s')",
                 course.getCourseid(),
+                course.getSemesterId(),
                 course.getName()
         );
-
         executeUpdate(query);
     }
 
-    public ArrayList<Course> getAll(String term, int year) throws SQLException {
+    // Get EVERY course (in all semesters)
+    public ArrayList<Course> getAll() throws SQLException {
+        String query = String.format("SELECT * FROM Course");
+        return executeQuery(query);
+    }
+
+    // Get all courses in a semester
+    public ArrayList<Course> getAll(Semester sem) throws SQLException {
         String query = String.format(
-        		"SELECT * FROM Course WHERE term = '%s' and year = %d",
-        		term,
-        		year
+        		"SELECT * FROM Course WHERE semester_id = '%d'",
+        		sem.getSemester_id()
         );
         return executeQuery(query);
     }
-    
-    public ArrayList<Course> getCourse(String courseid) throws SQLException {
+
+    // Get a specific course using the course's ID
+    public ArrayList<Course> getCourse(String courseId) throws SQLException {
     	String query = String.format(
-        		"SELECT * FROM Course WHERE courseid = '%s'",
-        		courseid
+        		"SELECT * FROM Course WHERE course_id = '%s'",
+        		courseId
         );
         return executeQuery(query);
     }
     
     public boolean update(Course course) throws SQLException {
     	String query = String.format(
-        		"UPDATE Course SET term = '%s', year = %d, courseid = '%s', name = '%s'",
-        		course.getSemster().getTerm(),
-        		course.getSemster().getYear(),
-        		course.getCourseid(),
-        		course.getName()
-        		);
+                "UPDATE Course SET course_id = '%s', semester_id = '%d', name = '%s'",
+                course.getCourseid(),
+                course.getSemesterId(),
+                course.getName()
+        );
+
     	try {
     		executeUpdate(query);
-    	}catch(SQLException e) {
+    	} catch(SQLException e) {
     		e.printStackTrace();
     		return false ;
     	}
