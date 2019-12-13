@@ -74,8 +74,6 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
 		
 		btnAdjustPercentage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdjustPercentFrame adjust=new AdjustPercentFrame();
-				adjust.setVisible(true);
 			}
 		});
 	}

@@ -208,7 +208,7 @@ public class PickPartFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		RecordGradeFrame next = new RecordGradeFrame(course, category_c,part_p);
+		RecordGradeFrame next = new RecordGradeFrame(courseBackend, course, category_c,part_p);
 		next.setVisible(true);
 		dispose();
 	}

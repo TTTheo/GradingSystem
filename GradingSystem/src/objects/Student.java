@@ -6,19 +6,34 @@ public class Student {
 	private String sid ;
 	private String fname ;
 	private String lname ;
+
+	private String email;
 	private List<Course> courses ;
 
-	public Student(String fname, String sid) {
+	public Student(String fname, String lname, String sid) {
 		this.fname = fname ;
-		this.sid=sid;
+		this.lname=lname;
+	    this.sid = sid;
 	}
 
-	public Student(String fname, String lname, String sid, List<Course> courses) {
-	    this(fname, lname);
-		this.sid = sid;
+	public Student(String fname, String lname, String sid, String email) {
+		this(fname, lname, sid);
+		this.email = email;
+	}
+
+	public Student(String fname, String lname, String sid, String email, List<Course> courses) {
+	    this(fname, lname, sid, email);
 		this.courses = courses;
 	}
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getFname() {
 		return fname;
 	}
