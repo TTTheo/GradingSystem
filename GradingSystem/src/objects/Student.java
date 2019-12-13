@@ -7,10 +7,10 @@ public class Student {
 	private String fname ;
 	private String lname ;
 	private List<Course> courses ;
-	
-	public Student(String fname, String lname) {
+
+	public Student(String fname, String sid) {
 		this.fname = fname ;
-		this.lname = lname ;
+		this.sid=sid;
 	}
 
 	public Student(String fname, String lname, String sid, List<Course> courses) {
@@ -18,7 +18,7 @@ public class Student {
 		this.sid = sid;
 		this.courses = courses;
 	}
-
+	
 	public String getFname() {
 		return fname;
 	}

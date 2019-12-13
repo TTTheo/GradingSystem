@@ -50,19 +50,19 @@ public class PickPartFrame extends JFrame implements FrameActions{
 	 */
 	public PickPartFrame(CourseBackend c) {
 	    courseBackend = c;
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 572, 589);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.course=course;
 		init();
 		addActions();
 	}
 	
 	public void init(){
-		course=new Course("CS591",4);
+		/*course=new Course("CS591",4);
 		course.setCategories(category);
 		course.setCourseid("CAS01");
 		category.add(new Category("Homework",3,"C01",20));
@@ -82,8 +82,8 @@ public class PickPartFrame extends JFrame implements FrameActions{
 		category.get(2).setPartList(partList3);
 		category.add(new Category("Bonus",1,"C04",0));
 		ArrayList<Part> partList4=new ArrayList<Part>();
-//		partList4.add(new Part("P07","bonus","C04",10,100));
-		category.get(3).setPartList(partList4);
+		partList4.add(new Part("P07","bonus","C04",10,100));
+		category.get(3).setPartList(partList4);*/
 		lblPickACategory = new JLabel("Pick a Category:");
 		lblPickACategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblPickACategory.setBounds(110, 79, 150, 23);
@@ -98,29 +98,29 @@ public class PickPartFrame extends JFrame implements FrameActions{
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		comboBox.setBounds(110, 130, 330, 33);
 		contentPane.add(comboBox);
-		/*try {
-			//category=categoryBack.getCategories(course.getCourseid());
+		try {
+			category=courseBackend.getCategories(course);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		for(int i=0;i<category.size();i++) {
 			comboBox.addItem(category.get(i).getName());
 		}
 		
         
-		comboBox.addItemListener(new ItemListener() {//为college下拉框设置监听器
+		comboBox.addItemListener(new ItemListener() {
 		    @Override
 		    public void itemStateChanged(ItemEvent e) {
 		    	for(int i=0;i<category.size();i++) {
 		    		if(comboBox.getSelectedItem().equals(category.get(i).getName())){
-		    			//try {
-							//part=partBack.getParts(category.get(i).getCid());
+		    			try {
+							part=courseBackend.getParts(category.get(i));
 		    				part=category.get(i).getPartList();
-						//} catch (SQLException e1) {
+						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
-							//e1.printStackTrace();
-						//}
+							e1.printStackTrace();
+						}
 		    		}
 		    	}
 		        comboBox_1.removeAllItems();
@@ -137,13 +137,13 @@ public class PickPartFrame extends JFrame implements FrameActions{
 		
 		for(int i=0;i<category.size();i++) {
 		if(comboBox.getSelectedItem().equals(category.get(i).getName())){
-			//try {
-				//part=partBack.getParts(category.get(i).getCid());
+			try {
+				part=courseBackend.getParts(category.get(i));
 				part=category.get(i).getPartList();
-			//} catch (SQLException e1) {
+			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-			//}
+				e1.printStackTrace();
+			}
 		}
 		}
 	    comboBox_1.removeAllItems();
@@ -208,7 +208,7 @@ public class PickPartFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		RecordGradeFrame next = new RecordGradeFrame(course,category_c,getPart());
+		RecordGradeFrame next = new RecordGradeFrame(course, category_c,part_p);
 		next.setVisible(true);
 		dispose();
 	}

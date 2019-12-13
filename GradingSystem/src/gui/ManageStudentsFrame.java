@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
+import backend.StudentBackend;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -52,19 +53,22 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	private JButton btnCancel;
 	private DefaultTableModel tableModel;
 	private String[][] data;
-	private final String[] columnNames= {"Name","ID","Email"};
+	private final String[] columnNames= {"First Name","Last Name","ID","Email"};
 	private List<Student> students=new ArrayList<Student>();
-	private Course course=new Course("CS591",1);
+	private Course course;//=new Course("CS591",1);
+	private StudentBackend studentBack=new StudentBackend();
+	private JTextField textField_3;
 	/**
 	 * Create the frame.
 	 */
-	public ManageStudentsFrame() {
+	public ManageStudentsFrame(Course course) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 877, 589);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.course=course;
 		init();
 		addActions();
 	}
@@ -92,11 +96,13 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		scrollPane.setBounds(35, 63, 538, 354);
 		contentPane.add(scrollPane);
 		
-		data=new String[students.size()][3];
+		students=studentBack.getAllStudents(course.getCourseid());
+		data=new String[students.size()][4];
 		for(int i=0;i<students.size();i++) {
 			data[i][0]=students.get(i).getFname();
-			data[i][1]=students.get(i).getSid();
-//			/data[i][2]=students.get(i).getEmail();
+			data[i][1]=students.get(i).getLname();
+			data[i][2]=students.get(i).getSid();
+			data[i][3]=students.get(i).getEmail();
 		}
 		tableModel=new DefaultTableModel(data,columnNames){
 			 public boolean isCellEditable(int row, int column){
@@ -112,36 +118,36 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		contentPane.add(lblCourse);
 		lblCourse.setText(course.getName());
 		
-		lblName = new JLabel("Name:");
+		lblName = new JLabel("Fisrt Name:");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblName.setBounds(653, 63, 56, 16);
+		lblName.setBounds(650, 47, 113, 16);
 		contentPane.add(lblName);
 		
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		textField.setBounds(647, 92, 173, 22);
+		textField.setBounds(647, 76, 173, 22);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		lblId = new JLabel("ID:");
 		lblId.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblId.setBounds(653, 127, 78, 19);
+		lblId.setBounds(650, 165, 78, 19);
 		contentPane.add(lblId);
 		
 		textField_1 = new JTextField();
 		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		textField_1.setBounds(647, 159, 173, 22);
+		textField_1.setBounds(647, 197, 173, 22);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		lblEmail = new JLabel("Email:");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblEmail.setBounds(653, 199, 78, 23);
+		lblEmail.setBounds(650, 222, 78, 23);
 		contentPane.add(lblEmail);
 		
 		textField_2 = new JTextField();
 		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		textField_2.setBounds(647, 233, 173, 22);
+		textField_2.setBounds(647, 246, 173, 22);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
@@ -156,6 +162,16 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCancel.setBounds(35, 451, 97, 25);
 		contentPane.add(btnCancel);
+		
+		JLabel lblLastName = new JLabel("Last Name:");
+		lblLastName.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblLastName.setBounds(650, 107, 113, 16);
+		contentPane.add(lblLastName);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(647, 131, 173, 22);
+		contentPane.add(textField_3);
+		textField_3.setColumns(10);
 	}
 	
 	public void addActions(){		
@@ -163,9 +179,11 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int selectedRowIndex = table.getSelectedRow();
                 String selectedName = tableModel.getValueAt(selectedRowIndex,0).toString();
-                String selectedID=tableModel.getValueAt(selectedRowIndex,1).toString();
-                String selectedEmail=tableModel.getValueAt(selectedRowIndex, 2).toString();
+                String selectedLname=tableModel.getValueAt(selectedRowIndex, 1).toString();
+                String selectedID=tableModel.getValueAt(selectedRowIndex,2).toString();
+                String selectedEmail=tableModel.getValueAt(selectedRowIndex, 3).toString();
                 textField.setText(selectedName);
+                textField_3.setText(selectedLname);
                 textField_1.setText(selectedID);
                 textField_2.setText(selectedEmail);
         	}
@@ -174,37 +192,108 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		btnAddStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name=textField.getText();
+				String lname=textField_3.getText();
 				String ID=textField_1.getText();
 				String Email=textField_2.getText();
 				int rowIndex = students.size();
-				//students.add(new Student(name,ID,Email));
-				data=new String[students.size()][3];
-				for(int i=0;i<students.size();i++) {
-					data[i][0]=students.get(i).getFname();
-					data[i][1]=students.get(i).getSid();
-					//data[i][2]=students.get(i).getEmail();
+				Student stu=studentBack.getStudent(ID);
+				if(stu!=null) {
+					alert("The student exist!");
+				}else {
+					students.add(new Student(name,lname,ID,Email));
+					studentBack.addStudent(new Student(name,lname,ID,Email));
+					data=new String[students.size()][4];
+					for(int i=0;i<students.size();i++) {
+						data[i][0]=students.get(i).getFname();
+						data[i][1]=students.get(i).getLname();
+						data[i][2]=students.get(i).getSid();
+						data[i][3]=students.get(i).getEmail();
+					}
+					tableModel=new DefaultTableModel(data,columnNames);
+					table.setModel(tableModel);
 				}
-				tableModel=new DefaultTableModel(data,columnNames);
-				table.setModel(tableModel);
 			}
 		});
 		
 		btnDeleteStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				  int selectedRowIndex = table.getSelectedRow();
-	              String selectedID=tableModel.getValueAt(selectedRowIndex,1).toString();
-	              for(int j=0;j<students.size();j++) {
-	            	  if(students.get(j).getSid().equals(selectedID)) {
-	            		  students.remove(j);
-	            		  data=new String[students.size()][3];
-	            		  for(int i=0;i<students.size();i++) {
-	            			  data[i][0]=students.get(i).getFname();
-	            			  data[i][1]=students.get(i).getSid();
-	            			  //data[i][2]=students.get(i).getEmail();
-	            		  }
-	            		  tableModel=new DefaultTableModel(data,columnNames);
-	            		  table.setModel(tableModel);
-	            		  break;
+				 /* int selectedRowIndex = table.getSelectedRow();
+				  String name = tableModel.getValueAt(selectedRowIndex,0).toString();
+				  String lname=tableModel.getValueAt(selectedRowIndex, 1).toString();
+				  String ID=tableModel.getValueAt(selectedRowIndex,2).toString();
+				  String Email=tableModel.getValueAt(selectedRowIndex, 3).toString();*/
+				  String name=textField.getText();
+				  String lname=textField_3.getText();
+				  String ID=textField_1.getText();
+				  String Email=textField_2.getText();
+	              boolean stuExist=false;
+	              if(!ID.equals("")) {
+	            	  if(name.equals("")&&lname.equals("")&&Email.equals("")) {
+			              for(int j=0;j<students.size();j++) {
+			            	  if(students.get(j).getSid().equals(ID)) {
+			            		  stuExist=true;
+			            		  students.remove(j);
+			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+			            		  data=new String[students.size()][4];
+			            		  for(int i=0;i<students.size();i++) {
+			            			  data[i][0]=students.get(i).getFname();
+			            			  data[i][1]=students.get(i).getLname();
+			            			  data[i][2]=students.get(i).getSid();
+			            			  data[i][3]=students.get(i).getEmail();
+			            		  }
+			            		  tableModel=new DefaultTableModel(data,columnNames);
+			            		  table.setModel(tableModel);
+			            		  break;
+			            	  }
+			              }
+			              if(!stuExist) {
+			            	  alert("Do not exist!");
+			              }
+	            	  }else if(!name.equals("")&&lname.equals("")||name.equals("")&&!lname.equals("")) {
+	            		  alert("Please fill full name!");
+	            	  }else if(!name.equals("")&&!lname.equals("")) {
+	            		  for(int j=0;j<students.size();j++) {
+			            	  if(students.get(j).getSid().equals(ID)&&students.get(j).getFname().equals(name)&&students.get(j).getLname().equals(lname)) {
+			            		  stuExist=true;
+			            		  students.remove(j);
+			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+			            		  data=new String[students.size()][4];
+			            		  for(int i=0;i<students.size();i++) {
+			            			  data[i][0]=students.get(i).getFname();
+			            			  data[i][1]=students.get(i).getLname();
+			            			  data[i][2]=students.get(i).getSid();
+			            			  data[i][3]=students.get(i).getEmail();
+			            		  }
+			            		  tableModel=new DefaultTableModel(data,columnNames);
+			            		  table.setModel(tableModel);
+			            		  break;
+			            	  }
+			              }
+			              if(!stuExist) {
+			            	  alert("Do not exist!");
+			              }
+	            	  }else {
+	            		  for(int j=0;j<students.size();j++) {
+			            	  if(students.get(j).getSid().equals(ID)&&students.get(j).getFname().equals(name)&&
+			            			  students.get(j).getLname().equals(lname)&&students.get(j).getEmail().equals(Email)) {
+			            		  stuExist=true;
+			            		  students.remove(j);
+			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+			            		  data=new String[students.size()][4];
+			            		  for(int i=0;i<students.size();i++) {
+			            			  data[i][0]=students.get(i).getFname();
+			            			  data[i][1]=students.get(i).getLname();
+			            			  data[i][2]=students.get(i).getSid();
+			            			  data[i][3]=students.get(i).getEmail();
+			            		  }
+			            		  tableModel=new DefaultTableModel(data,columnNames);
+			            		  table.setModel(tableModel);
+			            		  break;
+			            	  }
+			              }
+			              if(!stuExist) {
+			            	  alert("Do not exist!");
+			              }
 	            	  }
 	              }
 			}
@@ -212,22 +301,33 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		
 		btnWithdrawStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 int selectedRowIndex = table.getSelectedRow();
-				 String selectedID=tableModel.getValueAt(selectedRowIndex,1).toString();
-				 for(int j=0;j<students.size();j++) {
-					 if(students.get(j).getSid().equals(selectedID)) {
-						 students.remove(j);
-	            		  data=new String[students.size()][3];
+				String name=textField.getText();
+				String lname=textField_3.getText();
+				String ID=textField_1.getText();
+				String Email=textField_2.getText();
+				  int selectedRowIndex = table.getSelectedRow();
+	              String selectedID=tableModel.getValueAt(selectedRowIndex,1).toString();
+	              boolean stuExist=false;
+	              for(int j=0;j<students.size();j++) {
+	            	  if(students.get(j).getSid().equals(selectedID)) {
+	            		  stuExist=true;
+	            		  students.remove(j);
+	            		  //studentBack.deleteStudent(new Student(name,lname,ID,Email));
+	            		  data=new String[students.size()][4];
 	            		  for(int i=0;i<students.size();i++) {
 	            			  data[i][0]=students.get(i).getFname();
-	            			  data[i][1]=students.get(i).getSid();
-	            			  //data[i][2]=students.get(i).getEmail();
+	            			  data[i][1]=students.get(i).getLname();
+	            			  data[i][2]=students.get(i).getSid();
+	            			  data[i][3]=students.get(i).getEmail();
 	            		  }
 	            		  tableModel=new DefaultTableModel(data,columnNames);
 	            		  table.setModel(tableModel);
 	            		  break;
-					 }
-				 }
+	            	  }
+	              }
+	              if(!stuExist) {
+	            	  alert("Do not exist!");
+	              }
 			}
 		});
 		
@@ -244,22 +344,24 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		            for (int j = 0; j < row_total; j++) {
 		                if(j == 0){
 		                    Cell[] cells = sheet.getRow(j);
-		                    System.out.println(cells[0].getContents());
-		                    System.out.println(cells[1].getContents());
-		                    System.out.println(cells[2].getContents());
+		                    //System.out.println(cells[0].getContents());
+		                    //System.out.println(cells[1].getContents());
+		                    //System.out.println(cells[2].getContents());
 		                }else {
 			                Cell[] student=sheet.getRow(j);
-			                //students.add(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents()));
-			                System.out.println(students.get(j-1).getFname());
-		                    System.out.println(students.get(j-1).getSid());
+			                students.add(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents(),student[3].getContents()));
+			                studentBack.addStudent(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents(),student[3].getContents()));
+			                //students.add(new Student(student[0].getContents(),student[1].getContents()));
+			             //   System.out.println(students.get(j-1).getFname());
+		                   // System.out.println(students.get(j-1).getSid());
 		                    //System.out.println(students.get(j-1).getEmail());
 		                }
 		            }
 		            data=new String[students.size()][3];
 		            for(int i=0;i<students.size();i++) {
-	            		data[i][0]=students.get(i).getFname();
-	            		data[i][1]=students.get(i).getSid();
-	            		//data[i][2]=students.get(i).getEmail();
+		            	data[i][1]=students.get(i).getLname();
+		            	data[i][2]=students.get(i).getSid();
+		            	data[i][3]=students.get(i).getEmail();
           			}
 		            tableModel=new DefaultTableModel(data,columnNames);
 		            table.setModel(tableModel);

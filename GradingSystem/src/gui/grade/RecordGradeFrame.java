@@ -12,6 +12,8 @@ import javax.swing.table.TableCellEditor;
 
 import backend.CourseBackend;
 import gui.CourseMenuFrame;
+import backend.GradeBackend;
+import backend.StudentBackend;
 import gui.FrameActions;
 import gui.SemesterFrame;
 import objects.Category;
@@ -19,6 +21,7 @@ import objects.Course;
 import objects.Grade;
 import objects.Part;
 import objects.Semester;
+import objects.Student;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -68,16 +71,22 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	private Part part;//=new Part("P01","Homwork","C09",100,20);
 	private String stuID;
 	private List<Grade> grades=new ArrayList<Grade>();
-	private String[][] data={{"Mary", "U09",""},
-			{"Emma", "U10",""},
-			{"Jerry","U11",""}};
+	private String[][] data;//={{"Mary", "U09",""},
+		//	{"Emma", "U10",""},
+			//{"Jerry","U11",""}};
 	private final String[] columnNames = { "Name", "ID", "Score" };
 	private String editValue=new String("");
+	private StudentBackend studentBack;
+	private ArrayList<Student> students=new ArrayList<Student>();
+	private GradeBackend gradeBack=new GradeBackend();
+	private CourseBackend courseBackend;
 	
 	/**
 	 * Create the frame.
 	 */
-	public RecordGradeFrame(Course course,Category category,Part part) {
+	public RecordGradeFrame(CourseBackend c, Course course,Category category,Part part) {
+	    courseBackend = c;
+
 		setBackground(new Color(255, 248, 220));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 933, 584);
@@ -165,9 +174,15 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		/*String[][] datas= {{"Mary", "U09",String.valueOf(grades.get(0).getGrade())},
 				{"Emma", "U10",String.valueOf(grades.get(1).getGrade())},
 				{"Jerry","U11",String.valueOf(grades.get(2).getGrade())}};*/
-		String[][] datas= {{"Mary", "U09",""},
+		students=studentBack.getAllStudents(course.getCourseid());
+				/*String[][] datas= {{"Mary", "U09",""},
 				{"Emma", "U10",""},
-				{"Jerry","U11",""}};
+				{"Jerry","U11",""}};*/
+		String datas[][]=new String[students.size()][columnNames.length];
+		for(int i=0;i<students.size();i++) {
+			datas[i][0]=students.get(i).getFname();
+			datas[i][1]=students.get(i).getSid();
+		}
 		this.data=datas;
 
 		tableModel=new DefaultTableModel(this.data,columnNames){
@@ -178,8 +193,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 					 return false;
 				 }
              }  
-			 
-
 		};
 		table = new JTable(tableModel) {
 			protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
@@ -231,38 +244,12 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
                 }
                 return retValue;
             }
-			
-			//private static final long serialVersionUID = 1L;
-			public void editingStopped(ChangeEvent changeevent)
-			{
-				int r=getEditingRow();
-				int c=getEditingColumn();
-				//System.out.println(r+"--"+c);
-				editValue = (String)table.getValueAt(r, c);
-				//System.out.println(editValue);
-			    TableCellEditor tablecelleditor = getCellEditor();
-			    if(tablecelleditor != null){
-			    	Object obj = tablecelleditor.getCellEditorValue();
-			     	setValueAt(obj, editingRow, editingColumn);
-			     	String stuName=textField_2.getText();
-			     	//Double newScore=Double.valueOf(textField.getText());		
-			    	Double newScore=Double.parseDouble(obj.toString());	
-			    	//System.out.println(newScore);
-			    	int partID=part.getPid();
-			    	for(int i=0;i<grades.size();i++) {
-			    		if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
-			    			grades.get(i).setGrade(newScore);
-			    			break;
-			    		}
-			    	}		    		
-			        removeEditor();
-		        }
-		    }
 		};
 
 		table.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(table);
 		rewriteKeys();
+		
 		
 		JLabel lblCourseCategory = new JLabel(course.getName()+" - "+category.getName()+" - "+part.getName());
 		lblCourseCategory.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -294,6 +281,32 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				// TODO    
 			}  
 		});
+		
+		textField_2.addKeyListener(new KeyListener(){   
+			public void keyPressed(KeyEvent arg0) {    
+				if(arg0.getKeyChar()==KeyEvent.VK_ENTER){  
+					if(!textField.getText().equals("")) {
+						String comment=textField_2.getText();
+						int selectedRowIndex = table.getSelectedRow();
+				        String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+				        for(int i=0;i<grades.size();i++) {
+				        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
+				        		grades.get(i).setComment(comment);
+				        		gradeBack.updateGrade(grades.get(i));
+				        		alert("Save comment!");
+				        	}
+				        }
+					}			 
+					//System.out.println("!!!!");
+				}   
+			};   
+			public void keyReleased(KeyEvent arg0) {    
+				// TODO 
+			}
+			public void keyTyped(KeyEvent arg0) {    
+				// TODO    
+			}  
+		});
 
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -314,13 +327,32 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	          @Override
 	          public void actionPerformed(ActionEvent e){
 	        	  if(table.getSelectedRow()+1<table.getRowCount()){
-	        		  int row=table.getSelectedRow()+1;
-	        		  int column=table.getSelectedColumn();
-	        		  //table.editCellAt(table.getSelectedRow()+1,table.getSelectedColumn());
-	        		  //table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
-	        		  table.editCellAt(row,column);
-	        		  table.setRowSelectionInterval(row, row);
+        			  table.editCellAt(table.getSelectedRow()+1,2);
+	        		  table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
+	        		  int row=table.getSelectedRow();
 	        		  setNameScore();
+	        		  editValue=tableModel.getValueAt(row-1, 2).toString();
+		        	  //System.out.print(editValue);
+		        	  if(editValue.equals("")) {
+	        			  //updateScore();
+	        		  }else {
+		        	  stuID=tableModel.getValueAt(row-1, 1).toString();	
+        			  double newScore=Double.parseDouble(editValue);
+        			  int partID=part.getPid();
+        			  for(int i=0;i<grades.size();i++) {
+        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
+        					  grades.get(i).setGrade(newScore);
+        					  gradeBack.updateGrade(grades.get(i));
+        					  data[i][2]=String.valueOf(newScore);
+        					  table.updateUI();
+        					  break;
+        				  }
+        			  }
+        			  table.editCellAt(table.getSelectedRow(),2);
+        			  table.setRowSelectionInterval(table.getSelectedRow(), table.getSelectedRow());
+        			  //table.editCellAt(row,2);
+        			 // System.out.println(table.getSelectedRow()+" "+table.getSelectedColumn());
+	        	  }
 	        	  }
 	          }
 		});
@@ -331,14 +363,34 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	          @Override
 	          public void actionPerformed(ActionEvent e){
 	        	  if(table.getSelectedRow()-1>=0){
-	        		  if(!editValue.equals("")) {
-	        			  //updateScore();
-	        		  }	        		 
-	        		  table.editCellAt(table.getSelectedRow()-1,table.getSelectedColumn());
+		        	  table.editCellAt(table.getSelectedRow()-1,2);
 	        		  table.setRowSelectionInterval(table.getSelectedRow()-1, table.getSelectedRow()-1);
 	        		  setNameScore();
+	        		  int row=table.getSelectedRow();
+	        		  editValue=tableModel.getValueAt(row+1, 2).toString();
+		        	  //System.out.print(editValue);
+		        	  if(editValue.equals("")) {
+	        			  //updateScore();
+	        		  }else {
+		        	  stuID=tableModel.getValueAt(table.getSelectedRow()+1, 1).toString();	
+        			  double newScore=Double.parseDouble(editValue);
+        			  int partID=part.getPid();
+        			  for(int i=0;i<grades.size();i++) {
+        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
+        					  grades.get(i).setGrade(newScore);
+        					  gradeBack.updateGrade(grades.get(i));
+        					  data[i][2]=String.valueOf(newScore);
+        					  table.updateUI();
+        					  break;
+        				  }
+        			  }
+        			  table.setRowSelectionInterval(row, row);
+        			  table.editCellAt(row,2);
+	        		  }
+		        	  
 	        	  }
 	          }
+	          
 		});
 		table.setActionMap(up);
 
@@ -350,18 +402,29 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         String selectedName = tableModel.getValueAt(selectedRowIndex,0).toString();
         String selectedScore=tableModel.getValueAt(selectedRowIndex, 2).toString();
         stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+        for(int i=0;i<grades.size();i++) {
+        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(stuID)) {
+        		String comment=grades.get(i).getComment();
+        		if(comment!=null) {
+        			textField_1.setText(comment);
+        		}
+        	}
+        }
         // set the selected row data into jtextfields
         textField_2.setText(selectedName);
         textField.setText(selectedScore);
 	}
 	
 	public void updateScore() {
+		int selectedRowIndex = table.getSelectedRow();
+		stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
 		String stuName=textField_2.getText();
-		Double newScore=Double.valueOf(textField.getText());		
+		double newScore=Double.valueOf(textField.getText());
 		int partID=part.getPid();
 		for(int i=0;i<grades.size();i++) {
 			if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
 				grades.get(i).setGrade(newScore);
+				gradeBack.updateGrade(grades.get(i));
 				this.data[i][2]=String.valueOf(newScore);
 				DefaultTableModel dtm2=(DefaultTableModel)table.getModel();
 				dtm2.setDataVector(this.data,columnNames);
@@ -371,6 +434,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		}
 		//Grade newgrade=new Grade(stuID,partID,newScore);
 	}
+
 	
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
@@ -378,7 +442,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		CourseMenuFrame next = new CourseMenuFrame(new CourseBackend());
+		ViewGradeFrame next = new ViewGradeFrame(courseBackend);
 		next.setVisible(true);
 		dispose();
 	}
@@ -388,3 +452,4 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		dispose();
 	}
 }
+
