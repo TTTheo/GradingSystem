@@ -70,6 +70,7 @@ public class Category {
 
 	public void addPart(Part part) {
 		this.partList.add(part) ;
+		this.partNum ++;
 	}
 	
 	public Part getPartAt(int index) {

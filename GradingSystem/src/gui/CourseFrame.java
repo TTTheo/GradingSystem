@@ -131,7 +131,7 @@ public class CourseFrame extends JFrame implements FrameActions{
 
 	// Open the course menu frame next
 	public void openNext() {
-		CourseBackend cb = new CourseBackend(selectedCourse);  // TODO: pass this
+		//CourseBackend cb = new CourseBackend(selectedCourse);  // TODO: pass this
 		CourseMenuFrame next = new CourseMenuFrame();
 		next.setVisible(true);
 		dispose();

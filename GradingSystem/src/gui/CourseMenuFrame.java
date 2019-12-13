@@ -92,15 +92,15 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		
 		btnRecordGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RecordGradeFrame recordGrade=new RecordGradeFrame();
-				recordGrade.setVisible(true);
+				//RecordGradeFrame recordGrade=new RecordGradeFrame();
+				//recordGrade.setVisible(true);
 			}
 		});
 		
 		btnViewGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ViewGradeFrame viewGrade=new ViewGradeFrame();
-				viewGrade.setVisible(true);
+				//ViewGradeFrame viewGrade=new ViewGradeFrame();
+				//viewGrade.setVisible(true);
 			}
 		});
 		

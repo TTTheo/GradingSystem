@@ -9,6 +9,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import backend.CourseBackend;
+import dao.CategoryDao;
+import dao.CourseDao;
+import dao.PartDao;
+import gui.AddPartFrame;
 import gui.FrameActions;
 import gui.SemesterFrame;
 import objects.Category;
@@ -23,9 +27,12 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
@@ -34,10 +41,11 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
 	private JButton AddNewBtn;
-	private JButton DeleteBtn;
 	private JTextField textField;
-	private JButton EditSelectedButton, ApplyChangesButton;
+	private JButton ApplyChangesButton;
 	private Course course = new Course();
+	private String courseID;
+	private final Action action = new SwingAction();
 
 
 	/**
@@ -50,15 +58,14 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		init();
 	}
 	
 	public EditCategoryFrame(Course course) {
 		this();
 		this.course = course;
+		this.courseID = course.getCourseid();
 		init();
 		addActions();
-//		System.out.println(this.course.getName());
 	}
 	
 	public void init(){
@@ -71,12 +78,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		this.generateTable(course);
 		
 		AddNewBtn = new JButton("Add New");
-		AddNewBtn.setBounds(605, 291, 129, 35);
+		AddNewBtn.setBounds(605, 212, 129, 35);
 		contentPane.add(AddNewBtn);
-		
-		DeleteBtn = new JButton("Delete Selected");
-		DeleteBtn.setBounds(605, 197, 129, 35);
-		contentPane.add(DeleteBtn);
 		
 		JLabel CourseNameLabel = new JLabel(this.course.getName());
 		CourseNameLabel.setBounds(28, 46, 163, 16);
@@ -100,14 +103,9 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		CancelButton.setForeground(Color.RED);
 		CancelButton.setBounds(326, 522, 129, 35);
 		contentPane.add(CancelButton);
-		
-		EditSelectedButton = new JButton("Edit Selected");
-		EditSelectedButton.setBounds(605, 244, 129, 35);
-		contentPane.add(EditSelectedButton);
 	}
 	
 	public void generateTable(Course course) {
-//		final String[] columnNames = {"Category", "Number of Parts", "Percentage"};
 		CategoryTable = new JTable(new MyTableModel());
 		scrollPane.setViewportView(CategoryTable);
 	}
@@ -118,33 +116,49 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	    private int rowCount;
 	    
 		public MyTableModel() {
-			int rowToGenerate = 0;
-			rowToGenerate += course.getCategoryCount();
-			for (Category c : course.getCategories()) {
-				rowToGenerate += c.getPartNum();
-			}
-			rowCount = rowToGenerate;
-			data = new Object[rowToGenerate][4];
-			//Fill out the Content List
-			int currentRow = 0;
-			for (Category c : course.getCategories()) {
-					//Fill out the first row of every category
-//					System.out.println("rowToGenerate: " + rowToGenerate + " CategoryCount: " + course.getCategoryCount()
-//									  + " currentRow: " + currentRow);
+				//
+				CategoryDao categoryDAO = new CategoryDao();
+				PartDao partDAO = new PartDao();
+				ArrayList<Category> categoryList = new ArrayList<Category>();
+				ArrayList<Part> partList = new ArrayList<Part>();
+				try {
+					categoryList = categoryDAO.getAll(courseID);
+				} catch (SQLException e) {
+					System.out.println("Failed to extract CATEGROIES from the DB!");
+				}
+				int rowToGenerate = categoryList.size();
+				for (Category c : categoryList) {
+					String currentCID = c.getCid();
+					try {
+						partList = partDAO.getAll(currentCID);
+					} catch (SQLException e) {
+						System.out.println("Failed to extract PARTS from the DB!");
+					}
+					rowToGenerate += partList.size();
+				}
+				rowCount = rowToGenerate;
+				data = new Object[rowToGenerate][4];
+				int currentRow = 0;
+				for (Category c : categoryList) {
+					try {
+						partList = partDAO.getAll(c.getCid());
+					} catch (SQLException e) {
+						System.out.println("Failed to extract PARTS from the DB!");
+					}
 					data[currentRow][0] = c.getName();
 					data[currentRow][2] = c.getPercentage();
 					currentRow ++;
 					int partNum = c.getPartNum();
 					for (int index = 0; index < partNum; index ++) {
-						data[currentRow][1] = c.getPartAt(index).getName();
-						data[currentRow][2] = c.getPartAt(index).getPercentage();
-						data[currentRow][3] = c.getPartAt(index).getTotalScore();
+						data[currentRow][1] = partList.get(index).getName();
+						data[currentRow][2] = partList.get(index).getPercentage();
+						data[currentRow][3] = partList.get(index).getTotalScore();
 						currentRow++;
 					}
-			}
+				}
 		}
 		
-	    /*
+		/*
 	     * Don't need to implement this method unless your table's
 	     * editable.
 	     */
@@ -160,7 +174,6 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 
 		@Override
 		public int getRowCount() {
-			// TODO Auto-generated method stub
 			return rowCount;
 		}
 		@Override
@@ -170,13 +183,11 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		
 		@Override
 		public int getColumnCount() {
-			// TODO Auto-generated method stub
 			return 4;
 		}
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			// TODO Auto-generated method stub
 			return data[rowIndex][columnIndex];
 		}
 		@Override
@@ -190,21 +201,54 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		ApplyChangesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Extract information from the table and put them back to the Coruse instance accordingly
-				int c_Count, p_Count;
-				c_Count = p_Count = 0;
+				CategoryDao categoryDAO = new CategoryDao();
+				PartDao partDAO = new PartDao();
+				ArrayList<Category> categoryList = new ArrayList<Category>();
+				ArrayList<Part> partList = new ArrayList<Part>();
+				try {
+					categoryList = categoryDAO.getAll(courseID);
+				} catch (SQLException e1) {
+					System.out.println("Failed to extract CATEGROIES from the DB!");
+				}
+				String currentCID = "";
+				int partNum = 0;
 				for (int rowNum = 0; rowNum < CategoryTable.getRowCount(); rowNum++) {
 					if (CategoryTable.getValueAt(rowNum, 0) != null) {//then this row is for a category
+						//
 						String categoryName = (String) CategoryTable.getValueAt(rowNum, 0);
+						for (Category c : categoryList) {
+							if (c.getName().equalsIgnoreCase(categoryName)) {
+								currentCID = c.getCid();
+								partNum = c.getPartNum();
+							} else {
+								System.out.println("Failed to match Front-End course with DB!");
+							}
+						}
 						double categoryPercent = 0.0;
 						try {
 							categoryPercent = (double) CategoryTable.getValueAt(rowNum, 2);
 						} catch (ClassCastException e1) {
 							categoryPercent = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 2));
 						}
-						course.getCategories().get(c_Count).setName(categoryName);
-						course.getCategories().get(c_Count).setPercentage(categoryPercent);
+						Category cToUpdate = new Category(categoryName, partNum, courseID, categoryPercent);
+						cToUpdate.setCid(currentCID);
+						categoryDAO.update(cToUpdate);
+						//
 					} else {//then this row is for a part
+						try {
+							partList = partDAO.getAll(currentCID);
+						} catch (SQLException e2) {
+							System.out.println("Failed to extract PARTS from the DB!");
+						}
 						String partName = (String) CategoryTable.getValueAt(rowNum, 1);
+						String currentPID = "";
+						for (Part p : partList) {
+							if (p.getName().equalsIgnoreCase(partName)) {
+								currentPID= p.getPid();
+							} else {
+								System.out.println("Failed to match Front-End Part with DB!");
+							}
+						}
 						double percentage = 0.0;
 						double totalScore = 0.0;
 						try {
@@ -217,27 +261,30 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 						} catch (ClassCastException e1) {
 							totalScore = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 3));
 						}
-						course.getCategories().get(c_Count).getPartAt(p_Count).setName(partName);
-						course.getCategories().get(c_Count).getPartAt(p_Count).setPercentage(percentage);
-						course.getCategories().get(c_Count).getPartAt(p_Count).setTotalScore(totalScore);
-						p_Count ++;
-						if (course.getCategories().get(c_Count).getPartNum() == p_Count) {
-							c_Count++;
-							p_Count = 0;
-						}
+						Part pToUpdate = new Part(partName,
+												  currentCID,
+												  totalScore,
+												  percentage);
+						pToUpdate.setPid(currentPID);
+						partDAO.update(pToUpdate);
 					}		
 				}
 				double c_PercentageSum = 0;
-				for (Category c : course.getCategories()) {
+				for (Category c : categoryList) {
 					double c_Percentage = c.getPercentage();
+					String c_ID = c.getCid();
 					c_PercentageSum += c_Percentage;
 					double p_PercentageSum = 0;
-					for (Part p : c.getPartList()) {
-						p_PercentageSum += p.getPercentage();
-					}
-					if (p_PercentageSum > c_Percentage) {
-						JOptionPane.showMessageDialog(null, "Percentages of all Parts DON'T add up, please EDIT THEM");
-						return;
+					try {
+						for (Part p : partDAO.getAll(c_ID)) {
+							p_PercentageSum += p.getPercentage();
+							if (p_PercentageSum > c_Percentage) {
+								JOptionPane.showMessageDialog(null, "Percentages of all Parts DON'T add up, please EDIT THEM");
+								return;
+							}
+						}
+					} catch (SQLException e1) {
+						System.out.println("Failed to match Front-End CATEGORY with DB!");
 					}
 				}
 				if (c_PercentageSum > 100) {
@@ -246,6 +293,14 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				}
 				EditCategoryFrame refresh = new EditCategoryFrame(course);
 				refresh.setVisible(true);
+				dispose();
+			}
+		});
+		
+		AddNewBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddPartFrame newFrame = new AddPartFrame(course);
+				newFrame.setVisible(true);
 				dispose();
 			}
 		});
@@ -265,5 +320,13 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	// This is the first window, no previous window exists
 	public void openPrevious() {
 		dispose();
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 }

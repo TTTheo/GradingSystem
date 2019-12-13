@@ -17,7 +17,7 @@ public class Course {
 	public Course(Semester semester, String name) {
 		this.semster = semester ;
 		this.name = name ;
-		this.courseid = "CAS" + User.courseidCount++ ;
+		this.courseid = "CAS" + 999999 ;
 	}
 	
 	public Course(String name, int categoryCount) {
@@ -27,7 +27,7 @@ public class Course {
 		this.categories = new ArrayList<Category>();
 	}
 	
-	public Course(Semester semester,String name, int categoryCount) {
+	public Course(Semester semester, String name, int categoryCount) {
 		this(semester,name);
 		this.categoryCount = categoryCount;
 		this.students = new ArrayList<Student>();

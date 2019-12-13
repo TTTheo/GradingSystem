@@ -96,7 +96,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		for(int i=0;i<students.size();i++) {
 			data[i][0]=students.get(i).getFname();
 			data[i][1]=students.get(i).getSid();
-			data[i][2]=students.get(i).getEmail();
+//			/data[i][2]=students.get(i).getEmail();
 		}
 		tableModel=new DefaultTableModel(data,columnNames){
 			 public boolean isCellEditable(int row, int column){
@@ -177,12 +177,12 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 				String ID=textField_1.getText();
 				String Email=textField_2.getText();
 				int rowIndex = students.size();
-				students.add(new Student(name,ID,Email));
+				//students.add(new Student(name,ID,Email));
 				data=new String[students.size()][3];
 				for(int i=0;i<students.size();i++) {
 					data[i][0]=students.get(i).getFname();
 					data[i][1]=students.get(i).getSid();
-					data[i][2]=students.get(i).getEmail();
+					//data[i][2]=students.get(i).getEmail();
 				}
 				tableModel=new DefaultTableModel(data,columnNames);
 				table.setModel(tableModel);
@@ -200,7 +200,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	            		  for(int i=0;i<students.size();i++) {
 	            			  data[i][0]=students.get(i).getFname();
 	            			  data[i][1]=students.get(i).getSid();
-	            			  data[i][2]=students.get(i).getEmail();
+	            			  //data[i][2]=students.get(i).getEmail();
 	            		  }
 	            		  tableModel=new DefaultTableModel(data,columnNames);
 	            		  table.setModel(tableModel);
@@ -221,7 +221,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	            		  for(int i=0;i<students.size();i++) {
 	            			  data[i][0]=students.get(i).getFname();
 	            			  data[i][1]=students.get(i).getSid();
-	            			  data[i][2]=students.get(i).getEmail();
+	            			  //data[i][2]=students.get(i).getEmail();
 	            		  }
 	            		  tableModel=new DefaultTableModel(data,columnNames);
 	            		  table.setModel(tableModel);
@@ -249,17 +249,17 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		                    System.out.println(cells[2].getContents());
 		                }else {
 			                Cell[] student=sheet.getRow(j);
-			                students.add(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents()));
+			                //students.add(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents()));
 			                System.out.println(students.get(j-1).getFname());
 		                    System.out.println(students.get(j-1).getSid());
-		                    System.out.println(students.get(j-1).getEmail());
+		                    //System.out.println(students.get(j-1).getEmail());
 		                }
 		            }
 		            data=new String[students.size()][3];
 		            for(int i=0;i<students.size();i++) {
 	            		data[i][0]=students.get(i).getFname();
 	            		data[i][1]=students.get(i).getSid();
-	            		data[i][2]=students.get(i).getEmail();
+	            		//data[i][2]=students.get(i).getEmail();
           			}
 		            tableModel=new DefaultTableModel(data,columnNames);
 		            table.setModel(tableModel);
