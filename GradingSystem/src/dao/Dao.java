@@ -15,6 +15,7 @@ public abstract class Dao<T> {
 			Statement st = conn.createStatement();
 		) {
 			st.executeUpdate(query);
+//			https://stackoverflow.com/a/7357118/10634812
 			ResultSet rs = st.getGeneratedKeys();
 			return rs.getInt("last_insert_rowid()");
 		}
