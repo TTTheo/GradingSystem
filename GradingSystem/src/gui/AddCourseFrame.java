@@ -7,7 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import dao.CourseDao;
 import objects.Course;
+import objects.Semester;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Color;
@@ -30,7 +33,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	private JLabel lblNumberOfCategories;
 	private JLabel lblApplyOldStructure;	
 	private JComboBox comboBox;	
-	JButton btnNext;
+	private JButton btnNext;
 	private JButton btnCancel;
 	/**
 	 * Create the frame.
@@ -96,8 +99,18 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 			public void actionPerformed(ActionEvent e) {
 				String courseName = textField.getText();
 				try {
+					CourseDao c_DAO = new CourseDao();
 					int categoryNum = Integer.parseInt(textField_1.getText());
-					Course newCourse = new Course(courseName, categoryNum);
+					//Because the Semester Frame and Course Frame are still in work, I have created a mock up Semester Instance to store inside DB
+					Course newCourse = new Course(new Semester("FALL2019", 2019),
+												  courseName, 
+												  categoryNum);
+					
+					try {
+						c_DAO.insert(newCourse);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 					AddCategoryFrame nextFrame = new AddCategoryFrame(newCourse, categoryNum);
 					nextFrame.setVisible(true);
 					dispose();

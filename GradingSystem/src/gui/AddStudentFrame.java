@@ -25,7 +25,6 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import org.junit.Test;
 
 
 import java.io.FileInputStream;

@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import dao.CategoryDao;
+import dao.PartDao;
 import gui.grade.EditCategoryFrame;
 import objects.Category;
 import objects.Course;
@@ -151,14 +154,22 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 				String categoryName = textField.getText();
 				int partNum = Integer.parseInt(textField_1.getText());
 				double cPercentage = Double.parseDouble(textField_2.getText());
+				//
+				CategoryDao c_DAO = new CategoryDao();
 				Category newCategory = new Category (categoryName, partNum, course.getCourseid(), cPercentage);
-				
+				try {
+					c_DAO.insert(newCategory);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					//System.out.println("Failed to insert the created Category instance into the DB!");
+				}
 				
 				//Ready A Single Part for current new Category
 				for (int rowNum = 0; rowNum < table.getRowCount(); rowNum++) {
 					String partName = "";
 					double percentage = 0;
 					double totalScore = 0;
+					PartDao p_DAO = new PartDao();
 					for (int colNum = 0; colNum <= 2; colNum++) {
 						switch (colNum) {
 							case 0:
@@ -183,7 +194,14 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 								return;
 						}						
 					}
-					Part newPart = new Part(partName, course.getCourseid(), totalScore, percentage);
+					//
+					Part newPart = new Part(partName, newCategory.getCid(), totalScore, percentage);
+					try {
+						p_DAO.insert(newPart);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						//System.out.println("Failed to insert the created Part instance into the DB!");
+					}
 					newCategory.addPart(newPart);
 				}
 				double p_PercentageSum = 0;

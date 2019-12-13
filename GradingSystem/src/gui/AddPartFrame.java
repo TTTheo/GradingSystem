@@ -6,6 +6,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import dao.CategoryDao;
+import dao.PartDao;
+import gui.grade.EditCategoryFrame;
+import objects.Category;
+import objects.Course;
+import objects.Part;
+
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -13,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
@@ -24,13 +34,24 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	private JLabel lblCategory;	
 	private JComboBox comboBox;	
 	private JLabel lblNameOfPart;		
-	private JLabel lblPercentage;		
+	private JLabel lblPercentage;
+	private JLabel lblFullScore;
 	private JButton btnAdd;
 	private JButton btnNewButton;
+	private JTextField textField_2;
+	private Course course;
+	private String courseID;
+	CategoryDao categoryDAO = new CategoryDao();
+	PartDao partDAO = new PartDao();
+	ArrayList<Category> categoryList = new ArrayList<Category>();
+	ArrayList<Part> partList = new ArrayList<Part>();
+	ArrayList<String> cNameList = new ArrayList<String>();
 	/**
 	 * Create the frame.
 	 */
-	public AddPartFrame() {
+	public AddPartFrame(Course course) {
+		this.course = course;
+		this.courseID = course.getCourseid();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 589, 609);
 		contentPane = new JPanel();
@@ -47,7 +68,16 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		lblCategory.setBounds(65, 62, 104, 23);
 		contentPane.add(lblCategory);
 		
-		comboBox = new JComboBox();
+		//ArrayList<String> cNameList = new ArrayList<String>();
+		try {
+			categoryList = categoryDAO.getAll(courseID);
+		} catch (SQLException e1) {
+			System.out.println("Failed to extract CATEGROIES from the DB!");
+		}
+		for (Category c : categoryList) {
+			cNameList.add(c.getName());
+		}
+		comboBox = new JComboBox(cNameList.toArray());
 		comboBox.setBounds(65, 98, 423, 31);
 		contentPane.add(comboBox);
 		
@@ -73,18 +103,53 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		
 		btnAdd = new JButton("Add");
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnAdd.setBounds(395, 394, 93, 23);
+		btnAdd.setBounds(395, 435, 93, 23);
 		contentPane.add(btnAdd);
 		
 		btnNewButton = new JButton("Back");
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnNewButton.setBounds(72, 393, 97, 25);
+		btnNewButton.setBounds(65, 434, 97, 25);
 		contentPane.add(btnNewButton);
+		
+		lblFullScore = new JLabel("Full Score:");
+		lblFullScore.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblFullScore.setBounds(65, 335, 97, 31);
+		contentPane.add(lblFullScore);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(65, 382, 423, 31);
+		contentPane.add(textField_2);
+		textField_2.setColumns(10);
 	}
 	
 	public void addActions(){
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String categoryName = (String) comboBox.getSelectedItem();
+				for (Category c : categoryList) {
+					if (c.getName().equals(categoryName)) {
+						Part newPart = new Part(lblNameOfPart.getText(), 
+												c.getCid(), 
+												Double.parseDouble(lblFullScore.getText()), 
+												Double.parseDouble(lblPercentage.getText()));
+						try {
+							partDAO.insert(newPart);
+						} catch (SQLException e1) {
+							System.out.println("Failed to insert the NEW PART into the DB!");
+						}
+					}
+				}
+				EditCategoryFrame nextFrame = new EditCategoryFrame(course);
+				nextFrame.setVisible(true);
+				dispose();
+			}
+		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditCategoryFrame nextFrame = new EditCategoryFrame(course);
+				nextFrame.setVisible(true);
+				dispose();
 			}
 		});
 	}
@@ -104,5 +169,4 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	public void openPrevious() {
 		dispose();
 	}
-
 }

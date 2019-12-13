@@ -61,8 +61,8 @@ public class ManageCourseFrame extends JFrame implements FrameActions{
 		
 		btnAddPart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddPartFrame addPart=new AddPartFrame();
-				addPart.setVisible(true);
+//				AddPartFrame addPart=new AddPartFrame();
+//				addPart.setVisible(true);
 			}
 		});
 		
