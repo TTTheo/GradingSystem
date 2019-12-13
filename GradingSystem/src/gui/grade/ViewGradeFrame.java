@@ -2,21 +2,31 @@ package gui.grade;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.CategoryBackend;
+import backend.CourseBackend;
+import backend.GradeBackend;
 import backend.PartBackEnd;
+import backend.StudentBackend;
 import gui.FrameActions;
+import gui.ManageStudentsFrame;
+import gui.PickPartFrame;
 import gui.SemesterFrame;
 
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JCheckBox;
 import javax.swing.ScrollPaneConstants;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import objects.Category;
 import objects.Course;
@@ -25,11 +35,15 @@ import objects.Part;
 import objects.Student;
 
 import java.awt.GridLayout;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+
 
 public class ViewGradeFrame extends JFrame implements FrameActions{
 
@@ -48,23 +62,33 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private ArrayList<Student> students=new ArrayList<Student>();
 	private ArrayList<Grade> grades=new ArrayList<Grade>();
 	private ArrayList<Part> parts=new ArrayList<Part>();
-	private JCheckBox chckbxNewCheckBox;
 	private JButton btnStatistic;
 	private JButton btnCalculateFinal;
 	private JButton btnCurveFinalGrade;
+	private JButton btnEditStudents;
+	private JButton btnEditCategory;
 	private String[] finals;
 	private String[] curve;
 	private JButton btnCancel;
 	private Course course;
+	private CourseBackend courseBack=new CourseBackend();
 	private CategoryBackend categoryBack=new CategoryBackend();
 	private PartBackEnd partBack=new PartBackEnd();
+	private JButton btnRecordGrade;
+	private GradeBackend gradeBack=new GradeBackend();
+	private StudentBackend studentBack=new StudentBackend();
+	private DefaultTableCellRenderer tcr=null;
+	private List<String[]> index=new ArrayList<String[]>();
+	private JPopupMenu m_popupMenu;
+	private int X;
+	private int Y;
 
 	/**
 	 * Create the frame.
 	 */
 	public ViewGradeFrame(Course course) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 895, 618);
+		setBounds(100, 100, 1032, 618);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -79,14 +103,15 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init() {
-		/*try {
+		try {
+			System.out.print(course.getCourseid());
 			category=categoryBack.getCategories(course.getCourseid());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
-		category.add(new Category("Homework",3,"C01",20));
+		/*category.add(new Category("Homework",3,"C01",20));
 		ArrayList<Part> partList=new ArrayList<Part>();
 		partList.add(new Part("P01","homework1","C01",100,30));
 		partList.add(new Part("P02","homework2","C01",100,30));
@@ -104,7 +129,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		category.add(new Category("Bonus",1,"C04",0));
 		ArrayList<Part> partList4=new ArrayList<Part>();
 		partList4.add(new Part("P07","bonus","C04",10,100));
-		category.get(3).setPartList(partList4);
+		category.get(3).setPartList(partList4);*/
 		
 		lblCourseName = new JLabel("Course name");
 		lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -113,9 +138,24 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		lblCourseName.setText(course.getName());
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(190, 78, 617, 387);
+		scrollPane.setBounds(190, 78, 617, 402);
 		contentPane.add(scrollPane);
-
+		
+		grades=gradeBack.getAllGrade();
+		students=studentBack.getAllStudents(course.getCourseid());
+		/*grades.add(new Grade("U09","P01",50));
+		grades.add(new Grade("U10","P01",89));
+		grades.add(new Grade("U11","P01",100));
+		students.add(new Student("Jerry","U09"));
+		students.add(new Student("Emma","U10"));
+		students.add(new Student("Lisa","U11"));
+		grades.add(new Grade("U09","P02",20));
+		grades.add(new Grade("U10","P02",40));
+		grades.add(new Grade("U11","P02",88));
+		grades.add(new Grade("U09","P05",87));
+		grades.add(new Grade("U10","P05",89));
+		grades.add(new Grade("U11","P05",88));*/
+		
 		//ArrayList<Part> parts=new ArrayList<Part>();
 		for(int i=0;i<category.size();i++) {
 			for(int j=0;j<category.get(i).getPartList().size();j++) {
@@ -128,11 +168,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					 return false;
             }
 		};
+		changeColor();
+		table.setDefaultRenderer(Object.class, tcr);
 		scrollPane.setViewportView(table);
 		
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(51, 78, 140, 387);
+		scrollPane_1.setBounds(51, 78, 140, 402);
 		contentPane.add(scrollPane_1);
 		
 		panel = new JPanel();
@@ -141,28 +183,43 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		btnApply = new JButton("Apply");
 		btnApply.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnApply.setBounds(51, 478, 97, 25);
+		btnApply.setBounds(51, 497, 97, 29);
 		contentPane.add(btnApply);
 		
 		btnStatistic = new JButton("Statistic");
 		btnStatistic.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnStatistic.setBounds(372, 478, 97, 25);
+		btnStatistic.setBounds(843, 117, 145, 29);
 		contentPane.add(btnStatistic);
 		
 		btnCalculateFinal = new JButton("Calculate Final");
 		btnCalculateFinal.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnCalculateFinal.setBounds(486, 478, 140, 25);
+		btnCalculateFinal.setBounds(843, 171, 145, 29);
 		contentPane.add(btnCalculateFinal);
 		
-		btnCurveFinalGrade = new JButton("Curve Final Grade");
+		btnCurveFinalGrade = new JButton("Curve Final");
 		btnCurveFinalGrade.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnCurveFinalGrade.setBounds(638, 478, 169, 25);
+		btnCurveFinalGrade.setBounds(843, 223, 145, 29);
 		contentPane.add(btnCurveFinalGrade);
 		
 		btnCancel = new JButton("Back");
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnCancel.setBounds(710, 31, 97, 25);
+		btnCancel.setBounds(843, 497, 145, 29);
 		contentPane.add(btnCancel);
+		
+		btnEditStudents = new JButton("Edit Students");
+		btnEditStudents.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnEditStudents.setBounds(843, 317, 145, 29);
+		contentPane.add(btnEditStudents);
+		
+		btnEditCategory = new JButton("Edit Category");
+		btnEditCategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnEditCategory.setBounds(843, 371, 145, 29);
+		contentPane.add(btnEditCategory);
+		
+		btnRecordGrade = new JButton("Record Grade");
+		btnRecordGrade.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnRecordGrade.setBounds(843, 423, 145, 29);
+		contentPane.add(btnRecordGrade);
 		
 		for(int i=0;i<category.size();i++) {
 			check.add(new JCheckBox(category.get(i).getName()));
@@ -172,7 +229,89 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 			
 	}
 	
+	private void createPopupMenu() {
+        m_popupMenu = new JPopupMenu();
+        
+        JMenuItem delMenItem = new JMenuItem();
+        delMenItem.setText("View comment");
+        delMenItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	//System.out.println(X+" "+Y);
+            	boolean judge=false;
+            	for(String[] rowAndCol : index){
+                	if(X==(Integer.valueOf(rowAndCol[0]))&&Y==(Integer.valueOf(rowAndCol[1]))){
+                		System.out.println(X+" "+Y);
+                		String pid=parts.get(Y-2).getPid();
+                		String sid=students.get(X).getSid();
+                		for(int k=0;k<grades.size();k++) {
+							if(grades.get(k).getSid().equals(sid)&&grades.get(k).getPid().equals(pid)) {
+								String comment=grades.get(k).getComment();
+								if(comment!=null) {
+									judge=true;
+									ViewComment view=new ViewComment(comment);
+									view.setVisible(true);
+									break;
+								}else {
+									alert("No comment!");
+									break;
+								}
+							}else {
+								//table.setToolTipText(null);
+							}
+						}
+                	}
+                }
+            	if(!judge) {
+            		alert("No comment!");
+            	}
+            }
+        });
+        m_popupMenu.add(delMenItem);
+	}
+	
+	private void mouseRightButtonClick(java.awt.event.MouseEvent evt) {
+		createPopupMenu();
+        if (evt.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+            int focusedRowIndex = table.rowAtPoint(evt.getPoint());
+            int col = table.columnAtPoint(evt.getPoint()); 
+            if (focusedRowIndex == -1) {
+                return;
+            }
+            table.setRowSelectionInterval(focusedRowIndex, focusedRowIndex);
+            X=focusedRowIndex;
+            Y=col;
+            m_popupMenu.show(table, evt.getX(), evt.getY());
+        }
+	}
+	
 	public void addActions() {
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            	mouseRightButtonClick(evt);
+            }
+		});
+		btnEditStudents.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ManageStudentsFrame manageStu=new ManageStudentsFrame(course);
+				manageStu.setVisible(true);
+			}
+		});
+		
+		btnEditCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditCategoryFrame edit=new EditCategoryFrame();
+				edit.setVisible(true);
+			}
+		});
+		
+		btnRecordGrade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PickPartFrame pick=new PickPartFrame(course);
+				pick.setVisible(true);
+				dispose();
+			}
+		});
+		
 		btnApply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<JCheckBox> newCheck=new ArrayList<JCheckBox>();
@@ -198,12 +337,42 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				//System.out.println(part.size());
 				tableModel=setNewModel();
 				table.setModel(tableModel);
+				changeColor();
+				table.setDefaultRenderer(Object.class, tcr);
 			}
 		});
 		
 		btnStatistic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				double median;
+				double average;
+				double deviation;
+				if(finals!=null) {
+					double totalGrade=0;
+					for(int i=0;i<finals.length;i++) {
+						totalGrade+=Double.parseDouble(finals[i]);
+					}
+					average=totalGrade/finals.length;
+					String[] tempfinals=finals;
+					Arrays.sort(tempfinals);
+					double size=tempfinals.length;
+					if(size/2==0) {
+						median=(Double.parseDouble(tempfinals[(int) (size/2)])+Double.parseDouble(tempfinals[(int) (size/2-1)]))/2;
+					}else {
+						double index=size/2-0.5;
+						median=Double.parseDouble(tempfinals[(int)index]);
+					}
+					double cal=0;
+					for(int i=0;i<finals.length;i++) {
+						cal+=Double.parseDouble(finals[i])-average;
+					}
+					deviation=Math.sqrt(cal/finals.length);
+					double statistic[]= {average,median,deviation};
+					ShowStatisticFrame show=new ShowStatisticFrame(statistic);
+					show.setVisible(true);
+				}else {
+					alert("Calculate final first!");
+				}
 				
 			}
 		});
@@ -326,6 +495,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					columnNames[i]=parts.get(i-2).getName();
 				}
 			}
+			//index=new int[][];
 			data=new String[students.size()][columnNames.length];
 			for(int i=0;i<students.size();i++) {
 				for(int j=0;j<columnNames.length;j++) {
@@ -339,12 +509,18 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								String comment=grades.get(k).getComment();
+								if(comment!=null) {
+									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
+									index.add(commentindex);
+								}
 								break;
 							}
 						}
 					}			
 				}
 			}
+			
 		}else if(finalExist&&check.get(check.size()-2).isSelected()&&curveExist&&check.get(check.size()-1).isSelected()) {
 			columnNames=new String[parts.size()+4];
 			for(int i=0;i<columnNames.length;i++) {
@@ -375,6 +551,11 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								String comment=grades.get(k).getComment();
+								if(comment!=null) {
+									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
+									index.add(commentindex);
+								}
 								break;
 							}
 						}
@@ -407,6 +588,11 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								String comment=grades.get(k).getComment();
+								if(comment!=null) {
+									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
+									index.add(commentindex);
+								}
 								break;
 							}
 						}
@@ -435,6 +621,11 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								String comment=grades.get(k).getComment();
+								if(comment!=null) {
+									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
+									index.add(commentindex);
+								}
 								break;
 							}
 						}
@@ -445,6 +636,33 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		tableModel=new DefaultTableModel(data, columnNames);
 		return tableModel;
 	}
+	
+	public void changeColor() {
+		 tcr= new DefaultTableCellRenderer() {
+			//private List<String[]> indexes=index;
+
+			public Component getTableCellRendererComponent(JTable table,
+					Object value, boolean isSelected, boolean hasFocus,int row, int col) {
+				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+				for(int i=0; i<table.getRowCount(); i++){
+					if (row == i){
+					this.setBackground(Color.white);
+					}
+					}
+					for(String[] rowAndCol : index){
+					int _row= Integer.valueOf(rowAndCol[0]);
+					int _col= Integer.valueOf(rowAndCol[1]);
+
+					if( _row == row && _col == col) {
+					this.setBackground(Color.yellow);
+					}
+					}
+					//this.setText(value.toString());
+					return this;
+					}
+			};
+	}
+
 	
 	public void getFinalGrade() {
 		int row=table.getRowCount();
@@ -514,3 +732,4 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		dispose();
 	}
 }
+

@@ -23,4 +23,8 @@ public class GradeBackend {
 	public boolean updateGrade(Grade grade) {
 		return true ;
 	}
+	
+	public ArrayList<Grade> getAllGrade() {
+			return null ;
+	} 
 }

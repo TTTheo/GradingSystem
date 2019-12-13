@@ -6,12 +6,24 @@ public class Student {
 	private String fname ;
 	private String lname ;
 	private String sid ;
+	private String email;
 	private List<Course> courses ;
 	
-	public Student(String fname, String lname) {
+	/*public Student(String fname, String lname) {
 		this.fname = fname ;
 		this.lname = lname ;
 		this.sid = "U" + User.sidCount++ ;
+	}*/
+	
+	public Student(String fname, String sid) {
+		this.fname = fname ;
+		this.sid=sid;
+	}
+	
+	public Student(String fname, String lname, String sid, String email) {
+		this.fname=fname;
+		this.sid=sid;
+		this.email=email;
 	}
 
 	public Student(String fname, String lname, String sid, List<Course> courses) {
@@ -19,6 +31,14 @@ public class Student {
 		this.lname = lname ;
 		this.sid = "U" + User.sidCount++ ;
 		this.courses = courses ;
+	}
+	
+	public String getEmail() {
+		return this.email;
+	}
+	
+	public void setEmail(String email) {
+		this.email=email;
 	}
 
 	public String getFname() {
