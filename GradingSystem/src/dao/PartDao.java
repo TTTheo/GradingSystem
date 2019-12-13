@@ -21,12 +21,14 @@ public class PartDao extends Dao<Part>{
                 ResultSet rs = st.executeQuery(query);
         ) {
             while (rs.next()) {
-                String pid = rs.getString("pid");
-                String cid = rs.getString("cid");
+                int pid = rs.getInt("pid");
+                int cid = rs.getInt("cid");
                 String name = rs.getString("name");
                 double total_score = rs.getDouble("total_score");
                 double percentage = rs.getDouble("percentage");
-                Part part = new Part(pid, name, cid, total_score, percentage) ;
+
+                Part part = new Part(name, cid, total_score, percentage) ;
+                part.setPid(pid);
                 parts.add(part);
             }
         }

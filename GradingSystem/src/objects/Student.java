@@ -3,9 +3,9 @@ package objects;
 import java.util.*;
 
 public class Student {
+	private String sid ;
 	private String fname ;
 	private String lname ;
-	private String sid ;
 	private List<Course> courses ;
 	
 	public Student(String fname, String lname) {
@@ -14,9 +14,9 @@ public class Student {
 	}
 
 	public Student(String fname, String lname, String sid, List<Course> courses) {
-		this.fname = fname ;
-		this.lname = lname ;
-		this.courses = courses ;
+	    this(fname, lname);
+		this.sid = sid;
+		this.courses = courses;
 	}
 
 	public String getFname() {
@@ -50,6 +50,6 @@ public class Student {
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
 	}
-	
-	
+
+
 }

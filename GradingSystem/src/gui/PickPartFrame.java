@@ -7,8 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import backend.CategoryBackend;
-import backend.PartBackEnd;
+import backend.CourseBackend;
 import gui.grade.RecordGradeFrame;
 
 import javax.swing.JLabel;
@@ -41,8 +40,7 @@ public class PickPartFrame extends JFrame implements FrameActions{
 	private JButton btnCancel;
 	private ArrayList<Category> category=new ArrayList<Category>();
 	private ArrayList<Part> part=new ArrayList<Part>();
-	private CategoryBackend categoryBack=new CategoryBackend();
-	private PartBackEnd partBack=new PartBackEnd();
+	private CourseBackend courseBackend;
 	private Course course;
 	private Category category_c;
 	private Part part_p;
@@ -50,7 +48,9 @@ public class PickPartFrame extends JFrame implements FrameActions{
 	/**
 	 * Create the frame.
 	 */
-	public PickPartFrame() {
+	public PickPartFrame(CourseBackend c) {
+	    courseBackend = c;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 572, 589);
 		contentPane = new JPanel();
@@ -67,22 +67,22 @@ public class PickPartFrame extends JFrame implements FrameActions{
 		course.setCourseid("CAS01");
 		category.add(new Category("Homework",3,"C01",20));
 		ArrayList<Part> partList=new ArrayList<Part>();
-		partList.add(new Part("P01","homework1","C01",100,30));
-		partList.add(new Part("P02","homework2","C01",100,30));
-		partList.add(new Part("P03","homework3","C01",100,40));
+//		partList.add(new Part("P01","homework1","C01",100,30));
+//		partList.add(new Part("P02","homework2","C01",100,30));
+//		partList.add(new Part("P03","homework3","C01",100,40));
 		category.get(0).setPartList(partList);
 		category.add(new Category("Exam",2,"C02",20));
 		ArrayList<Part> partList2=new ArrayList<Part>();
-		partList2.add(new Part("P04","midterm","C02",100,60));
-		partList2.add(new Part("P05","final","C02", 100,40));
+//		partList2.add(new Part("P04","midterm","C02",100,60));
+//		partList2.add(new Part("P05","final","C02", 100,40));
 		category.get(1).setPartList(partList2);
 		category.add(new Category("Attending",1,"C03",20));
 		ArrayList<Part> partList3=new ArrayList<Part>();
-		partList3.add(new Part("P06","attending","C04",5,100));
+//		partList3.add(new Part("P06","attending","C04",5,100));
 		category.get(2).setPartList(partList3);
 		category.add(new Category("Bonus",1,"C04",0));
 		ArrayList<Part> partList4=new ArrayList<Part>();
-		partList4.add(new Part("P07","bonus","C04",10,100));
+//		partList4.add(new Part("P07","bonus","C04",10,100));
 		category.get(3).setPartList(partList4);
 		lblPickACategory = new JLabel("Pick a Category:");
 		lblPickACategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -169,11 +169,11 @@ public class PickPartFrame extends JFrame implements FrameActions{
 			public void actionPerformed(ActionEvent e) {
 				String CategoryName=comboBox.getSelectedItem().toString();
 				String partName=comboBox_1.getSelectedItem().toString();
-				String Pid;
+				int pid;
 				for(int i=0;i<part.size();i++) {
 					if(part.get(i).getName().equals(partName)) {
-						Pid=part.get(i).getPid();
-						part_p=part.get(i);
+						pid = part.get(i).getPid();
+						part_p = part.get(i);
 						break;
 					}
 				}

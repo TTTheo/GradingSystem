@@ -128,9 +128,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				}
 				int rowToGenerate = categoryList.size();
 				for (Category c : categoryList) {
-					String currentCID = c.getCid();
 					try {
-						partList = partDAO.getAll(currentCID);
+						partList = partDAO.getAll(c.getCid());
 					} catch (SQLException e) {
 						System.out.println("Failed to extract PARTS from the DB!");
 					}
@@ -210,7 +209,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				} catch (SQLException e1) {
 					System.out.println("Failed to extract CATEGROIES from the DB!");
 				}
-				String currentCID = "";
+				int currentCID = 0;
 				int partNum = 0;
 				for (int rowNum = 0; rowNum < CategoryTable.getRowCount(); rowNum++) {
 					if (CategoryTable.getValueAt(rowNum, 0) != null) {//then this row is for a category
@@ -241,10 +240,10 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 							System.out.println("Failed to extract PARTS from the DB!");
 						}
 						String partName = (String) CategoryTable.getValueAt(rowNum, 1);
-						String currentPID = "";
+						int currentPID = 0;
 						for (Part p : partList) {
 							if (p.getName().equalsIgnoreCase(partName)) {
-								currentPID= p.getPid();
+								currentPID = p.getPid();
 							} else {
 								System.out.println("Failed to match Front-End Part with DB!");
 							}
@@ -272,7 +271,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				double c_PercentageSum = 0;
 				for (Category c : categoryList) {
 					double c_Percentage = c.getPercentage();
-					String c_ID = c.getCid();
+					int c_ID = c.getCid();
 					c_PercentageSum += c_Percentage;
 					double p_PercentageSum = 0;
 					try {

@@ -5,8 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import backend.CategoryBackend;
-import backend.PartBackEnd;
+import backend.CourseBackend;
 import gui.FrameActions;
 import gui.SemesterFrame;
 
@@ -56,20 +55,19 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private String[] curve;
 	private JButton btnCancel;
 	private Course course;
-	private CategoryBackend categoryBack=new CategoryBackend();
-	private PartBackEnd partBack=new PartBackEnd();
+	private CourseBackend courseBackend;
 
 	/**
 	 * Create the frame.
 	 */
-	public ViewGradeFrame(Course course) {
+	public ViewGradeFrame(CourseBackend c) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 895, 618);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		this.course=course;
+		this.course=c.getCurrentCourse();
 		init();
 		addActions();
 	}
@@ -88,22 +86,22 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		category.add(new Category("Homework",3,"C01",20));
 		ArrayList<Part> partList=new ArrayList<Part>();
-		partList.add(new Part("P01","homework1","C01",100,30));
-		partList.add(new Part("P02","homework2","C01",100,30));
-		partList.add(new Part("P03","homework3","C01",100,40));
+//		partList.add(new Part("P01","homework1","C01",100,30));
+//		partList.add(new Part("P02","homework2","C01",100,30));
+//		partList.add(new Part("P03","homework3","C01",100,40));
 		category.get(0).setPartList(partList);
 		category.add(new Category("Exam",2,"C02",20));
 		ArrayList<Part> partList2=new ArrayList<Part>();
-		partList2.add(new Part("P04","midterm","C02",100,60));
-		partList2.add(new Part("P05","final","C02", 100,40));
+//		partList2.add(new Part("P04","midterm","C02",100,60));
+//		partList2.add(new Part("P05","final","C02", 100,40));
 		category.get(1).setPartList(partList2);
 		category.add(new Category("Attending",1,"C03",20));
 		ArrayList<Part> partList3=new ArrayList<Part>();
-		partList3.add(new Part("P06","attending","C04",5,100));
+//		partList3.add(new Part("P06","attending","C04",5,100));
 		category.get(2).setPartList(partList3);
 		category.add(new Category("Bonus",1,"C04",0));
 		ArrayList<Part> partList4=new ArrayList<Part>();
-		partList4.add(new Part("P07","bonus","C04",10,100));
+//		partList4.add(new Part("P07","bonus","C04",10,100));
 		category.get(3).setPartList(partList4);
 		
 		lblCourseName = new JLabel("Course name");
@@ -337,7 +335,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						data[i][j]=finals[i];
 					}else {
 						for(int k=0;k<grades.size();k++) {
-							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
+							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								break;
 							}
@@ -373,7 +371,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						data[i][j]=curve[i];
 					}else {
 						for(int k=0;k<grades.size();k++) {
-							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
+							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								break;
 							}
@@ -405,7 +403,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						data[i][j]=curve[i];
 					}else {
 						for(int k=0;k<grades.size();k++) {
-							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
+							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								break;
 							}
@@ -433,7 +431,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						data[i][j]=students.get(i).getSid();
 					}else {
 						for(int k=0;k<grades.size();k++) {
-							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid().equals(parts.get(j-2).getPid())) {
+							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								break;
 							}
@@ -459,7 +457,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					Part part=category.get(i).getPartList().get(j);
 					double Ppercentage=part.getPercentage();
 					for(int l=0;l<grades.size();l++) {
-						if(grades.get(l).getSid().equals(ID)&&grades.get(l).getPid().equals(part.getPid())){
+						if(grades.get(l).getSid().equals(ID)&&grades.get(l).getPid() == part.getPid()){
 							if(grades.get(l).getGrade()<0) {
 								double grade=(part.getTotalScore()+grades.get(l).getGrade())/part.getTotalScore()*100;
 								categoryfinal+=grade*Ppercentage;

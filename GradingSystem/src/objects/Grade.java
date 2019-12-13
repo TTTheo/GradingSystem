@@ -1,14 +1,14 @@
 package objects;
 
 public class Grade {
-	private String sid ;
-	private String pid ;
+	private String sid ;  // This grade belongs to student sid
+	private int pid ;     // This is the grade for part pid
 	private double grade ;
 	private String comment;
 	
-	public Grade(String sid, String pid, double grade) {
-		this.sid = sid ;
-		this.pid = pid ;
+	public Grade(String sid, int pid, double grade) {
+		this.sid = sid;
+		this.pid = pid;
 		this.grade = grade ;
 		this.comment=null;
 	}
@@ -29,11 +29,11 @@ public class Grade {
 		this.sid = sid;
 	}
 
-	public String getPid() {
+	public int getPid() {
 		return pid;
 	}
 
-	public void setPid(String pid) {
+	public void setPid(int pid) {
 		this.pid = pid;
 	}
 

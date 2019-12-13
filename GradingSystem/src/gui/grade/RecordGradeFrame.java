@@ -158,9 +158,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			data.add(demo);
 		}*/
 		
-		grades.add(new Grade("U09","P01",0));
-		grades.add(new Grade("U10","P01",0));
-		grades.add(new Grade("U11","P01",0));
+//		grades.add(new Grade("U09","P01",0));
+//		grades.add(new Grade("U10","P01",0));
+//		grades.add(new Grade("U11","P01",0));
 		/*String[][] datas= {{"Mary", "U09",String.valueOf(grades.get(0).getGrade())},
 				{"Emma", "U10",String.valueOf(grades.get(1).getGrade())},
 				{"Jerry","U11",String.valueOf(grades.get(2).getGrade())}};*/
@@ -247,9 +247,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			     	//Double newScore=Double.valueOf(textField.getText());		
 			    	Double newScore=Double.parseDouble(obj.toString());	
 			    	//System.out.println(newScore);
-			    	String partID=part.getPid();
+			    	int partID=part.getPid();
 			    	for(int i=0;i<grades.size();i++) {
-			    		if(grades.get(i).getPid().equals(partID)&&grades.get(i).getSid().equals(stuID)) {
+			    		if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
 			    			grades.get(i).setGrade(newScore);
 			    			break;
 			    		}
@@ -359,9 +359,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	public void updateScore() {
 		String stuName=textField_2.getText();
 		Double newScore=Double.valueOf(textField.getText());		
-		String partID=part.getPid();
+		int partID=part.getPid();
 		for(int i=0;i<grades.size();i++) {
-			if(grades.get(i).getPid().equals(partID)&&grades.get(i).getSid().equals(stuID)) {
+			if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
 				grades.get(i).setGrade(newScore);
 				this.data[i][2]=String.valueOf(newScore);
 				DefaultTableModel dtm2=(DefaultTableModel)table.getModel();

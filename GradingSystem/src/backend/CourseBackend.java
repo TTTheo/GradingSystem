@@ -26,6 +26,10 @@ public class CourseBackend {
 		currentCourse = course;
 	}
 
+	public Course getCurrentCourse() {
+		return currentCourse;
+	}
+
 	public void setCurrentCourse(Course c) {
 		currentCourse = c;
 	}

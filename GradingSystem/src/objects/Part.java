@@ -2,24 +2,19 @@ package objects;
 
 public class Part {
 	private int pid;
-	private String cid ;
+	private int cid; // This part belongs to category cid
 	private String name;
 	private double totalScore;
 	private double percentage;
 
-	// pid gets set when you insert it into the database.
-	public Part(String name, String cid, double totalScore, double percentage) {
+	// pid gets set when you insert it into the database
+	public Part(String name, int cid, double totalScore, double percentage) {
 		this.cid = cid ;
 		this.name = name;
 		this.totalScore = totalScore;
 		this.percentage = percentage;
 	}
-	public Part(String pid, String name, String cid, double totalScore, double percentage) {
-		this.cid = cid ;
-		this.name = name;
-		this.totalScore = totalScore;
-		this.percentage = percentage;
-	}
+
 	public int getPid() {
 		return pid;
 	}
@@ -28,11 +23,11 @@ public class Part {
 		this.pid = pid;
 	}
 
-	public String getCid() {
+	public int getCid() {
 		return cid;
 	}
 
-	public void setCid(String cid) {
+	public void setCid(int cid) {
 		this.cid = cid;
 	}
 

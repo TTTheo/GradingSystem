@@ -28,7 +28,7 @@ public class AddSingleStuFrame extends JFrame implements FrameActions{
 	private JButton btnAdd;
 	private JTextField textField_3;
 	private JTextField textField_4;
-	private List<Student> students=new ArrayList<Student>();
+	private List<Student> students = new ArrayList<Student>();
 
 	/**
 	 * Create the frame.
