@@ -1,9 +1,6 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class Dao<T> {
@@ -11,12 +8,15 @@ public abstract class Dao<T> {
 
 	// Calls executeUpdate in a try-with-resources statement 
 	// Automatically closes connections and statements
-	public void executeUpdate(String query) throws SQLException {
+	// Returns the auto generated ID by the DB (can ignore if not needed)
+	public int executeUpdate(String query) throws SQLException {
 		try (
 			Connection conn = getConnection();
 			Statement st = conn.createStatement();
 		) {
 			st.executeUpdate(query);
+			ResultSet rs = st.getGeneratedKeys();
+			return rs.getInt("last_insert_rowid()");
 		}
 	}
 

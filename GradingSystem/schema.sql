@@ -1,8 +1,12 @@
-CREATE TABLE User (username varchar (255), password varchar (255));
+CREATE TABLE User (
+    uid INTEGER PRIMARY KEY AUTOINCREMENT,
+    username varchar (255),
+    password varchar (255)
+);
 
 -- one-to-many with courses
 CREATE TABLE Semester (
-    semester_id INTEGER PRIMARY KEY,
+    semester_id INTEGER PRIMARY KEY AUTOINCREMENT,
     term varchar(10),
     year int
 );
@@ -25,7 +29,7 @@ CREATE TABLE Course (
 
 -- Course is one-to-many with Category
 CREATE TABLE Category (
-    cid INTEGER PRIMARY KEY,
+    cid INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id VARCHAR (255) NOT NULL,
     name VARCHAR (255),
     percentage DOUBLE,
@@ -34,7 +38,7 @@ CREATE TABLE Category (
 
 -- Category is one-to-many with Part
 CREATE TABLE Part (
-    pid INTEGER PRIMARY KEY,
+    pid INTEGER PRIMARY KEY AUTOINCREMENT,
     cid INTEGER NOT NULL,
     name VARCHAR (255),
     total_score DOUBLE,
