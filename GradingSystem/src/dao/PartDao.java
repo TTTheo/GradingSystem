@@ -45,10 +45,11 @@ public class PartDao extends Dao<Part>{
                 part.getPercentage()
         );
 
-        executeUpdate(query);
+        int pid = executeUpdate(query);
+        part.setPid(pid);
     }
 
-    public ArrayList<Part> getAll(String cid) throws SQLException {
+    public ArrayList<Part> getAll(int cid) throws SQLException {
         String query = String.format(
         		"SELECT * FROM Part WHERE cid = '%s'",
         		cid

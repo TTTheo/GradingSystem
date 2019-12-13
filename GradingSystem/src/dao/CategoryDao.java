@@ -22,13 +22,13 @@ public class CategoryDao extends Dao<Category> {
                 ResultSet rs = st.executeQuery(query);
         ) {
             while (rs.next()) {
-            	String cid = rs.getString("cid") ;
+            	int cid = rs.getInt("cid") ;
             	String name = rs.getString("name") ;
             	int partNum = rs.getInt("part_num") ;
             	String courseid = rs.getString("courseid") ;
             	double percentage = rs.getDouble("percentage") ;
                 ArrayList<Part> parts = pd.getAll(cid) ;
-                Category cat = new Category(name, partNum, cid, courseid, percentage) ;
+                Category cat = new Category(name, partNum, courseid, percentage) ;
                 cat.setPartList(parts);
                 cats.add(cat);
             }
@@ -48,10 +48,11 @@ public class CategoryDao extends Dao<Category> {
                 category.getCourseid()
         );
 
-        executeUpdate(query);
-    }
+		int cid = executeUpdate(query);
+		category.setCid(cid);
+	}
 
-    public ArrayList<Category> getAll(String courseid) throws SQLException {
+	public ArrayList<Category> getAll(String courseid) throws SQLException {
         String query = String.format(
         		"SELECT * FROM Category WHERE courseid = '%s'",
         		courseid

@@ -1,31 +1,30 @@
 package objects;
 
 public class Part {
-	private String pid ;
+	private int pid;
 	private String cid ;
 	private String name;
 	private double totalScore;
 	private double percentage;
-	
+
+	// pid gets set when you insert it into the database.
 	public Part(String name, String cid, double totalScore, double percentage) {
-		this.pid = "P" + User.pidCount++ ;
 		this.cid = cid ;
 		this.name = name;
 		this.totalScore = totalScore;
 		this.percentage = percentage;
 	}
 	public Part(String pid, String name, String cid, double totalScore, double percentage) {
-		this.pid = pid ;
 		this.cid = cid ;
 		this.name = name;
 		this.totalScore = totalScore;
 		this.percentage = percentage;
 	}
-	public String getPid() {
+	public int getPid() {
 		return pid;
 	}
 
-	public void setPid(String pid) {
+	public void setPid(int pid) {
 		this.pid = pid;
 	}
 

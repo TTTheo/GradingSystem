@@ -1,10 +1,7 @@
 package objects;
 
 public class User {
-	public static int courseidCount = 1 ;
-	public static int cidCount = 1 ;
-	public static int sidCount = 1 ;
-	public static int pidCount = 1 ;
+	private int uid;
 	private String username;
 	private String password;
 
@@ -17,6 +14,15 @@ public class User {
 		username = user;
 		password = pass;
 	}
+
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
 
 	public String getUsername() {
 		return username;

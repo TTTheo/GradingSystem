@@ -3,18 +3,18 @@ package objects;
 import java.util.*;
 
 public class Category {
+	private int cid;
 	private String name ;//hw, midterm, quiz, etc.
 	private int partNum;// 1,2,3, ...
 	private String courseid ;
-	private String cid;
 	private double percentage;
 	private ArrayList<Part> partList;
-	
+
+	// cid gets set when you insert into the database.
 	public Category (String name, int partNum, String couseid, double percentage) {
 		this.name = name;
 		this.partNum = partNum;
 		this.courseid = couseid ;
-		this.cid = "C" + User.cidCount++ ;
 		this.percentage = percentage;
 		this.partList = new ArrayList<Part>(partNum);
 	}
@@ -23,7 +23,6 @@ public class Category {
 		this.name = name;
 		this.partNum = partNum;
 		this.courseid = courseid ;
-		this.cid = cid ;
 		this.percentage = percentage;
 		this.partList = new ArrayList<Part>(partNum);
 	}
@@ -52,11 +51,11 @@ public class Category {
 		this.courseid = courseid;
 	}
 
-	public String getCid() {
+	public int getCid() {
 		return cid;
 	}
 
-	public void setCid(String cid) {
+	public void setCid(int cid) {
 		this.cid = cid;
 	}
 

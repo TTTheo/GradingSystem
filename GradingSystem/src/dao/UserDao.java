@@ -58,6 +58,7 @@ public class UserDao extends Dao<User> {
 				user.getPassword()
 		);
 
-		executeUpdate(query);
+		int uid = executeUpdate(query);
+		user.setUid(uid);
 	}
 }
