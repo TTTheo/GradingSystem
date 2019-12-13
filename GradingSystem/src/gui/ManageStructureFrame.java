@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class ManageCourseFrame extends JFrame implements FrameActions{
+public class ManageStructureFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JButton btnAddCategory;
@@ -26,7 +26,7 @@ public class ManageCourseFrame extends JFrame implements FrameActions{
 	/**
 	 * Create the frame.
 	 */
-	public ManageCourseFrame(CourseBackend c) {
+	public ManageStructureFrame(CourseBackend c) {
 	    courseBackend = c;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CourseFrame extends JFrame implements FrameActions{
+public class AllCoursesFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 
@@ -35,7 +35,7 @@ public class CourseFrame extends JFrame implements FrameActions{
 	/**
 	 * Create the frame.
 	 */
-	public CourseFrame(SemesterBackend backend) {
+	public AllCoursesFrame(SemesterBackend backend) {
 	    this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

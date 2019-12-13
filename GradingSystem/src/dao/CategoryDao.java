@@ -11,8 +11,7 @@ import objects.*;
 public class CategoryDao extends Dao<Category> {
 	
 	private PartDao pd = new PartDao() ;
-	
-	
+
 	@Override
     public ArrayList<Category> executeQuery(String query) throws SQLException {
         ArrayList<Category> cats = new ArrayList<>();
@@ -98,5 +97,4 @@ public class CategoryDao extends Dao<Category> {
     	}
     	return true ;
     }
-    
 }

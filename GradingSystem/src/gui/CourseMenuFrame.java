@@ -1,15 +1,11 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.grade.RecordGradeFrame;
-import gui.grade.ViewGradeFrame;
+import backend.CourseBackend;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -29,11 +25,15 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	private JButton btnManageCourseStrcuture;
 	private JButton btnOriginalGrades;
 
+	private CourseBackend courseBackend;
+
 
 	/**
 	 * Create the frame.
 	 */
-	public CourseMenuFrame() {
+	public CourseMenuFrame(CourseBackend c) {
+		courseBackend = c;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 574, 583);
 		contentPane = new JPanel();
@@ -45,7 +45,6 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init(){
-		
 		lblNameOfCourse = new JLabel("Name of course");
 		lblNameOfCourse.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblNameOfCourse.setBounds(164, 24, 162, 26);
@@ -57,25 +56,25 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		btnManageStudents.setBounds(164, 82, 236, 36);
 		contentPane.add(btnManageStudents);
 		
-		btnRecordGrades = new JButton("Record grades");
+		btnRecordGrades = new JButton("Record grades (Not Implemented)");
 		btnRecordGrades.setBackground(SystemColor.controlHighlight);
 		btnRecordGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnRecordGrades.setBounds(164, 163, 236, 36);
 		contentPane.add(btnRecordGrades);
 		
-		btnViewGrades = new JButton("View grades");
+		btnViewGrades = new JButton("View grades (Not Implemented)");
 		btnViewGrades.setBackground(SystemColor.controlHighlight);
 		btnViewGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnViewGrades.setBounds(164, 245, 236, 36);
 		contentPane.add(btnViewGrades);
 		
-		btnManageCourseStrcuture = new JButton("Manage Course Strcuture");
+		btnManageCourseStrcuture = new JButton("Manage Course Structure");
 		btnManageCourseStrcuture.setBackground(SystemColor.controlHighlight);
 		btnManageCourseStrcuture.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnManageCourseStrcuture.setBounds(164, 324, 236, 36);
 		contentPane.add(btnManageCourseStrcuture);
 		
-		btnOriginalGrades = new JButton("Original grades");
+		btnOriginalGrades = new JButton("Original grades (Not implemented)");
 		btnOriginalGrades.setBackground(SystemColor.controlHighlight);
 		btnOriginalGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnOriginalGrades.setBounds(164, 402, 236, 36);
@@ -106,7 +105,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		
 		btnManageCourseStrcuture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ManageCourseFrame manageCourse=new ManageCourseFrame();
+				ManageStructureFrame manageCourse=new ManageStructureFrame(courseBackend);
 				manageCourse.setVisible(true);
 			}
 		});

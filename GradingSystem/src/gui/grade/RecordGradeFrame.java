@@ -10,6 +10,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import backend.CourseBackend;
 import gui.CourseMenuFrame;
 import gui.FrameActions;
 import gui.SemesterFrame;
@@ -302,9 +303,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CourseMenuFrame coursemenu=new CourseMenuFrame();
-				coursemenu.setVisible(true);
-				dispose();
+			    openNext();
 			}
 		});
 	}
@@ -379,7 +378,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		CourseMenuFrame next = new CourseMenuFrame();
+		CourseMenuFrame next = new CourseMenuFrame(new CourseBackend());
 		next.setVisible(true);
 		dispose();
 	}
