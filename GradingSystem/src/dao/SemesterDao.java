@@ -26,14 +26,13 @@ public class SemesterDao extends Dao<Semester> {
 
     @Override
     public void insert(Semester semester) throws SQLException {
-
         String query = String.format(
                 "INSERT INTO Semester (term, year) VALUES ('%s', %d)",
                 semester.getTerm(),
                 semester.getYear()
         );
-
-        executeUpdate(query);
+        int sid = executeUpdate(query);
+        semester.setSemester_id(sid);
     }
 
     public ArrayList<Semester> getAll() throws SQLException {
