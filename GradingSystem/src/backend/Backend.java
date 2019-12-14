@@ -3,38 +3,91 @@ package backend;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import objects.Course;
-import objects.Category;
-import objects.Part;
-import objects.Semester;
+import objects.*;
 import dao.*;
 
-// Logic for everything specific to one course, including
-// categories, parts, students, grades
-public class CourseBackend {
+// Logic for managing the interaction between GUI and DB
+public class Backend {
+    // Initialize DB classes
+	private UserDao userDao = new UserDao();
+	private SemesterDao semesterDao = new SemesterDao();
 	private CourseDao courseDao = new CourseDao();
 	private CategoryDao categoryDao = new CategoryDao();
 	private PartDao partDao = new PartDao();
 
-	Course currentCourse;
+	// Track current user, current semester, and current course
+	private User user;  // Unused, multiple users is a low priority feature
+	private Semester semester;
+	private Course course;
 
-	public CourseBackend() {
-		currentCourse = null;
+	public Backend() {
+		this(null, null, null);
 	}
 
-	public CourseBackend(Course course) {
-		currentCourse = course;
+	public Backend(User user, Semester semester, Course course) {
+		this.user = user;
+		this.semester = semester;
+		this.course = course;
 	}
 
-	public Course getCurrentCourse() {
-		return currentCourse;
+	/* User Methods Start */
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public void setCurrentCourse(Course c) {
-		currentCourse = c;
+	// Returns the User if username and password were correct
+	// else returns null if no such user exists
+	public User loginUser(String user, String pass) throws SQLException {
+		ArrayList<User> userList = userDao.getUsersByLogin(user, pass);
+		if (userList.size() == 0) {
+			return null;
+		}
+		User existingUser = userList.get(0);
+		return existingUser;
 	}
 
-	// Course methods
+	// Adds a user to the database.
+	// Returns null if another user already exists with the same username.
+	public User signUp(String user, String pass) throws SQLException {
+	    // First check if username already exists
+		ArrayList<User> userList = userDao.getUsersByName(user);
+		if (userList.size() != 0) {
+			return null;
+		}
+
+		User newUser = new User(user, pass);
+		userDao.insert(newUser);
+		return newUser;
+	}
+
+	/* Semester Methods Start */
+
+	public Semester getSemester() {
+		return semester;
+	}
+
+	public void setSemester(Semester semester) {
+		this.semester = semester;
+	}
+
+	public void addSemester(Semester s) throws SQLException {
+		semesterDao.insert(s);
+	}
+
+	public ArrayList<Semester> getAllSemesters() throws SQLException {
+		return semesterDao.getAll();
+	}
+
+	/* Course Methods Start */
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
 
 	// Gets every single course semester
 	public ArrayList<Course> getAllCourse(Semester semester) {
@@ -98,12 +151,12 @@ public class CourseBackend {
 		return true;
 	}
 
-	/* Category Backend Methods */
+	/* Category Methods Start */
 
 	// Get all categories for a course
 	public ArrayList<Category> getCategories(Course c) throws SQLException {
 		ArrayList<Category> categories = new ArrayList<>();
-		categories = categoryDao.getAll(c.getCourseid());
+		categories = categoryDao.getAll(c.getCourseId());
 		if (categories.size() == 0) return null;
 		for (Category cat : categories) {
 			ArrayList<Part> parts = getParts(cat);
@@ -123,7 +176,7 @@ public class CourseBackend {
 		return true;
 	}
 
-	/* Part backend methods */
+	/* Part Methods Start */
 
 	// Get all parts for a category
 	public ArrayList<Part> getParts(Category c) throws SQLException {
@@ -136,7 +189,7 @@ public class CourseBackend {
 		partDao.insert(part);
 	}
 
-	/* Student backend methods */
+	/* Student Methods Start */
 
-	/* Grade backend methods */
+	/* Grade Methods Start */
 }
