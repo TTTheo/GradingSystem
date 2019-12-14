@@ -10,21 +10,23 @@ public class Course {
 	private ArrayList<Category> categories ;
 	
 	public Course() {
-		//do nothing
+		this("", 0, "", new ArrayList<Student>(), new ArrayList<Category>());
 	}
 
-	public Course(String courseId) {
-		this.courseId = courseId ;
-	}
-
-	public Course(String courseId, String name) {
-		this(courseId);
-		this.name = name;
+	public Course(String courseId, int semesterId) {
+		this(courseId, semesterId, "", new ArrayList<Student>(), new ArrayList<Category>());
 	}
 
 	public Course(String courseId, int semesterId, String name) {
-		this(courseId, name);
+		this(courseId, semesterId, name, new ArrayList<Student>(), new ArrayList<Category>());
+	}
+
+	public Course(String courseId, int semesterId, String name, ArrayList<Student> students, ArrayList<Category> categories) {
+		this.courseId = courseId;
 		this.semesterId = semesterId;
+		this.name = name;
+		this.students = students;
+		this.categories = categories;
 	}
 
 	public int getSemesterId() {
@@ -42,12 +44,12 @@ public class Course {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getCourseid() {
+
+	public String getCourseId() {
 		return courseId;
 	}
 
-	public void setCourseid(String courseId) {
+	public void setCourseId(String courseId) {
 		this.courseId = courseId;
 	}
 

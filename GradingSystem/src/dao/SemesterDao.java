@@ -32,8 +32,7 @@ public class SemesterDao extends Dao<Semester> {
                 semester.getYear()
         );
         int sid = executeUpdate(query);
-        System.out.println("last inserted semester row id is..." + sid);
-        semester.setSemester_id(sid);
+        semester.setSemesterId(sid);
     }
 
     public ArrayList<Semester> getAll() throws SQLException {

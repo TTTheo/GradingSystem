@@ -3,19 +3,19 @@ package objects;
 import java.util.*;
 
 public class Semester {
-    private int semester_id;
+    private int semesterId;
     private String term;
     private Integer year;
     private List<Course> courses ;
 
     public static final String[] TERMS = new String[] {"SPRING","SUMMER","FALL","WINTER"};
 
-    public int getSemester_id() {
-        return semester_id;
+    public int getSemesterId() {
+        return semesterId;
     }
 
-    public void setSemester_id(int semester_id) {
-        this.semester_id = semester_id;
+    public void setSemesterId(int semesterId) {
+        this.semesterId = semesterId;
     }
 
     @Override

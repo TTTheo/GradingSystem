@@ -33,7 +33,7 @@ public class CourseDao extends Dao<Course>{
 
         String query = String.format(
                 "INSERT INTO Course (course_id, semester_id, name) VALUES ('%s', %d, '%s')",
-                course.getCourseid(),
+                course.getCourseId(),
                 course.getSemesterId(),
                 course.getName()
         );
@@ -50,7 +50,7 @@ public class CourseDao extends Dao<Course>{
     public ArrayList<Course> getAll(Semester sem) throws SQLException {
         String query = String.format(
         		"SELECT * FROM Course WHERE semester_id = '%d'",
-        		sem.getSemester_id()
+        		sem.getSemesterId()
         );
         return executeQuery(query);
     }
@@ -67,7 +67,7 @@ public class CourseDao extends Dao<Course>{
     public boolean update(Course course) throws SQLException {
     	String query = String.format(
                 "UPDATE Course SET course_id = '%s', semester_id = '%d', name = '%s'",
-                course.getCourseid(),
+                course.getCourseId(),
                 course.getSemesterId(),
                 course.getName()
         );
