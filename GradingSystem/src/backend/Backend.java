@@ -14,6 +14,8 @@ public class Backend {
 	private CourseDao courseDao = new CourseDao();
 	private CategoryDao categoryDao = new CategoryDao();
 	private PartDao partDao = new PartDao();
+	private StudentDao studentDao = new StudentDao();
+//	private GradeDao gradeDao = new GradeDao();
 
 	// Track current user, current semester, and current course
 	private User user;  // Unused, multiple users is a low priority feature
@@ -89,16 +91,19 @@ public class Backend {
 		this.course = course;
 	}
 
-	// Gets every single course semester
-	public ArrayList<Course> getAllCourse(Semester semester) {
+	// Gets every single course from a semester
+	public ArrayList<Course> getAllCourses(Semester semester) {
 		ArrayList<Course> courses = null;
 		try {
-			courses = courseDao.getAll(semester);
-			if (courses != null) {
-				for (Course course : courses) {
-					ArrayList<Category> cats = getCategories(course);
-					course.setCategories(cats);
-				}
+			courses = courseDao.getAll(semester);  // will never be null
+			for (Course course : courses) {
+				// Get all the categories of this course
+				ArrayList<Category> cats = getCategories(course);
+				course.setCategories(cats);
+
+				// Get all the students of this course
+				ArrayList<Student> students = getAllStudents(course);
+				course.setStudents(students);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -108,11 +113,11 @@ public class Backend {
 
 	// Get a course by it's course id (eg. "cs591")
 	// Populates the course's categories (and parts) as well
-	public Course getCourse(String courseid) {
+	public Course getCourse(String courseId) {
 		ArrayList<Course> courses = null;
 		Course course = null;
 		try {
-			courses = courseDao.getCourse(courseid);
+			courses = courseDao.getCourse(courseId);
 			if (courses == null) return null;
 			course = courses.get(0);
 			ArrayList<Category> cats = getCategories(course);
@@ -153,9 +158,7 @@ public class Backend {
 
 	// Get all categories for a course
 	public ArrayList<Category> getCategories(Course c) throws SQLException {
-		ArrayList<Category> categories = new ArrayList<>();
-		categories = categoryDao.getAll(c.getCourseId());
-		if (categories.size() == 0) return null;
+		ArrayList<Category> categories = categoryDao.getAll(c.getCourseId());
 		for (Category cat : categories) {
 			ArrayList<Part> parts = getParts(cat);
 			cat.setPartList(parts);
@@ -166,7 +169,7 @@ public class Backend {
 	public void addCategory(Category category) throws SQLException {
 		categoryDao.insert(category);
 		ArrayList<Part> parts = category.getPartList();
-		if (parts != null && parts.size() != 0) {
+		if (parts != null) {
 			for (Part part : parts) {
 				addPart(part);
 			}
@@ -178,7 +181,6 @@ public class Backend {
 	// Get all parts for a category
 	public ArrayList<Part> getParts(Category c) throws SQLException {
 		ArrayList<Part> parts = partDao.getAll(c.getCid());
-		if (parts.size() == 0) return null;
 		return parts;
 	}
 
@@ -187,6 +189,15 @@ public class Backend {
 	}
 
 	/* Student Methods Start */
+
+	// Get all students in a course
+	public ArrayList<Student> getAllStudents(Course course) throws SQLException {
+		return studentDao.getAll(course);
+	}
+
+	public void addStudentToCourse(Student student, Course course) throws SQLException {
+		studentDao.insertStudentCourse(student.getSid(), course.getCourseId());
+	}
 
 	/* Grade Methods Start */
 }

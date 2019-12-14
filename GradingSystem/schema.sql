@@ -15,7 +15,8 @@ CREATE TABLE Semester (
 -- Student is one-to-many with Grade
 CREATE TABLE Student (
     sid VARCHAR (255) PRIMARY KEY,
-    name VARCHAR (255)
+    fname VARCHAR (255),
+    lname VARCHAR (255)
 );
 
 -- Semester is one-to-many with Course
@@ -60,7 +61,7 @@ CREATE TABLE Grade (
 -- many-to-many tables:
 
 -- Relates Students and Courses
-CREATE TABLE Course_Student (
+CREATE TABLE Student_Course (
     sid VARCHAR (255) NOT NULL,
     course_id VARCHAR (255) NOT NULL,
     FOREIGN KEY (sid) REFERENCES Student(sid),
@@ -79,15 +80,15 @@ INSERT INTO Course (course_id, semester_id, name)
 INSERT INTO Course (course_id, semester_id, name)
     VALUES ('cs101', 1, 'Intro');
 
-INSERT INTO Student (sid, name) VALUES ('U09', 'Jerry');
-INSERT INTO Student (sid, name) VALUES ('U10', 'Emma');
+INSERT INTO Student (sid, fname, lname) VALUES ('U09', 'Jerry', 'lname');
+INSERT INTO Student (sid, fname, lname) VALUES ('U10', 'Emma', 'lname');
 
 -- U09 is taking 2 courses
-INSERT INTO Course_Student (sid, course_id) VALUES ('U09', 'cs591');
-INSERT INTO Course_Student (sid, course_id) VALUES ('U09', 'cs101');
+INSERT INTO Student_Course (sid, course_id) VALUES ('U09', 'cs591');
+INSERT INTO Student_Course (sid, course_id) VALUES ('U09', 'cs101');
 
 -- U10 is taking 1 course
-INSERT INTO Course_Student (sid, course_id) VALUES ('U10', 'cs591');
+INSERT INTO Student_Course (sid, course_id) VALUES ('U10', 'cs591');
 
 INSERT INTO Category (cid, course_id, name, percentage)
     VALUES (1, "cs591", "Homework", 20);
@@ -118,3 +119,6 @@ INSERT INTO Grade (sid, pid, grade) VALUES ('U10', 4, 84); -- final
 
 -- To get all parts of a Category
 -- SELECT * FROM Category, Part WHERE Category.cid = Part.cid;
+
+-- Get all students in a course 'cs591'
+-- SELECT * FROM Student_Course WHERE course_id = 'cs591';
