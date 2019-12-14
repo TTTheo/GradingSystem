@@ -1,12 +1,10 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
 import gui.grade.EditCategoryFrame;
@@ -46,12 +44,13 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	ArrayList<Category> categoryList = new ArrayList<Category>();
 	ArrayList<Part> partList = new ArrayList<Part>();
 	ArrayList<String> cNameList = new ArrayList<String>();
+
+	private Backend backend;
 	/**
 	 * Create the frame.
 	 */
-	public AddPartFrame(Course course) {
-		this.course = course;
-		this.courseID = course.getCourseid();
+	public AddPartFrame(Backend c) {
+		backend = c;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 589, 609);
 		contentPane = new JPanel();
@@ -139,7 +138,7 @@ public class AddPartFrame extends JFrame implements FrameActions{
 						}
 					}
 				}
-				EditCategoryFrame nextFrame = new EditCategoryFrame(course);
+				EditCategoryFrame nextFrame = new EditCategoryFrame(backend);
 				nextFrame.setVisible(true);
 				dispose();
 			}
@@ -147,7 +146,7 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EditCategoryFrame nextFrame = new EditCategoryFrame(course);
+				EditCategoryFrame nextFrame = new EditCategoryFrame(backend);
 				nextFrame.setVisible(true);
 				dispose();
 			}
@@ -158,10 +157,7 @@ public class AddPartFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

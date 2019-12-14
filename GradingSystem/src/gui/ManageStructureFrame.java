@@ -1,9 +1,6 @@
 package gui;
 
-import backend.CourseBackend;
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import backend.Backend;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,12 +19,12 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
 	private JButton btnAddPart;
 	private JButton btnAdjustPercentage;
 
-	private CourseBackend courseBackend;
+	private Backend backend;
 	/**
 	 * Create the frame.
 	 */
-	public ManageStructureFrame(CourseBackend c) {
-	    courseBackend = c;
+	public ManageStructureFrame(Backend backend) {
+	    this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 532, 524);
@@ -51,7 +48,7 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
 		btnAddPart.setBounds(167, 209, 188, 37);
 		contentPane.add(btnAddPart);
 		
-		btnAdjustPercentage = new JButton("Adjust Percentage");
+		btnAdjustPercentage = new JButton("Adjust Percentage (Unused)");
 		btnAdjustPercentage.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAdjustPercentage.setBounds(167, 307, 188, 37);
 		contentPane.add(btnAdjustPercentage);
@@ -60,20 +57,15 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnAddCategory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddCategoryFrame addCategory=new AddCategoryFrame();
+				AddCategoryFrame addCategory=new AddCategoryFrame(backend, backend.getCourse(), 1); // TODO category left?
 				addCategory.setVisible(true);
 			}
 		});
 		
 		btnAddPart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				AddPartFrame addPart=new AddPartFrame();
-//				addPart.setVisible(true);
-			}
-		});
-		
-		btnAdjustPercentage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+				AddPartFrame addPart=new AddPartFrame(backend);
+				addPart.setVisible(true);
 			}
 		});
 	}
@@ -82,10 +74,7 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 
