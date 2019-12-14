@@ -123,8 +123,7 @@ public class Backend {
 		return course;
 	}
 
-	public boolean addCourse(Course course) {
-		if (course == null) return false;
+	public void addCourse(Course course) throws SQLException {
 		try {
 			courseDao.insert(course);
 			ArrayList<Category> cats = course.getCategories();
@@ -135,9 +134,8 @@ public class Backend {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			throw e;
 		}
-		return true;
 	}
 
 	public boolean updateCourse(Course course) {
@@ -165,7 +163,7 @@ public class Backend {
 		return categories;
 	}
 
-	public boolean addCategory(Category category) throws SQLException {
+	public void addCategory(Category category) throws SQLException {
 		categoryDao.insert(category);
 		ArrayList<Part> parts = category.getPartList();
 		if (parts != null && parts.size() != 0) {
@@ -173,7 +171,6 @@ public class Backend {
 				addPart(part);
 			}
 		}
-		return true;
 	}
 
 	/* Part Methods Start */

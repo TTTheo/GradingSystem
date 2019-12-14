@@ -15,9 +15,11 @@ public class SemesterDao extends Dao<Semester> {
                 ResultSet rs = st.executeQuery(query);
         ) {
             while (rs.next()) {
+                int semesterId = rs.getInt("semester_id");
                 String term = rs.getString("term");
                 Integer year = (Integer) rs.getObject("year");
                 Semester sem = new Semester(term, year);
+                sem.setSemesterId(semesterId);
                 semesters.add(sem);
             }
         }

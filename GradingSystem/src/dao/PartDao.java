@@ -37,10 +37,8 @@ public class PartDao extends Dao<Part>{
 
     @Override
     public void insert(Part part) throws SQLException {
-
         String query = String.format(
-                "INSERT INTO Part (pid, cid, name, total_score, percentage) VALUES ('%s','%s','%s', %f,%f)",
-                part.getPid(),
+                "INSERT INTO Part (cid, name, total_score, percentage) VALUES ('%s','%s', %f,%f)",
                 part.getCid(),
                 part.getName(),
                 part.getTotalScore(),
@@ -51,27 +49,28 @@ public class PartDao extends Dao<Part>{
         part.setPid(pid);
     }
 
+    // Get all parts of a category
     public ArrayList<Part> getAll(int cid) throws SQLException {
         String query = String.format(
         		"SELECT * FROM Part WHERE cid = '%s'",
         		cid
-        	);
+        );
         return executeQuery(query);
     }
 
-    public ArrayList<Part> select(String pid) throws SQLException {
+    public ArrayList<Part> getById(String pid) throws SQLException {
     	String query = String.format(
         		"SELECT * FROM Part WHERE pid = '%s'",
         		pid
-        		);
+        );
         return executeQuery(query);
     }
     
-    public boolean delete(String pid) {
+    public boolean delete(Part p) {
     	String query = String.format(
         		"DELETE FROM Part WHERE pid = '%s'",
-        		pid
-        		);
+        		p.getPid()
+        );
     	try {
     		executeUpdate(query);
     	}catch(SQLException e) {

@@ -10,6 +10,21 @@ public class Semester {
 
     public static final String[] TERMS = new String[] {"SPRING","SUMMER","FALL","WINTER"};
 
+    public Semester() {
+        this("", 0, new ArrayList<Course>());
+    }
+
+    public Semester(String term, int year) {
+        this(term, year, new ArrayList<Course>());
+    }
+
+    public Semester(String term, int year, ArrayList<Course> courses) {
+        this.semesterId = semesterId;
+        this.term = term;
+        this.year = year;
+        this.courses = courses;
+    }
+
     public int getSemesterId() {
         return semesterId;
     }
@@ -23,19 +38,6 @@ public class Semester {
         return term + " " + year;
     }
 
-    public Semester() {
-        this("", 0, new ArrayList<Course>());
-    }
-
-    public Semester(String term, int year) {
-        this(term, year, new ArrayList<Course>());
-    }
-
-    public Semester(String term, int year, ArrayList<Course> courses) {
-        this.term = term;
-        this.year = year;
-        this.courses = courses;
-    }
 
     public Integer getNumCourses () {
         return courses.size();

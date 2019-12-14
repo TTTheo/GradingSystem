@@ -23,11 +23,10 @@ public class CategoryDao extends Dao<Category> {
             while (rs.next()) {
             	int cid = rs.getInt("cid") ;
             	String name = rs.getString("name") ;
-            	int partNum = rs.getInt("part_num") ;
-            	String courseid = rs.getString("courseid") ;
+            	String courseid = rs.getString("course_id") ;
             	double percentage = rs.getDouble("percentage") ;
-                ArrayList<Part> parts = pd.getAll(cid) ;
-                Category cat = new Category(name, partNum, courseid, percentage) ;
+				ArrayList<Part> parts = pd.getAll(cid);
+				Category cat = new Category(name, parts.size(), courseid, percentage) ;
                 cat.setPartList(parts);
                 cats.add(cat);
             }
@@ -37,14 +36,11 @@ public class CategoryDao extends Dao<Category> {
 
     @Override
     public void insert(Category category) throws SQLException {
-
         String query = String.format(
-                "INSERT INTO Category (cid, name, part_num, percentage, courseid) VALUES ('%s','%s',%d,%f,'%s')",
-                category.getCid(),
+                "INSERT INTO Category (name, percentage, course_id) VALUES ('%s',%f,'%s')",
                 category.getName(),
-                category.getPartNum(),
                 category.getPercentage(),
-                category.getCourseid()
+                category.getCourseId()
         );
 
 		int cid = executeUpdate(query);
@@ -53,25 +49,26 @@ public class CategoryDao extends Dao<Category> {
 
 	public ArrayList<Category> getAll(String courseid) throws SQLException {
         String query = String.format(
-        		"SELECT * FROM Category WHERE courseid = '%s'",
+        		"SELECT * FROM Category WHERE course_id = '%s'",
         		courseid
-        		);
+		);
         return executeQuery(query);
     }
-    
-    public ArrayList<Category> select(String cid) throws SQLException {
+
+    // Get a specific category if you know the ID
+    public ArrayList<Category> getById(String cid) throws SQLException {
     	String query = String.format(
         		"SELECT * FROM Category WHERE cid = '%s'",
         		cid
-        		);
+		);
         return executeQuery(query);
     }
     
-    public boolean delete(String cid) {
+    public boolean delete(Category c) {
     	String query = String.format(
         		"DELETE FROM Category WHERE cid = '%s'",
-        		cid
-        		);
+        		c.getCid()
+		);
     	try {
     		executeUpdate(query);
     	}catch(SQLException e) {
@@ -83,12 +80,11 @@ public class CategoryDao extends Dao<Category> {
     
     public boolean update(Category category) {
     	String query = String.format(
-        		"UPDATE Category SET name = '%s', part_num = '%d', percentage = '%f' WHERE cid = '%s'",
+        		"UPDATE Category SET name = '%s', percentage = '%f' WHERE cid = '%s'",
         		category.getName(),
-        		category.getPartNum(),
         		category.getPercentage(),
         		category.getCid()
-        		);
+		);
     	try {
     		executeUpdate(query);
     	}catch(SQLException e) {

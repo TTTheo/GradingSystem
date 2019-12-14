@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import backend.Backend;
 import dao.CourseDao;
 import objects.Course;
 import objects.Semester;
@@ -29,17 +30,19 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JLabel lblCourseName;
+	private JLabel lblCourseId;
 	private JLabel lblNumberOfCategories;
 	private JLabel lblApplyOldStructure;	
 	private JComboBox comboBox;	
 	private JButton btnNext;
 	private JButton btnCancel;
+	private Backend backend;
 	/**
 	 * Create the frame.
 	 */
-	public AddCourseFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public AddCourseFrame(Backend backend) {
+		this.backend = backend;
+
 		setBounds(100, 100, 552, 585);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,10 +53,10 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 	}
 	
 	public void init(){
-		lblCourseName = new JLabel("Course name:");
-		lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblCourseName.setBounds(76, 53, 220, 32);
-		contentPane.add(lblCourseName);
+		lblCourseId = new JLabel("Course ID (eg. cs591):");
+		lblCourseId.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblCourseId.setBounds(76, 53, 220, 32);
+		contentPane.add(lblCourseId);
 		
 		lblNumberOfCategories = new JLabel("Number of categories:");
 		lblNumberOfCategories.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -65,7 +68,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		lblApplyOldStructure = new JLabel("Apply old structure:");
+		lblApplyOldStructure = new JLabel("Apply Previous Grading Structure:");
 		lblApplyOldStructure.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblApplyOldStructure.setBounds(76, 157, 220, 34);
 		contentPane.add(lblApplyOldStructure);
@@ -93,29 +96,26 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		btnCancel.setBounds(76, 413, 107, 32);
 		contentPane.add(btnCancel);
 	}
-	
+
 	public void addActions(){
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String courseName = textField.getText();
+				String courseId = textField.getText();
+				Course newCourse = new Course(courseId, backend.getSemester().getSemesterId());
+				System.out.println("this is the created course's sem id: " + newCourse.getSemesterId());
+				int categoryNum = Integer.parseInt(textField_1.getText());  // Input validation is low priority
+
 				try {
-					CourseDao c_DAO = new CourseDao();
-					int categoryNum = Integer.parseInt(textField_1.getText());
-					//Because the Semester Frame and Course Frame are still in work, I have created a mock up Semester Instance to store inside DB
-					Course newCourse = new Course(new Semester("FALL2019", 2019),
-												  courseName, 
-												  categoryNum);
-					
-					try {
-						c_DAO.insert(newCourse);
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-					AddCategoryFrame nextFrame = new AddCategoryFrame(newCourse, categoryNum);
+					backend.addCourse(newCourse);
+
+					// Ideally we would be able to add categories all in one
+					// frame and remove the need for newCourse and categoryNum
+					AddCategoryFrame nextFrame = new AddCategoryFrame(backend, newCourse, categoryNum);
 					nextFrame.setVisible(true);
 					dispose();
-				} catch (NumberFormatException e1) {
-					JOptionPane.showMessageDialog(null, "Invalid Input for the number of categories");
+				} catch (SQLException e1) {
+					alert(e1.toString());
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -127,8 +127,6 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

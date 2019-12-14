@@ -6,27 +6,19 @@ public class Category {
 	private int cid;
 	private String name ;//hw, midterm, quiz, etc.
 	private int partNum;// 1,2,3, ...
-	private String courseid ;
+	private String courseId;
 	private double percentage;
 	private ArrayList<Part> partList;
 
 	// cid gets set when you insert into the database.
-	public Category (String name, int partNum, String couseid, double percentage) {
+	public Category (String name, int partNum, String courseId, double percentage) {
 		this.name = name;
 		this.partNum = partNum;
-		this.courseid = couseid ;
+		this.courseId = courseId;
 		this.percentage = percentage;
 		this.partList = new ArrayList<Part>(partNum);
 	}
 	
-	public Category (String name, int partNum, String cid,String courseid, double percentage) {
-		this.name = name;
-		this.partNum = partNum;
-		this.courseid = courseid ;
-		this.percentage = percentage;
-		this.partList = new ArrayList<Part>(partNum);
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -43,12 +35,12 @@ public class Category {
 		this.partNum = partNum;
 	}
 
-	public String getCourseid() {
-		return courseid;
+	public String getCourseId() {
+		return courseId;
 	}
 
-	public void setCourseid(String courseid) {
-		this.courseid = courseid;
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
 	}
 
 	public int getCid() {

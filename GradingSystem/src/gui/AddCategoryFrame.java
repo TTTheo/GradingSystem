@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
 import gui.grade.EditCategoryFrame;
@@ -35,28 +36,27 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 	private JScrollPane scrollPane;		
 	private JButton btnNext;
 	private JButton btnSetParts;
-	private Course course;
-	private int categoryLeft;
 	private JButton btnBack;
 
-	/**
-	 * Create the frame.
-	 */
-	public AddCategoryFrame() {
+	private Backend backend;
+	private Course course;
+	private int categoryLeft;
+
+	public AddCategoryFrame(Backend backend, Course course, int categoryLeft) {
+		this.backend = backend;
+		this.backend.setCourse(course);
+		this.course = course;
+		this.categoryLeft = categoryLeft;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 590, 622);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
 		init();
 		addActions();
-	}
-	
-	public AddCategoryFrame(Course course, int categoryLeft) {
-		this();
-		this.course = course;
-		this.categoryLeft = categoryLeft;
 	}
 	
 	public void init(){
@@ -103,7 +103,6 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		scrollPane.setViewportView(table);
 		
-		
 		btnNext = new JButton("Next");
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnNext.setBounds(423, 512, 93, 23);
@@ -128,17 +127,17 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 				try {
 					partNum = Integer.parseInt(textField_1.getText());
 				} catch (NumberFormatException e1) {
-					JOptionPane.showMessageDialog(null, "Invalid Input for the number of parts");
+					alert("Invalid Input for the number of parts");
 					return;
 				}
 				try {
 					cPercentage = Double.parseDouble(textField_2.getText());
 					if (cPercentage > 100) {
-						JOptionPane.showMessageDialog(null, "Percentage cover for a single category shall not exceed 100");
+						alert("Percentage cover for a single category shall not exceed 100");
 						return;
 					}
 				} catch (NumberFormatException e1) {
-					JOptionPane.showMessageDialog(null, "Invalid Input for the percentage of this category");
+					alert("Invalid Input for the percentage of this category");
 					return;
 				}
 				Object[][] content=new Object[partNum][3];
@@ -150,18 +149,17 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Capture the Information from Textfield to construct a new Category
+				// Capture the Information from Textfield to construct a new Category
 				String categoryName = textField.getText();
 				int partNum = Integer.parseInt(textField_1.getText());
 				double cPercentage = Double.parseDouble(textField_2.getText());
-				//
-				CategoryDao c_DAO = new CategoryDao();
-				Category newCategory = new Category (categoryName, partNum, course.getCourseid(), cPercentage);
+
+				Category newCategory = new Category (categoryName, partNum, course.getCourseId(), cPercentage);
 				try {
-					c_DAO.insert(newCategory);
+					backend.addCategory(newCategory);
 				} catch (SQLException e1) {
+				    alert(e1.toString());
 					e1.printStackTrace();
-					//System.out.println("Failed to insert the created Category instance into the DB!");
 				}
 				
 				//Ready A Single Part for current new Category
@@ -180,14 +178,14 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 									percentage = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
 									break;
 								} catch (NumberFormatException e1) {
-									JOptionPane.showMessageDialog(null, "Invalid Input for the percentage of " + partName);
+									alert("Invalid Input for the percentage of " + partName);
 								}
 							case 2:
 								try {
 									totalScore = Double.parseDouble((String) table.getValueAt(rowNum, colNum));
 									break;
 								} catch (NumberFormatException e1) {
-									JOptionPane.showMessageDialog(null, "Invalid Input for the score of " + partName);
+									alert("Invalid Input for the score of " + partName);
 								}
 							default:
 								//Prevent from passing incorrect data to the next frame
@@ -199,8 +197,8 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 					try {
 						p_DAO.insert(newPart);
 					} catch (SQLException e1) {
+					    alert(e1.toString());
 						e1.printStackTrace();
-						//System.out.println("Failed to insert the created Part instance into the DB!");
 					}
 					newCategory.addPart(newPart);
 				}
@@ -209,7 +207,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 					p_PercentageSum += p.getPercentage();
 				}
 				if (p_PercentageSum > cPercentage) {
-					JOptionPane.showMessageDialog(null, "Percentages of Parts DON'T add up, please CHECK");
+					alert("Percentages of Parts DON'T add up, please CHECK");
 					return;
 				}
 				course.addCategory(newCategory);
@@ -218,7 +216,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 				if (categoryLeft > 1) {
 					categoryLeft--;
 					//System.out.println(categoryLeft);
-					AddCategoryFrame nextFrame = new AddCategoryFrame(course, categoryLeft);
+					AddCategoryFrame nextFrame = new AddCategoryFrame(backend, course, categoryLeft);
 					nextFrame.setVisible(true);
 					dispose();
 				} else {
@@ -228,9 +226,9 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 						c_PercentageSum += c.getPercentage();
 					}
 					if (c_PercentageSum > 100) {
-						JOptionPane.showMessageDialog(null, "Percentages of all Categories DON'T add up, please EDIT THEM");
+						alert("Percentages of all Categories DON'T add up, please EDIT THEM");
 					}
-					EditCategoryFrame nextFrame = new EditCategoryFrame(course);
+					EditCategoryFrame nextFrame = new EditCategoryFrame(backend);
 					nextFrame.setVisible(true);
 					dispose();
 				}
@@ -242,10 +240,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

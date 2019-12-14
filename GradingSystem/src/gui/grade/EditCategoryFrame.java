@@ -1,16 +1,12 @@
 package gui.grade;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
-import backend.CourseBackend;
+import backend.Backend;
 import dao.CategoryDao;
-import dao.CourseDao;
 import dao.PartDao;
 import gui.AddPartFrame;
 import gui.FrameActions;
@@ -36,34 +32,30 @@ import javax.swing.Action;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
-	private CourseBackend coursebackend = new CourseBackend() ;
 	private JPanel contentPane;
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
 	private JButton AddNewBtn;
 	private JTextField textField;
 	private JButton ApplyChangesButton;
-	private Course course = new Course();
-	private String courseID;
 	private final Action action = new SwingAction();
 
-
+	private Course course;
+	private String courseId;
+	private Backend backend;
 	/**
 	 * Create the frame.
 	 */
-	public EditCategoryFrame() {
+	public EditCategoryFrame(Backend backend) {
+		this.backend = backend;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-	}
-	
-	public EditCategoryFrame(Course course) {
-		this();
-		this.course = course;
-		this.courseID = course.getCourseid();
+
 		init();
 		addActions();
 	}
@@ -73,15 +65,16 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 118, 520, 378);
 		contentPane.add(scrollPane);
-		
-		this.course = coursebackend.getCourse("CAS1") ;
+
+		course = backend.getCourse();
+		courseId = backend.getCourse().getCourseId();
 		this.generateTable(course);
 		
 		AddNewBtn = new JButton("Add New");
 		AddNewBtn.setBounds(605, 212, 129, 35);
 		contentPane.add(AddNewBtn);
 		
-		JLabel CourseNameLabel = new JLabel(this.course.getName());
+		JLabel CourseNameLabel = new JLabel(courseId);
 		CourseNameLabel.setBounds(28, 46, 163, 16);
 		contentPane.add(CourseNameLabel);
 		
@@ -122,7 +115,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				ArrayList<Category> categoryList = new ArrayList<Category>();
 				ArrayList<Part> partList = new ArrayList<Part>();
 				try {
-					categoryList = categoryDAO.getAll(courseID);
+					categoryList = categoryDAO.getAll(courseId);
 				} catch (SQLException e) {
 					System.out.println("Failed to extract CATEGROIES from the DB!");
 				}
@@ -205,7 +198,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				ArrayList<Category> categoryList = new ArrayList<Category>();
 				ArrayList<Part> partList = new ArrayList<Part>();
 				try {
-					categoryList = categoryDAO.getAll(courseID);
+					categoryList = categoryDAO.getAll(courseId);
 				} catch (SQLException e1) {
 					System.out.println("Failed to extract CATEGROIES from the DB!");
 				}
@@ -229,7 +222,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 						} catch (ClassCastException e1) {
 							categoryPercent = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 2));
 						}
-						Category cToUpdate = new Category(categoryName, partNum, courseID, categoryPercent);
+						Category cToUpdate = new Category(categoryName, partNum, courseId, categoryPercent);
 						cToUpdate.setCid(currentCID);
 						categoryDAO.update(cToUpdate);
 						//
@@ -290,7 +283,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 					JOptionPane.showMessageDialog(null, "Percentages of all Categories DON'T add up, please EDIT THEM");
 					return;
 				}
-				EditCategoryFrame refresh = new EditCategoryFrame(course);
+				EditCategoryFrame refresh = new EditCategoryFrame(backend);
 				refresh.setVisible(true);
 				dispose();
 			}
@@ -298,7 +291,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		
 		AddNewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddPartFrame newFrame = new AddPartFrame(course);
+				AddPartFrame newFrame = new AddPartFrame(backend);
 				newFrame.setVisible(true);
 				dispose();
 			}
@@ -311,8 +304,6 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 
