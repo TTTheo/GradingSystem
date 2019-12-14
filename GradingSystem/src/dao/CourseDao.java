@@ -66,7 +66,7 @@ public class CourseDao extends Dao<Course>{
     
     public boolean update(Course course) throws SQLException {
     	String query = String.format(
-                "UPDATE Course SET course_id = '%s', semester_id = '%d', name = '%s'",
+                "UPDATE Course SET course_id = '%s', semester_id = %d, name = '%s'",
                 course.getCourseId(),
                 course.getSemesterId(),
                 course.getName()
@@ -80,5 +80,4 @@ public class CourseDao extends Dao<Course>{
     	}
     	return true ;
     }
-
 }

@@ -38,7 +38,7 @@ public class PartDao extends Dao<Part>{
     @Override
     public void insert(Part part) throws SQLException {
         String query = String.format(
-                "INSERT INTO Part (cid, name, total_score, percentage) VALUES ('%s','%s', %f,%f)",
+                "INSERT INTO Part (cid, name, total_score, percentage) VALUES (%d,'%s', %f,%f)",
                 part.getCid(),
                 part.getName(),
                 part.getTotalScore(),
@@ -58,9 +58,9 @@ public class PartDao extends Dao<Part>{
         return executeQuery(query);
     }
 
-    public ArrayList<Part> getById(String pid) throws SQLException {
+    public ArrayList<Part> getById(int pid) throws SQLException {
     	String query = String.format(
-        		"SELECT * FROM Part WHERE pid = '%s'",
+        		"SELECT * FROM Part WHERE pid = %d",
         		pid
         );
         return executeQuery(query);
@@ -68,7 +68,7 @@ public class PartDao extends Dao<Part>{
     
     public boolean delete(Part p) {
     	String query = String.format(
-        		"DELETE FROM Part WHERE pid = '%s'",
+        		"DELETE FROM Part WHERE pid = %d",
         		p.getPid()
         );
     	try {
@@ -82,12 +82,12 @@ public class PartDao extends Dao<Part>{
     
     public boolean update(Part part) {
     	String query = String.format(
-        		"UPDATE Part SET name = '%s', total_score = '%f', percentage = '%f' WHERE pid = '%s'",
+        		"UPDATE Part SET name = '%s', total_score = %f', percentage = '%f' WHERE pid = %d",
         		part.getName(),
         		part.getTotalScore(),
         		part.getPercentage(),
         		part.getPid()
-        		);
+        );
     	try {
     		executeUpdate(query);
     	}catch(SQLException e) {

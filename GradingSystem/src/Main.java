@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class Main {
 	public static void main(String[] args) throws SQLException {
-		SemesterFrame login = new SemesterFrame();
+		SemesterFrame login = new SemesterFrame(new Backend());
 		login.setVisible(true);
 	}
 }

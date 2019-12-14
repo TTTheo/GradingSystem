@@ -53,6 +53,7 @@ CREATE TABLE Grade (
     sid VARCHAR (255) NOT NULL,
     pid INTEGER NOT NULL,
     grade DOUBLE,
+    comment VARCHAR(255),
     PRIMARY KEY (sid, pid), -- Composite key
     FOREIGN KEY (sid) REFERENCES Student(sid),
     FOREIGN KEY (pid) REFERENCES Part(pid)
@@ -105,7 +106,7 @@ INSERT INTO Part (pid, cid, name, total_score, percentage)
     VALUES (4, 2, "Final", 100, 60);
 
 INSERT INTO Grade (sid, pid, grade) VALUES ('U09', 1, 60); -- hw 1
-INSERT INTO Grade (sid, pid, grade) VALUES ('U09', 2, 50); -- hw 2
+INSERT INTO Grade (sid, pid, grade, comment) VALUES ('U09', 2, 50, 'comment lol'); -- hw 2
 INSERT INTO Grade (sid, pid, grade) VALUES ('U09', 3, 70); -- midterm
 INSERT INTO Grade (sid, pid, grade) VALUES ('U09', 4, 80); -- final
 

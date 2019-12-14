@@ -33,7 +33,7 @@ public class StudentDao extends Dao<Student> {
     @Override
     public void insert(Student student) throws SQLException {
         String query = String.format(
-                "INSERT INTO Student (sid, fname, lname) VALUES ('%s', %s, '%s')",
+                "INSERT INTO Student (sid, fname, lname) VALUES ('%s', '%s', '%s')",
                 student.getSid(),
                 student.getFname(),
                 student.getLname()
