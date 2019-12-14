@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import backend.CourseBackend;
+import backend.Backend;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -25,14 +25,10 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	private JButton btnManageCourseStrcuture;
 	private JButton btnOriginalGrades;
 
-	private CourseBackend courseBackend;
+	private Backend backend;
 
-
-	/**
-	 * Create the frame.
-	 */
-	public CourseMenuFrame(CourseBackend c) {
-		courseBackend = c;
+	public CourseMenuFrame(Backend c) {
+		backend = c;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 574, 583);
@@ -84,7 +80,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnManageStudents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ManageStudentsFrame manageStu=new ManageStudentsFrame(courseBackend.getCurrentCourse());
+				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend.getCourse());
 				manageStu.setVisible(true);
 			}
 		});
@@ -105,7 +101,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		
 		btnManageCourseStrcuture.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ManageStructureFrame manageCourse=new ManageStructureFrame(courseBackend);
+				ManageStructureFrame manageCourse=new ManageStructureFrame(backend);
 				manageCourse.setVisible(true);
 			}
 		});
@@ -121,10 +117,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

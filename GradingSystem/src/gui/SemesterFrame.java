@@ -36,12 +36,14 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	private JButton addBtn ;
 	private JScrollPane semesterTableScrollPane ;
 	private JTextField selectedSemesterField;
-	private SemesterBackend backend = new SemesterBackend();
+	private Backend backend;
 	private Semester selectedSemester;
 	/**
 	 * Create the frame.
 	 */
-	public SemesterFrame() {
+	public SemesterFrame(Backend backend) {
+		this.backend = backend;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -159,7 +161,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 
 		viewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				backend.setCurrentSemester(selectedSemester);
+				backend.setSemester(selectedSemester);
 			    openNext();
 			}
 		});

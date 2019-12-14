@@ -46,7 +46,7 @@ public class CourseTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                value = c.getName();
+                value = c.getCourseId();
                 break;
             case 1:
                 value = c.getStudents().size();

@@ -1,16 +1,13 @@
 package gui;
 
-import backend.CourseBackend;
-import backend.SemesterBackend;
+import backend.Backend;
 import objects.Course;
-import objects.Semester;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AllCoursesFrame extends JFrame implements FrameActions{
@@ -19,7 +16,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 
 	private JTable courseTable ;
 	private CourseTableModel tableModel ;
-	private SemesterBackend backend ;
+	private Backend backend ;
 
 	private JButton viewBtn ;
 	private JButton editBtn ;
@@ -35,7 +32,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 	/**
 	 * Create the frame.
 	 */
-	public AllCoursesFrame(SemesterBackend backend) {
+	public AllCoursesFrame(Backend backend) {
 	    this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,20 +41,23 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		final String[] columnNames = { "ID", "Number of Students"};
+		final String[] columnNames = {"ID", "Number of Students"};
 
-		lblSemesterName = new JLabel(backend.getCurrentSemester().toString());
+		lblSemesterName = new JLabel(backend.getSemester().toString());
 		lblSemesterName.setBounds(57, 20, 135, 37);
 		contentPane.add(lblSemesterName);
 
-		Course demo = new Course("cs591", 1);
-		ArrayList<Course> data;
-		try {
-			data = backend.getCourses();
-		} catch (SQLException e) {
-			data = new ArrayList<>();
-			data.add(demo);
-		}
+		Course demo = new Course("cs591", backend.getSemester().getSemesterId());
+		ArrayList<Course> data = new ArrayList<>();
+		data.add(demo);
+
+		// TODO: get from the DB after inplementing student backend
+//		try {
+//			data = backend.getCourses();
+//		} catch (SQLException e) {
+//			data = new ArrayList<>();
+//			data.add(demo);
+//		}
 
 		tableModel = new CourseTableModel(data, columnNames);
 		courseTable = new JTable(tableModel);  // Create JTable with custom model
@@ -120,7 +120,15 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		viewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				backend.setCourse(selectedCourse);
 				openNext();
+			}
+		});
+
+		addBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddCourseFrame next = new AddCourseFrame(backend);
+				next.setVisible(true);
 			}
 		});
 	}
@@ -131,8 +139,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 
 	// Open the course menu frame next
 	public void openNext() {
-		CourseBackend cb = new CourseBackend(selectedCourse);
-		CourseMenuFrame next = new CourseMenuFrame(cb);
+		CourseMenuFrame next = new CourseMenuFrame(backend);
 		next.setVisible(true);
 		dispose();
 	}

@@ -10,8 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
-import backend.CourseBackend;
-import backend.UserBackend;
+import backend.Backend;
 import objects.User;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -28,9 +27,8 @@ public class LoginFrame extends JFrame implements FrameActions {
 	private JButton loginBtn;
 	private JButton signupBtn;
 
-	// userBackend exposes functions that we can call.
-	private User currentUser;
-	private UserBackend userBackend;
+	// backend exposes functions that we can call.
+	private Backend backend;
 	
 	public LoginFrame() {
 		setResizable(false);
@@ -82,7 +80,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		welcomeLabel.setBounds(198, 49, 251, 57);
 		contentPane.add(welcomeLabel);
-		userBackend = new UserBackend();
+		backend = new Backend();  // create the backend for the rest of the program
 
 		// Define button handlers
 		addActions();
@@ -94,7 +92,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 
 	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
+		SemesterFrame next = new SemesterFrame(backend);
 		next.setVisible(true);
 		dispose();
 	}
@@ -113,12 +111,12 @@ public class LoginFrame extends JFrame implements FrameActions {
 				String user = username.getText();
 				String pass = String.valueOf(password.getPassword());
 				try {
-					User login = userBackend.loginUser(user, pass);
+					User login = backend.loginUser(user, pass);
 					if (login == null) {
 						alert("Invalid login, try again");
 					} else {
 					    // Login was successful
-						currentUser = login;
+						backend.setUser(login);
 						openNext();
 					}
 				} catch (SQLException ex) {
@@ -135,12 +133,12 @@ public class LoginFrame extends JFrame implements FrameActions {
 				String user = username.getText();
 				String pass = String.valueOf(password.getPassword());
 				try {
-					User newUser = userBackend.signUp(user, pass);
+					User newUser = backend.signUp(user, pass);
 					if (newUser == null) {
 						alert("Username " + user + " already exists!");
 					} else {
-						currentUser = newUser;
 						alert("Successfully signed up");
+						backend.setUser(newUser);
 						openNext();
 					}
 				} catch (SQLException ex) {
