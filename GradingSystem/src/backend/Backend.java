@@ -190,13 +190,32 @@ public class Backend {
 
 	/* Student Methods Start */
 
+	// Adds a student to the student table
+    public void addStudent(Student student) throws SQLException {
+    	studentDao.insert(student);
+	}
+
+	public void addStudentToCourse(Student student, Course course) throws SQLException {
+		studentDao.insertStudentCourse(student.getSid(), course.getCourseId());
+	}
+
 	// Get all students in a course
 	public ArrayList<Student> getAllStudents(Course course) throws SQLException {
 		return studentDao.getAll(course);
 	}
 
-	public void addStudentToCourse(Student student, Course course) throws SQLException {
-		studentDao.insertStudentCourse(student.getSid(), course.getCourseId());
+	// Get student by student id, returns null if no student exists
+	public Student getStudentById(String sid) throws SQLException {
+		ArrayList<Student> students = studentDao.getById(sid);
+		if (students.size() == 0) {
+			return null;
+		}
+		return students.get(0);
+	}
+
+	// Delete all traces of student from db TODO: cascade delete grades
+	public void deleteStudent(Student student) throws SQLException {
+    	studentDao.delete(student);
 	}
 
 	/* Grade Methods Start */

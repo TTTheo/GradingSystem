@@ -41,6 +41,15 @@ public class StudentDao extends Dao<Student> {
         executeUpdate(query);
     }
 
+    // Get by student id
+    public ArrayList<Student> getById(String sid) throws SQLException {
+        String query = String.format(
+                "SELECT * from Student where sid = '%s'",
+                sid
+        );
+        return executeQuery(query);
+    }
+
     // Get all students in course
     public ArrayList<Student> getAll(Course course) throws SQLException {
         String query = String.format(
@@ -62,6 +71,21 @@ public class StudentDao extends Dao<Student> {
                 "INSERT INTO Student_Course (sid, course_id) VALUES ('%s', '%s')",
                 sid,
                 cid
+        );
+        executeUpdate(query);
+    }
+
+    // Deletes student from Student table as well as from many-to-many table
+    public void delete(Student student) throws SQLException {
+        String query = String.format(
+                "DELETE FROM Student WHERE sid = '%s'",
+                student.getSid()
+        );
+        executeUpdate(query);
+
+        query = String.format(
+                "DELETE FROM Student_Course WHERE sid = '%s'",
+                student.getSid()
         );
         executeUpdate(query);
     }

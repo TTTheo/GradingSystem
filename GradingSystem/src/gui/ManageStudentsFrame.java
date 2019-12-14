@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-import backend.StudentBackend;
+import backend.Backend;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -55,20 +56,19 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	private String[][] data;
 	private final String[] columnNames= {"First Name","Last Name","ID","Email"};
 	private List<Student> students=new ArrayList<Student>();
-	private Course course;//=new Course("CS591",1);
-	private StudentBackend studentBack=new StudentBackend();
+	private Course course;
 	private JTextField textField_3;
-	/**
-	 * Create the frame.
-	 */
-	public ManageStudentsFrame(Course course) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	private Backend backend;
+	public ManageStudentsFrame(Backend backend) {
+	    this.backend = backend;
+		course = backend.getCourse();
+
 		setBounds(100, 100, 877, 589);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		this.course=course;
 		init();
 		addActions();
 	}
@@ -95,8 +95,13 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(35, 63, 538, 354);
 		contentPane.add(scrollPane);
-		
-		students=studentBack.getAllStudents(course.getCourseid());
+
+		try {
+			students=backend.getAllStudents(course);
+		} catch(SQLException e) {
+			alert(e.toString());
+			e.printStackTrace();
+		}
 		data=new String[students.size()][4];
 		for(int i=0;i<students.size();i++) {
 			data[i][0]=students.get(i).getFname();
@@ -196,12 +201,23 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 				String ID=textField_1.getText();
 				String Email=textField_2.getText();
 				int rowIndex = students.size();
-				Student stu=studentBack.getStudent(ID);
+				Student stu=null;
+				try {
+					stu=backend.getStudentById(ID);
+				} catch (SQLException ex) {
+					alert(ex.toString());
+					ex.printStackTrace();
+				}
 				if(stu!=null) {
 					alert("The student exist!");
 				}else {
-					students.add(new Student(name,lname,ID,Email));
-					studentBack.addStudent(new Student(name,lname,ID,Email));
+                    students.add(new Student(name, lname, ID, Email));
+                    try {
+						backend.addStudent(new Student(name, lname, ID, Email));
+					} catch (SQLException ex) {
+						alert(ex.toString());
+						ex.printStackTrace();
+					}
 					data=new String[students.size()][4];
 					for(int i=0;i<students.size();i++) {
 						data[i][0]=students.get(i).getFname();
@@ -231,9 +247,14 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	            	  if(name.equals("")&&lname.equals("")&&Email.equals("")) {
 			              for(int j=0;j<students.size();j++) {
 			            	  if(students.get(j).getSid().equals(ID)) {
-			            		  stuExist=true;
-			            		  students.remove(j);
-			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+                                  stuExist = true;
+                                  students.remove(j);
+                                  try {
+									  backend.deleteStudent(new Student(name, lname, ID, Email));
+								  } catch (SQLException ex) {
+									  alert(ex.toString());
+									  ex.printStackTrace();
+								  }
 			            		  data=new String[students.size()][4];
 			            		  for(int i=0;i<students.size();i++) {
 			            			  data[i][0]=students.get(i).getFname();
@@ -254,9 +275,14 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	            	  }else if(!name.equals("")&&!lname.equals("")) {
 	            		  for(int j=0;j<students.size();j++) {
 			            	  if(students.get(j).getSid().equals(ID)&&students.get(j).getFname().equals(name)&&students.get(j).getLname().equals(lname)) {
-			            		  stuExist=true;
-			            		  students.remove(j);
-			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+                                  stuExist = true;
+                                  students.remove(j);
+                                  try {
+									  backend.deleteStudent(new Student(name, lname, ID, Email));
+								  } catch (SQLException ex) {
+									  alert(ex.toString());
+									  ex.printStackTrace();
+								  }
 			            		  data=new String[students.size()][4];
 			            		  for(int i=0;i<students.size();i++) {
 			            			  data[i][0]=students.get(i).getFname();
@@ -276,9 +302,14 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	            		  for(int j=0;j<students.size();j++) {
 			            	  if(students.get(j).getSid().equals(ID)&&students.get(j).getFname().equals(name)&&
 			            			  students.get(j).getLname().equals(lname)&&students.get(j).getEmail().equals(Email)) {
-			            		  stuExist=true;
-			            		  students.remove(j);
-			            		  studentBack.deleteStudent(new Student(name,lname,ID,Email));
+                                  stuExist = true;
+                                  students.remove(j);
+                                  try {
+									  backend.deleteStudent(new Student(name, lname, ID, Email));
+								  } catch (SQLException ex) {
+									  alert(ex.toString());
+									  ex.printStackTrace();
+								  }
 			            		  data=new String[students.size()][4];
 			            		  for(int i=0;i<students.size();i++) {
 			            			  data[i][0]=students.get(i).getFname();
@@ -348,9 +379,14 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		                    //System.out.println(cells[1].getContents());
 		                    //System.out.println(cells[2].getContents());
 		                }else {
-			                Cell[] student=sheet.getRow(j);
-			                students.add(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents(),student[3].getContents()));
-			                studentBack.addStudent(new Student(student[0].getContents(),student[1].getContents(),student[2].getContents(),student[3].getContents()));
+                            Cell[] student = sheet.getRow(j);
+                            students.add(new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents()));
+                            try {
+								backend.addStudent(new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents()));
+							} catch (SQLException ex) {
+								alert(ex.toString());
+								ex.printStackTrace();
+							}
 			                //students.add(new Student(student[0].getContents(),student[1].getContents()));
 			             //   System.out.println(students.get(j-1).getFname());
 		                   // System.out.println(students.get(j-1).getSid());
@@ -386,10 +422,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

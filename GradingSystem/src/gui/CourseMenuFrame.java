@@ -87,7 +87,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	public void addActions(){
 		btnManageStudents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend.getCourse());
+				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend);
 				manageStu.setVisible(true);
 			}
 		});

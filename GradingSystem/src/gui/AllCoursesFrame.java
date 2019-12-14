@@ -47,9 +47,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		lblSemesterName.setBounds(57, 20, 135, 37);
 		contentPane.add(lblSemesterName);
 
-//		Course demo = new Course("cs591", backend.getSemester().getSemesterId());
-		ArrayList<Course> data;
-		data = backend.getAllCourses(backend.getSemester());
+		ArrayList<Course> data = backend.getAllCourses(backend.getSemester());
 
 		tableModel = new CourseTableModel(data, columnNames);
 		courseTable = new JTable(tableModel);  // Create JTable with custom model

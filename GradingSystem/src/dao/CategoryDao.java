@@ -56,9 +56,9 @@ public class CategoryDao extends Dao<Category> {
     }
 
     // Get a specific category if you know the ID
-    public ArrayList<Category> getById(String cid) throws SQLException {
+    public ArrayList<Category> getById(int cid) throws SQLException {
     	String query = String.format(
-        		"SELECT * FROM Category WHERE cid = '%s'",
+        		"SELECT * FROM Category WHERE cid = %d",
         		cid
 		);
         return executeQuery(query);
@@ -66,7 +66,7 @@ public class CategoryDao extends Dao<Category> {
     
     public boolean delete(Category c) {
     	String query = String.format(
-        		"DELETE FROM Category WHERE cid = '%s'",
+        		"DELETE FROM Category WHERE cid = %d",
         		c.getCid()
 		);
     	try {
@@ -80,7 +80,7 @@ public class CategoryDao extends Dao<Category> {
     
     public boolean update(Category category) {
     	String query = String.format(
-        		"UPDATE Category SET name = '%s', percentage = '%f' WHERE cid = '%s'",
+        		"UPDATE Category SET name = '%s', percentage = '%f' WHERE cid = %d",
         		category.getName(),
         		category.getPercentage(),
         		category.getCid()
