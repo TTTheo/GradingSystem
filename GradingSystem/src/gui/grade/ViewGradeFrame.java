@@ -7,13 +7,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import backend.CourseBackend;
-import backend.GradeBackend;
-import backend.StudentBackend;
+import backend.Backend;
 import gui.FrameActions;
 import gui.ManageStudentsFrame;
 import gui.PickPartFrame;
-import gui.SemesterFrame;
 
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -69,21 +66,16 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	private String[] curve;
 	private JButton btnCancel;
 	private Course course;
-	private CourseBackend courseBackend;
 	private JButton btnRecordGrade;
-	private GradeBackend gradeBack=new GradeBackend();
-	private StudentBackend studentBack=new StudentBackend();
 	private DefaultTableCellRenderer tcr=null;
 	private List<String[]> index=new ArrayList<String[]>();
 	private JPopupMenu m_popupMenu;
 	private int X;
 	private int Y;
 
-	/**
-	 * Create the frame.
-	 */
-	public ViewGradeFrame(CourseBackend c) {
-		courseBackend = c;
+	private Backend backend;
+	public ViewGradeFrame(Backend backend) {
+		this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1032, 618);
@@ -91,7 +83,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		this.course=c.getCurrentCourse();
+		this.course=backend.getCourse();
 		init();
 		addActions();
 	}
@@ -102,8 +94,8 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 	
 	public void init() {
 		try {
-			System.out.print(course.getCourseid());
-			category=courseBackend.getCategories(course);
+			System.out.print(course.getCourseId());
+			category= backend.getCategories(course);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,8 +131,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		scrollPane.setBounds(190, 78, 617, 402);
 		contentPane.add(scrollPane);
 		
-		grades=gradeBack.getAllGrade();
-		students=studentBack.getAllStudents(course.getCourseid());
+//		grades=backend.getAllGrade(); TODO
+        try {
+			students=backend.getAllStudents(course);
+		} catch (SQLException e) {
+        	alert(e.toString());
+        	e.printStackTrace();
+		}
 		/*grades.add(new Grade("U09","P01",50));
 		grades.add(new Grade("U10","P01",89));
 		grades.add(new Grade("U11","P01",100));
@@ -290,21 +287,21 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		});
 		btnEditStudents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ManageStudentsFrame manageStu=new ManageStudentsFrame(course);
+				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend);
 				manageStu.setVisible(true);
 			}
 		});
 		
 		btnEditCategory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EditCategoryFrame edit=new EditCategoryFrame();
+				EditCategoryFrame edit=new EditCategoryFrame(backend);
 				edit.setVisible(true);
 			}
 		});
 		
 		btnRecordGrade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PickPartFrame pick=new PickPartFrame(courseBackend);
+				PickPartFrame pick=new PickPartFrame(backend);
 				pick.setVisible(true);
 				dispose();
 			}
@@ -718,10 +715,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

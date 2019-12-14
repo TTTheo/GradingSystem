@@ -6,6 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import backend.Backend;
+import gui.grade.RecordGradeFrame;
+import gui.grade.ViewGradeFrame;
+import objects.Category;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -53,13 +56,13 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		btnManageStudents.setBounds(164, 82, 236, 36);
 		contentPane.add(btnManageStudents);
 		
-		btnRecordGrades = new JButton("Record grades (Not Implemented)");
+		btnRecordGrades = new JButton("Record grades (TODO)");
 		btnRecordGrades.setBackground(SystemColor.controlHighlight);
 		btnRecordGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnRecordGrades.setBounds(164, 163, 236, 36);
 		contentPane.add(btnRecordGrades);
 		
-		btnViewGrades = new JButton("View grades (Not Implemented)");
+		btnViewGrades = new JButton("View grades");
 		btnViewGrades.setBackground(SystemColor.controlHighlight);
 		btnViewGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnViewGrades.setBounds(164, 245, 236, 36);
@@ -71,7 +74,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		btnManageCourseStrcuture.setBounds(164, 324, 236, 36);
 		contentPane.add(btnManageCourseStrcuture);
 		
-		btnOriginalGrades = new JButton("Original grades (Not implemented)");
+		btnOriginalGrades = new JButton("Original grades");
 		btnOriginalGrades.setBackground(SystemColor.controlHighlight);
 		btnOriginalGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnOriginalGrades.setBounds(164, 402, 236, 36);
@@ -94,15 +97,18 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		
 		btnRecordGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//RecordGradeFrame recordGrade=new RecordGradeFrame();
-				//recordGrade.setVisible(true);
+			    // Record Grade is used to record grades for a specific part.
+				// It is called in ViewGradeFrame, I'm not sure what it's suppose to do here
+//				RecordGradeFrame recordGrade=new RecordGradeFrame(backend);
+//				recordGrade.setVisible(true);
+                alert("This button is called in ViewGradeFrame. Not sure how it's used here");
 			}
 		});
 		
 		btnViewGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//ViewGradeFrame viewGrade=new ViewGradeFrame();
-				//viewGrade.setVisible(true);
+				ViewGradeFrame viewGrade=new ViewGradeFrame(backend);
+				viewGrade.setVisible(true);
 			}
 		});
 		
@@ -115,7 +121,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		
 		btnOriginalGrades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				alert("Not sure what this button is used for");
 			}
 		});
 

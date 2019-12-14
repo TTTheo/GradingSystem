@@ -1,26 +1,16 @@
 package gui.grade;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
-import backend.CourseBackend;
-import gui.CourseMenuFrame;
-import backend.GradeBackend;
-import backend.StudentBackend;
+import backend.Backend;
 import gui.FrameActions;
-import gui.SemesterFrame;
 import objects.Category;
 import objects.Course;
 import objects.Grade;
 import objects.Part;
-import objects.Semester;
 import objects.Student;
 
 import javax.swing.JLabel;
@@ -30,30 +20,24 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.SystemColor;
 import java.awt.Color;
 import java.awt.Component;
 
 public class RecordGradeFrame extends JFrame implements FrameActions{
-
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -76,28 +60,27 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			//{"Jerry","U11",""}};
 	private final String[] columnNames = { "Name", "ID", "Score" };
 	private String editValue=new String("");
-	private StudentBackend studentBack;
 	private ArrayList<Student> students=new ArrayList<Student>();
-	private GradeBackend gradeBack=new GradeBackend();
-	private CourseBackend courseBackend;
+	private Backend backend;
 	
 	/**
 	 * Create the frame.
 	 */
-	public RecordGradeFrame(CourseBackend c, Course course,Category category,Part part) {
-	    courseBackend = c;
+	public RecordGradeFrame(Backend backend) {
+        this.backend = backend;
+
+        // Get the course, category, and part that we are grading
+        course = backend.getCourse();
+        category = backend.getCategory();
+		part = backend.getPart();
 
 		setBackground(new Color(255, 248, 220));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 933, 584);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(248, 248, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		this.course=course;
-		this.category=category;
-		this.part=part;
 		init();
 		addActions();
 	}
@@ -174,7 +157,12 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		/*String[][] datas= {{"Mary", "U09",String.valueOf(grades.get(0).getGrade())},
 				{"Emma", "U10",String.valueOf(grades.get(1).getGrade())},
 				{"Jerry","U11",String.valueOf(grades.get(2).getGrade())}};*/
-		students=studentBack.getAllStudents(course.getCourseid());
+		try {
+			students=backend.getAllStudents(course);
+		} catch (SQLException e) {
+			alert(e.toString());
+			e.printStackTrace();
+		}
 				/*String[][] datas= {{"Mary", "U09",""},
 				{"Emma", "U10",""},
 				{"Jerry","U11",""}};*/
@@ -292,7 +280,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				        for(int i=0;i<grades.size();i++) {
 				        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
 				        		grades.get(i).setComment(comment);
-				        		gradeBack.updateGrade(grades.get(i));
+//				        		gradeBack.updateGrade(grades.get(i)); TODO
 				        		alert("Save comment!");
 				        	}
 				        }
@@ -342,7 +330,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         			  for(int i=0;i<grades.size();i++) {
         				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
         					  grades.get(i).setGrade(newScore);
-        					  gradeBack.updateGrade(grades.get(i));
+//        					  gradeBack.updateGrade(grades.get(i)); TODO
         					  data[i][2]=String.valueOf(newScore);
         					  table.updateUI();
         					  break;
@@ -378,7 +366,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         			  for(int i=0;i<grades.size();i++) {
         				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
         					  grades.get(i).setGrade(newScore);
-        					  gradeBack.updateGrade(grades.get(i));
+//        					  gradeBack.updateGrade(grades.get(i)); TODO
         					  data[i][2]=String.valueOf(newScore);
         					  table.updateUI();
         					  break;
@@ -424,7 +412,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		for(int i=0;i<grades.size();i++) {
 			if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
 				grades.get(i).setGrade(newScore);
-				gradeBack.updateGrade(grades.get(i));
+//				gradeBack.updateGrade(grades.get(i)); TODO
 				this.data[i][2]=String.valueOf(newScore);
 				DefaultTableModel dtm2=(DefaultTableModel)table.getModel();
 				dtm2.setDataVector(this.data,columnNames);
@@ -440,9 +428,8 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
-		ViewGradeFrame next = new ViewGradeFrame(courseBackend);
+		ViewGradeFrame next = new ViewGradeFrame(backend);
 		next.setVisible(true);
 		dispose();
 	}

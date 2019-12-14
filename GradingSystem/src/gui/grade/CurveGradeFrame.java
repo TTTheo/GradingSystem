@@ -158,8 +158,6 @@ public class CurveGradeFrame extends JFrame implements FrameActions{
 
 	// Open the semester frame next
 	public void openNext() {
-		SemesterFrame next = new SemesterFrame();
-		next.setVisible(true);
 		dispose();
 	}
 

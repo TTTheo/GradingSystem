@@ -22,6 +22,10 @@ public class Backend {
 	private Semester semester;
 	private Course course;
 
+	// Store the category and part we're grading here
+	private Category category;
+	private Part part;
+
 	public Backend() {
 		this(null, null, null);
 	}
@@ -30,6 +34,38 @@ public class Backend {
 		this.user = user;
 		this.semester = semester;
 		this.course = course;
+	}
+
+	public Semester getSemester() {
+		return semester;
+	}
+
+	public void setSemester(Semester semester) {
+		this.semester = semester;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public Part getPart() {
+		return part;
+	}
+
+	public void setPart(Part part) {
+		this.part = part;
 	}
 
 	/* User Methods Start */
@@ -65,14 +101,6 @@ public class Backend {
 
 	/* Semester Methods Start */
 
-	public Semester getSemester() {
-		return semester;
-	}
-
-	public void setSemester(Semester semester) {
-		this.semester = semester;
-	}
-
 	public void addSemester(Semester s) throws SQLException {
 		semesterDao.insert(s);
 	}
@@ -82,14 +110,6 @@ public class Backend {
 	}
 
 	/* Course Methods Start */
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public void setCourse(Course course) {
-		this.course = course;
-	}
 
 	// Gets every single course from a semester
 	public ArrayList<Course> getAllCourses(Semester semester) {
