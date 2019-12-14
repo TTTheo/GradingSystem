@@ -26,7 +26,6 @@ public class ManageStructureFrame extends JFrame implements FrameActions{
 	public ManageStructureFrame(Backend backend) {
 	    this.backend = backend;
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 532, 524);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

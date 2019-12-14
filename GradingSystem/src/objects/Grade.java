@@ -7,10 +7,14 @@ public class Grade {
 	private String comment;
 	
 	public Grade(String sid, int pid, double grade) {
+		this(sid,pid,grade,"");
+	}
+
+	public Grade(String sid, int pid, double grade, String comment) {
 		this.sid = sid;
 		this.pid = pid;
 		this.grade = grade ;
-		this.comment=null;
+		this.comment = comment;
 	}
 
 	public void setComment(String comment) {

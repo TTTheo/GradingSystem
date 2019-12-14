@@ -15,7 +15,7 @@ public class Backend {
 	private CategoryDao categoryDao = new CategoryDao();
 	private PartDao partDao = new PartDao();
 	private StudentDao studentDao = new StudentDao();
-//	private GradeDao gradeDao = new GradeDao();
+	private GradeDao gradeDao = new GradeDao();
 
 	// Track current user, current semester, and current course
 	private User user;  // Unused, multiple users is a low priority feature
@@ -238,5 +238,41 @@ public class Backend {
     	studentDao.delete(student);
 	}
 
-	/* Grade Methods Start */
+	/* Grade Methods Start (Untested) */
+
+	public void addGrade(Grade grade) throws SQLException {
+		gradeDao.insert(grade);
+	}
+
+	// Get all grades of this assignment/part
+	public ArrayList<Grade> getPartGrades(Part part) throws SQLException {
+		return gradeDao.getByPartId(part.getPid());
+	}
+
+	// Get all grades this student
+	public ArrayList<Grade> getStudentGrades(Student student) throws SQLException {
+		return gradeDao.getByStudentId(student.getSid());
+	}
+
+	// Get this student's grade for this part, returns null if student has no grade
+	public Grade getGrade(Student student, Part part) throws SQLException {
+		ArrayList<Grade> grades = gradeDao.getById(student.getSid(), part.getPid());
+		if (grades.size() == 0) {
+			return null;
+		}
+		return grades.get(0);
+	}
+
+	public void deleteGrade(Grade grade) throws SQLException {
+		gradeDao.delete(grade.getSid(), grade.getPid());
+	}
+
+	// Update a grades value and or comment
+	public void updateGrade(Grade grade) throws SQLException {
+		gradeDao.update(grade);
+	}
+
+	public ArrayList<Grade> getAllGrade() throws SQLException {
+			return gradeDao.getAll();
+		}
 }

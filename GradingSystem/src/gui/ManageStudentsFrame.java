@@ -36,9 +36,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 
 public class ManageStudentsFrame extends JFrame implements FrameActions{
-
 	private JPanel contentPane;
-	private JButton btnAddStudent;	
+	private JButton btnAddStudent;
 	private JButton btnDeleteStudent;
 	private JButton btnWithdrawStudent;
 	private JTable table;
@@ -48,8 +47,8 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	private JScrollPane scrollPane;
 	private JLabel lblCourse;
 	private JLabel lblName;
-	private JLabel lblId;	
-	private JLabel lblEmail;	
+	private JLabel lblId;
+	private JLabel lblEmail;
 	private JButton btnImportStudent;
 	private JButton btnCancel;
 	private DefaultTableModel tableModel;
@@ -72,26 +71,26 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		init();
 		addActions();
 	}
-	
+
 	public void init(){
 		btnAddStudent = new JButton("Add Student");
 		btnAddStudent.setBackground(SystemColor.controlHighlight);
 		btnAddStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAddStudent.setBounds(650, 293, 170, 23);
 		contentPane.add(btnAddStudent);
-		
+
 		btnDeleteStudent = new JButton("Delete Student");
 		btnDeleteStudent.setBackground(SystemColor.controlHighlight);
 		btnDeleteStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnDeleteStudent.setBounds(647, 343, 173, 23);
 		contentPane.add(btnDeleteStudent);
-		
+
 		btnWithdrawStudent = new JButton("Withdraw Student");
 		btnWithdrawStudent.setBackground(SystemColor.controlHighlight);
 		btnWithdrawStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnWithdrawStudent.setBounds(650, 394, 173, 23);
 		contentPane.add(btnWithdrawStudent);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(35, 63, 538, 354);
 		contentPane.add(scrollPane);
@@ -111,75 +110,75 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		}
 		tableModel=new DefaultTableModel(data,columnNames){
 			 public boolean isCellEditable(int row, int column){
-					 return false;			 
-            }  
+					 return false;
+            }
 		};
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
-		
+
 		lblCourse = new JLabel("Course");
 		lblCourse.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblCourse.setBounds(35, 27, 91, 23);
 		contentPane.add(lblCourse);
 		lblCourse.setText(course.getName());
-		
+
 		lblName = new JLabel("Fisrt Name:");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblName.setBounds(650, 47, 113, 16);
 		contentPane.add(lblName);
-		
+
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(647, 76, 173, 22);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		
+
 		lblId = new JLabel("ID:");
 		lblId.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblId.setBounds(650, 165, 78, 19);
 		contentPane.add(lblId);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_1.setBounds(647, 197, 173, 22);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
-		
+
 		lblEmail = new JLabel("Email:");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblEmail.setBounds(650, 222, 78, 23);
 		contentPane.add(lblEmail);
-		
+
 		textField_2 = new JTextField();
 		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_2.setBounds(647, 246, 173, 22);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
-		
+
 		btnImportStudent = new JButton("Import Student");
 		btnImportStudent.setBackground(SystemColor.controlHighlight);
 		btnImportStudent.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnImportStudent.setBounds(651, 451, 169, 25);
 		contentPane.add(btnImportStudent);
-		
+
 		btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(SystemColor.controlHighlight);
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCancel.setBounds(35, 451, 97, 25);
 		contentPane.add(btnCancel);
-		
+
 		JLabel lblLastName = new JLabel("Last Name:");
 		lblLastName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblLastName.setBounds(650, 107, 113, 16);
 		contentPane.add(lblLastName);
-		
+
 		textField_3 = new JTextField();
 		textField_3.setBounds(647, 131, 173, 22);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 	}
-	
-	public void addActions(){		
+
+	public void addActions(){
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int selectedRowIndex = table.getSelectedRow();
@@ -193,7 +192,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
                 textField_2.setText(selectedEmail);
         	}
         });
-		
+
 		btnAddStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name=textField.getText();
@@ -211,9 +210,11 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 				if(stu!=null) {
 					alert("The student exist!");
 				}else {
-                    students.add(new Student(name, lname, ID, Email));
+				    Student newStudent = new Student(name, lname, ID, Email);
+                    students.add(newStudent);
                     try {
-						backend.addStudent(new Student(name, lname, ID, Email));
+						backend.addStudent(newStudent);
+						backend.addStudentToCourse(newStudent, course);
 					} catch (SQLException ex) {
 						alert(ex.toString());
 						ex.printStackTrace();
@@ -230,7 +231,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 				}
 			}
 		});
-		
+
 		btnDeleteStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 /* int selectedRowIndex = table.getSelectedRow();
@@ -329,7 +330,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	              }
 			}
 		});
-		
+
 		btnWithdrawStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name=textField.getText();
@@ -361,7 +362,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	              }
 			}
 		});
-		
+
 		btnImportStudent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -380,9 +381,11 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		                    //System.out.println(cells[2].getContents());
 		                }else {
                             Cell[] student = sheet.getRow(j);
-                            students.add(new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents()));
+                            Student newStudent = new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents());
+                            students.add(newStudent);
                             try {
-								backend.addStudent(new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents()));
+								backend.addStudent(newStudent);
+								backend.addStudentToCourse(newStudent, course);
 							} catch (SQLException ex) {
 								alert(ex.toString());
 								ex.printStackTrace();
@@ -410,14 +413,14 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		        }
 			}
 		});
-		
+
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 	}
-	
+
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
