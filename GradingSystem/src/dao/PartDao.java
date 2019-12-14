@@ -52,7 +52,7 @@ public class PartDao extends Dao<Part>{
     // Get all parts of a category
     public ArrayList<Part> getAll(int cid) throws SQLException {
         String query = String.format(
-        		"SELECT * FROM Part WHERE cid = '%s'",
+        		"SELECT * FROM Part WHERE cid = %d",
         		cid
         );
         return executeQuery(query);

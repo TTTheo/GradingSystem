@@ -27,7 +27,8 @@ public class CategoryDao extends Dao<Category> {
             	double percentage = rs.getDouble("percentage") ;
 				ArrayList<Part> parts = pd.getAll(cid);
 				Category cat = new Category(name, parts.size(), courseid, percentage) ;
-                cat.setPartList(parts);
+				cat.setCid(cid);
+				cat.setPartList(parts);
                 cats.add(cat);
             }
         }

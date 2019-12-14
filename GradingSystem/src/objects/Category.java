@@ -18,7 +18,7 @@ public class Category {
 		this.percentage = percentage;
 		this.partList = new ArrayList<Part>(partNum);
 	}
-	
+
 	public String getName() {
 		return name;
 	}

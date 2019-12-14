@@ -102,7 +102,6 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 			public void actionPerformed(ActionEvent e) {
 				String courseId = textField.getText();
 				Course newCourse = new Course(courseId, backend.getSemester().getSemesterId());
-				System.out.println("this is the created course's sem id: " + newCourse.getSemesterId());
 				int categoryNum = Integer.parseInt(textField_1.getText());  // Input validation is low priority
 
 				try {
