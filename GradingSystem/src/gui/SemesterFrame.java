@@ -52,12 +52,13 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		contentPane.setLayout(null);
 		final String[] columnNames = { "Year", "Term"};
 
-		Semester demo = new Semester("Fall", 2019);
 		ArrayList<Semester> data;
 		try {
 			data = backend.getAllSemesters();
 		} catch (SQLException e) {
 			alert(e.toString());
+			Semester demo = new Semester("Fall", 2019);
+			demo.setSemesterId(1);
 			data = new ArrayList<>();
 			data.add(demo);
 		}
