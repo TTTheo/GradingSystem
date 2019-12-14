@@ -24,6 +24,7 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 	private JButton btnViewGrades;
 	private JButton btnManageCourseStrcuture;
 	private JButton btnOriginalGrades;
+	private JButton btnBack;
 
 	private Backend backend;
 
@@ -75,6 +76,12 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		btnOriginalGrades.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnOriginalGrades.setBounds(164, 402, 236, 36);
 		contentPane.add(btnOriginalGrades);
+
+		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnBack.setBounds(164, 490, 236, 36);
+		contentPane.add(btnBack);
 	}
 	
 	public void addActions(){
@@ -111,8 +118,14 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 				
 			}
 		});
+
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
+			}
+		});
 	}
-	
+
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
@@ -121,8 +134,10 @@ public class CourseMenuFrame extends JFrame implements FrameActions{
 		dispose();
 	}
 
-	// This is the first window, no previous window exists
+	// Go back to the frame that opened this
 	public void openPrevious() {
+		AllCoursesFrame c = new AllCoursesFrame(backend);
+		c.setVisible(true);
 		dispose();
 	}
 
