@@ -310,24 +310,31 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				if(arg0.getKeyChar()==KeyEvent.VK_ENTER){  
 					//if(!textField_1.getText().equals("")) {
 						String comment=textField_1.getText();
+						System.out.println(comment);
 						int selectedRowIndex = table.getSelectedRow();
-				        String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
-				        for(int i=0;i<grades.size();i++) {
-				        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
-				        		//if(comment.equals("")) {
-				        			//comment=null;
-				        		//}
-				        		grades.get(i).setComment(comment);
-//				        		gradeBack.updateGrade(grades.get(i)); TODO
-				        		try {
-	        						  backend.updateGrade(grades.get(i));
-	        					  } catch (SQLException e1) {
-	        						  // TODO Auto-generated catch block
-	        						  e1.printStackTrace();
-	        					 }
-				        		alert("Save comment!");
-				        	}
-				        }
+						if(selectedRowIndex!=-1) {
+					        String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+					        for(int i=0;i<grades.size();i++) {
+					        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
+					        		if(isBlankString(comment)) {
+					        			grades.get(i).setComment("");
+					        			//System.out.println("!!!!");
+					        		}else {
+					        			grades.get(i).setComment(comment);
+					        		}
+	//				        		gradeBack.updateGrade(grades.get(i)); TODO
+					        		try {
+		        						  backend.updateGrade(grades.get(i));
+		        					  } catch (SQLException e1) {
+		        						  // TODO Auto-generated catch block
+		        						  e1.printStackTrace();
+		        					 }
+					        		alert("Save comment!");
+					        	}
+					        }
+						}else {
+							alert("Please choose a student!");
+						}
 					}			 
 					//System.out.println("!!!!");
 				//}   
@@ -342,7 +349,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				openPrevious();
 			}
 		});
 		
@@ -351,6 +358,10 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			    openNext();
 			}
 		});
+	}
+	
+	boolean isBlankString(String string) {    
+		return string == null || string.trim().isEmpty();
 	}
 	
 	public void rewriteKeys() {
@@ -458,7 +469,9 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(stuID)) {
         		String comment=grades.get(i).getComment();
         		//System.out.println(comment);
-        		if(comment!=null) {
+        		if(comment==null&&comment.equals("")) {
+        			textField_1.setText(null);
+        		}else {
         			textField_1.setText(comment);
         		}
         	}
@@ -525,12 +538,18 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
 		if(selectedRowIndex!=-1) {
 			updateScore();
-			if(!textField_1.getText().equals("")) {
+			//if(!textField_1.getText().equals("")) {
 				String comment=textField_1.getText();
 				if(comment!=null) {
 			        for(int i=0;i<grades.size();i++) {
 			        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
-			        		grades.get(i).setComment(comment);
+			        		if(isBlankString(comment)) {
+			        			grades.get(i).setComment("");
+			        			System.out.println(".....");
+			        		}else {
+			        			grades.get(i).setComment(comment);
+			        		}
+			        		//grades.get(i).setComment(comment);
 	//		        		gradeBack.updateGrade(grades.get(i)); TODO
 			        		try {
 								  backend.updateGrade(grades.get(i));
@@ -543,7 +562,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			        }
 				}
 			}	
-		}
+		//}
 		ViewGradeFrame next = new ViewGradeFrame(backend);
 		next.setVisible(true);
 		dispose();
@@ -551,6 +570,8 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		ViewGradeFrame next=new ViewGradeFrame(backend);
+		next.setVisible(true);
 		dispose();
 	}
 }
