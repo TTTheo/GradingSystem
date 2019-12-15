@@ -105,7 +105,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		
 		btnNext = new JButton("Next");
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnNext.setBounds(423, 512, 93, 23);
+		btnNext.setBounds(423, 534, 93, 23);
 		contentPane.add(btnNext);
 		
 		btnSetParts = new JButton("Set parts");
@@ -115,8 +115,13 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		
 		btnBack = new JButton("Back");
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnBack.setBounds(50, 511, 97, 25);
+		btnBack.setBounds(50, 533, 97, 25);
 		contentPane.add(btnBack);
+		
+		JLabel lblNewLabel = new JLabel("Category Left to Create: " + categoryLeft);
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel.setBounds(308, 497, 208, 30);
+		contentPane.add(lblNewLabel);
 	}
 	
 	public void addActions(){
