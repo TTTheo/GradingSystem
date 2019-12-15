@@ -269,6 +269,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	// Open course view next
 	public void openNext() {
 		AllCoursesFrame c = new AllCoursesFrame(backend);
+		c.setLocationRelativeTo(null);
 		c.setVisible(true);
 		dispose();
 	}

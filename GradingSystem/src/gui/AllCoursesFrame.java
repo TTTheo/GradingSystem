@@ -228,6 +228,9 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		SemesterFrame prevframe = new SemesterFrame(backend) ;
+		prevframe.setLocationRelativeTo(null);
+		prevframe.setVisible(true);
 		dispose();
 	}
 }

@@ -18,6 +18,7 @@ import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
 import gui.grade.EditCategoryFrame;
+import gui.grade.ViewGradeFrame;
 import objects.Category;
 import objects.Course;
 import objects.Part;
@@ -114,6 +115,7 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		contentPane.add(btnSetParts);
 		
 		btnBack = new JButton("Back");
+		
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnBack.setBounds(50, 533, 97, 25);
 		contentPane.add(btnBack);
@@ -125,6 +127,12 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
+			}
+		});
+		
 		btnSetParts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int partNum = 0;
@@ -251,6 +259,9 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		EditCategoryFrame prevframe = new EditCategoryFrame(backend) ;
+		prevframe.setLocationRelativeTo(null);
+		prevframe.setVisible(true);
 		dispose();
 	}
 }
