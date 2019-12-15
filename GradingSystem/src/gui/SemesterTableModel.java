@@ -60,7 +60,7 @@ public class SemesterTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        return false;
+        return true;
     }
 
     // Custom methods for convenience
@@ -73,5 +73,13 @@ public class SemesterTableModel extends AbstractTableModel {
         int rowIndex = semesters.size();
         semesters.add(rowIndex, s);
         fireTableRowsInserted(rowIndex, rowIndex);
+    }
+    
+    public void deleteRow(Semester s) {
+    	//for(int i=0;i<semesters.size();i++) {
+    		int index=semesters.indexOf(s);
+    		semesters.remove(index);
+    		this.fireTableRowsDeleted(index, index);
+    	//}
     }
 }
