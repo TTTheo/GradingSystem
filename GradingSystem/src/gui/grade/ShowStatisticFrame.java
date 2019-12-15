@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ShowStatisticFrame extends JFrame {
 
@@ -30,6 +32,7 @@ public class ShowStatisticFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		init();
+		addAction();
 	}
 	
 	public void init() {
@@ -52,7 +55,16 @@ public class ShowStatisticFrame extends JFrame {
 		lblStandardDeviation.setText("Standard deviation: "+statistic[2]);
 		
 		btnBack = new JButton("Back");
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnBack.setBounds(292, 329, 97, 25);
 		contentPane.add(btnBack);
+	}
+	
+	public void addAction() {
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 	}
 }
