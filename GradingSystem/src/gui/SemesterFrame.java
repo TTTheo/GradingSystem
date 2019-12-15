@@ -15,6 +15,8 @@ import objects.Semester;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import java.awt.Font;
+import java.awt.SystemColor;
 public class SemesterFrame extends JFrame implements FrameActions {
 
 	private JPanel contentPane;
@@ -36,36 +38,35 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	private JButton addBtn ;
 	private JScrollPane semesterTableScrollPane ;
 	private JTextField selectedSemesterField;
-	private Backend backend;
+	private Backend backend = new Backend();
 	private Semester selectedSemester;
+	private JButton btnBack;
+	private ArrayList<Semester> data=new ArrayList<Semester>();
+	private final String[] columnNames = { "Year", "Term"};
 	/**
 	 * Create the frame.
 	 */
 	public SemesterFrame(Backend backend) {
-		this.backend = backend;
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setBounds(100, 100, 600, 400);
+		setBounds(100, 100, 893, 574);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		final String[] columnNames = { "Year", "Term"};
+		this.backend=backend;
 
-		ArrayList<Semester> data;
+		//Semester demo = new Semester("Fall", 2019);
 		try {
 			data = backend.getAllSemesters();
 		} catch (SQLException e) {
 			alert(e.toString());
-			Semester demo = new Semester("Fall", 2019);
-			demo.setSemesterId(1);
-			data = new ArrayList<>();
-			data.add(demo);
+			//data = new ArrayList<>();
+			//data.add(demo);
 		}
 
 		tableModel = new SemesterTableModel(data, columnNames);
 		semesterTable = new JTable(tableModel);  // Create JTable with custom model
+		semesterTable.setFont(new Font("Tahoma", Font.PLAIN, 17));
 
 		semesterTable.setBounds(52, 69, 333, 221);
 		semesterTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -76,62 +77,110 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		contentPane.add(semesterTable);
 
 		SemesterMenuLabel = new JLabel("Semester Menu");
-		SemesterMenuLabel.setBounds(57, 20, 135, 37);
+		SemesterMenuLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		SemesterMenuLabel.setBounds(31, 27, 135, 37);
 		contentPane.add(SemesterMenuLabel);
 
 		viewBtn = new JButton("View");
-		viewBtn.setBounds(426, 125, 117, 29);
+		viewBtn.setBackground(SystemColor.controlHighlight);
+		viewBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		viewBtn.setBounds(700, 142, 130, 37);
 		contentPane.add(viewBtn);
 
-		editBtn = new JButton("Edit...");
-		editBtn.setBounds(426, 166, 117, 29);
+		editBtn = new JButton("Edit");
+		editBtn.setBackground(SystemColor.controlHighlight);
+		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		editBtn.setBounds(700, 207, 130, 37);
 		contentPane.add(editBtn);
 
 		addBtn = new JButton("Add new");
-		addBtn.setBounds(400, 305, 117, 29);
+		addBtn.setBackground(SystemColor.controlHighlight);
+		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		addBtn.setBounds(513, 429, 117, 37);
 		contentPane.add(addBtn);
 
 		deleteBtn = new JButton("Delete");
-		deleteBtn.setBounds(426, 207, 117, 29);
+		deleteBtn.setBackground(SystemColor.controlHighlight);
+		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		deleteBtn.setBounds(700, 273, 130, 37);
 		contentPane.add(deleteBtn);
 
 		semesterTableScrollPane = new JScrollPane(semesterTable);
-		semesterTableScrollPane.setBounds(31, 69, 362, 221);
+		semesterTableScrollPane.setBounds(31, 69, 599, 336);
 		contentPane.add(semesterTableScrollPane);
 
 		selectedSemesterField = new JTextField();
+		selectedSemesterField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		selectedSemesterField.setEditable(false);
-		selectedSemesterField.setBounds(426, 87, 130, 26);
+		selectedSemesterField.setBounds(700, 92, 130, 26);
 		contentPane.add(selectedSemesterField);
 		selectedSemesterField.setColumns(10);
 
 		selectedSemester = null;
 		selectedSemesterLabel = new JLabel("Selected Semester");
-		selectedSemesterLabel.setBounds(431, 69, 123, 16);
+		selectedSemesterLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		selectedSemesterLabel.setBounds(700, 53, 163, 26);
 		contentPane.add(selectedSemesterLabel);
 
 		yearLabel = new JLabel("Year:");
-		yearLabel.setBounds(30, 310, 40, 25);
+		yearLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		yearLabel.setBounds(31, 431, 70, 25);
 		contentPane.add(yearLabel);
 
 		yearField = new JTextField();
-		yearField.setBounds(70, 310, 125, 25);
+		yearField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		yearField.setBounds(96, 431, 125, 27);
 		contentPane.add(yearField);
 
 		termLabel = new JLabel("Term: ");
-		termLabel.setBounds(210, 310, 40, 25);
+		termLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		termLabel.setBounds(255, 431, 60, 25);
 		contentPane.add(termLabel);
 
 		termField = new JTextField();
-		termField.setBounds(250, 310, 125, 25);
+		termField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		termField.setBounds(327, 429, 125, 29);
 		contentPane.add(termField);
 
 		viewBtn.setEnabled(false);  // enabled when a semester is selected
+		
+		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnBack.setBounds(700, 429, 130, 37);
+		contentPane.add(btnBack);
 		addActions();
 	}
 
 	// Handle Add and View, TODO: delete and edit
-	public void addActions(){
+	public void addActions(){	
+		editBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0;i<semesterTable.getRowCount();i++) {
+					String newyear=(String) semesterTable.getValueAt(i, 0);
+					String newterm=(String) semesterTable.getValueAt(i, 1);
+					boolean semesterExist=false;
+					for(Semester semester:data) {
+						if(semester.getTerm().equals(newterm)&&semester.getYear().equals(Integer.parseInt(newyear))) {
+							alert("This semester exist!");
+							semesterExist=true;
+						}
+					}
+					if(!semesterExist) {
+						data.get(i).setTerm(newterm);
+						data.get(i).setYear(Integer.parseInt(newyear));
+						try {
+							backend.updateSemester(data.get(i));
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				
+				
+			}
+		});
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String term = termField.getText().trim();
@@ -152,12 +201,23 @@ public class SemesterFrame extends JFrame implements FrameActions {
 
 				Semester s = new Semester(term, Integer.parseInt(year));
 				try {
-				    backend.addSemester(s);
+					ArrayList<Semester> sem=backend.getAllSemesters();
+					boolean semesterExist=false;
+					for(int i=0;i<sem.size();i++) {
+						if(sem.get(i).getTerm().equals(term)&&(sem.get(i).getYear().equals(Integer.parseInt(year)))) {
+							alert("This semester exist!");
+							semesterExist=true;
+							break;
+						}
+					}
+					if(!semesterExist) {
+						backend.addSemester(s);
+						tableModel.addRow(s);
+					}
 				} catch (SQLException ex) {
 					alert(ex.toString());
 				}
 
-				tableModel.addRow(s);
 			}
 		});
 
@@ -165,6 +225,28 @@ public class SemesterFrame extends JFrame implements FrameActions {
 			public void actionPerformed(ActionEvent e) {
 				backend.setSemester(selectedSemester);
 			    openNext();
+			}
+		});
+		
+		deleteBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        int selectedRowIndex = semesterTable.getSelectedRow();
+		        selectedSemester = tableModel.getSemesterAt(selectedRowIndex);
+		        // set the selected row data into jtextfields
+		        String semesterInfo = selectedSemester.toString();
+		        selectedSemesterField.setText(semesterInfo);
+				try {
+				   backend.deleteSemester(selectedSemester);
+				} catch (SQLException ex) {
+					alert(ex.toString());
+				}
+				tableModel.deleteRow(selectedSemester);
+			}
+		});
+		
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
 			}
 		});
 	}
@@ -187,7 +269,6 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	// Open course view next
 	public void openNext() {
 		AllCoursesFrame c = new AllCoursesFrame(backend);
-		c.setLocationRelativeTo(null);
 		c.setVisible(true);
 		dispose();
 	}

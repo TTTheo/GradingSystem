@@ -36,6 +36,28 @@ public class SemesterDao extends Dao<Semester> {
         int sid = executeUpdate(query);
         semester.setSemesterId(sid);
     }
+    
+    //////////////
+    public void delete(Semester semester) throws SQLException {
+        String query = String.format(
+                "DELETE FROM Semester (term, year) VALUES ('%s', %d)",
+                semester.getTerm(),
+                semester.getYear()
+        );
+        int sid = executeUpdate(query);
+        semester.setSemesterId(sid);
+    }
+    
+    //////////////
+    public void update(Semester semester) throws SQLException {
+        String query = String.format(
+                //"DELETE FROM Semester (term, year) VALUES ('%s', %d)",
+                semester.getTerm(),
+                semester.getYear()
+        );
+        int sid = executeUpdate(query);
+        semester.setSemesterId(sid);
+    }
 
     public ArrayList<Semester> getAll() throws SQLException {
         String query = "SELECT * FROM Semester";

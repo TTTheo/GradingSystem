@@ -66,6 +66,7 @@ public class PartDao extends Dao<Part>{
         return executeQuery(query);
     }
     
+    //////////////
     public boolean delete(Part p) {
     	String query = String.format(
         		"DELETE FROM Part WHERE pid = %d",

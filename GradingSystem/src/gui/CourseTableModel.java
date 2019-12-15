@@ -57,6 +57,9 @@ public class CourseTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
+    	if(column==0) {
+    		return true;
+    	}
         return false;
     }
 
@@ -70,5 +73,13 @@ public class CourseTableModel extends AbstractTableModel {
         int rowIndex = courses.size();
         courses.add(rowIndex, s);
         fireTableRowsInserted(rowIndex, rowIndex);
+    }
+    
+    public void deleteRow(Course s) {
+    	//for(int i=0;i<semesters.size();i++) {
+    		int index=courses.indexOf(s);
+    		courses.remove(index);
+    		this.fireTableRowsDeleted(index, index);
+    	//}
     }
 }

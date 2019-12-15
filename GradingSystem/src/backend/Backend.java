@@ -108,6 +108,15 @@ public class Backend {
 	public ArrayList<Semester> getAllSemesters() throws SQLException {
 		return semesterDao.getAll();
 	}
+	
+	//////////////////
+	public void deleteSemester(Semester s)throws SQLException {
+		semesterDao.delete(s);
+	}
+	///////////////////
+	public void updateSemester(Semester s)throws SQLException {
+		semesterDao.update(s);
+	}
 
 	/* Course Methods Start */
 
@@ -162,7 +171,22 @@ public class Backend {
 			throw e;
 		}
 	}
-
+	/////////////////////
+	public void deleteCourse(Course course) throws SQLException {
+		try {
+			courseDao.insert(course);
+			ArrayList<Category> cats = course.getCategories();
+			if (cats != null) {
+				for (Category cat : cats) {
+					deleteCategory(cat);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	/////////////
 	public boolean updateCourse(Course course) {
 		if (course == null) return false;
 		try {
@@ -195,6 +219,16 @@ public class Backend {
 			}
 		}
 	}
+	/////////////////
+	public void deleteCategory(Category category) throws SQLException {
+		categoryDao.delete(category);
+		ArrayList<Part> parts = category.getPartList();
+		if (parts != null) {
+			for (Part part : parts) {
+				deletePart(part);
+			}
+		}
+	}
 
 	/* Part Methods Start */
 
@@ -206,6 +240,10 @@ public class Backend {
 
 	public void addPart(Part part) throws SQLException {
 		partDao.insert(part);
+	}
+	////////////////////
+	public void deletePart(Part part) throws SQLException {
+		partDao.delete(part);
 	}
 
 	/* Student Methods Start */

@@ -65,6 +65,7 @@ public class CategoryDao extends Dao<Category> {
         return executeQuery(query);
     }
     
+    /////////////////
     public boolean delete(Category c) {
     	String query = String.format(
         		"DELETE FROM Category WHERE cid = %d",
