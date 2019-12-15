@@ -110,6 +110,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 					// Ideally we would be able to add categories all in one
 					// frame and remove the need for newCourse and categoryNum
 					AddCategoryFrame nextFrame = new AddCategoryFrame(backend, newCourse, categoryNum);
+					nextFrame.setLocationRelativeTo(null);
 					nextFrame.setVisible(true);
 					dispose();
 				} catch (SQLException e1) {

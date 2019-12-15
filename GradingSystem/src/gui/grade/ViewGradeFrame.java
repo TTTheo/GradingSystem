@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import backend.Backend;
+import gui.AllCoursesFrame;
 import gui.FrameActions;
 import gui.ManageStudentsFrame;
 import gui.PickPartFrame;
@@ -288,6 +289,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		btnEditStudents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend);
+				manageStu.setLocationRelativeTo(null);
 				manageStu.setVisible(true);
 			}
 		});
@@ -295,6 +297,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		btnEditCategory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EditCategoryFrame edit=new EditCategoryFrame(backend);
+				edit.setLocationRelativeTo(null);
 				edit.setVisible(true);
 			}
 		});
@@ -302,8 +305,8 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		btnRecordGrade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PickPartFrame pick=new PickPartFrame(backend);
+				pick.setLocationRelativeTo(null);
 				pick.setVisible(true);
-				dispose();
 			}
 		});
 		
@@ -415,7 +418,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				openPrevious();
 			}
 		});
 	}
@@ -721,6 +724,9 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		AllCoursesFrame prevframe = new AllCoursesFrame(backend) ;
+		prevframe.setLocationRelativeTo(null);
+		prevframe.setVisible(true);
 		dispose();
 	}
 }

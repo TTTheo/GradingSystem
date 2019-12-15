@@ -74,6 +74,16 @@ public class StudentDao extends Dao<Student> {
         );
         executeUpdate(query);
     }
+    
+ // Withdraw a student for a course
+    public void deleteStudentCourse(String sid, String cid) throws SQLException {
+        String query = String.format(
+                "DELETE FROM Student_Course WHERE sid = '%s' and course_id ='%s'",
+                sid,
+                cid
+        );
+        executeUpdate(query);
+    }
 
     // Deletes student from Student table as well as from many-to-many table
     public void delete(Student student) throws SQLException {

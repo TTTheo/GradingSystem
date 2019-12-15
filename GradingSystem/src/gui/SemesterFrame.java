@@ -45,6 +45,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -186,6 +187,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 	// Open course view next
 	public void openNext() {
 		AllCoursesFrame c = new AllCoursesFrame(backend);
+		c.setLocationRelativeTo(null);
 		c.setVisible(true);
 		dispose();
 	}

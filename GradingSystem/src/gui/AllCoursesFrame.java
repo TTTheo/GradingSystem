@@ -1,6 +1,7 @@
 package gui;
 
 import backend.Backend;
+import gui.grade.ViewGradeFrame;
 import objects.Course;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 	private JButton editBtn ;
 	private JButton deleteBtn ;
 	private JButton addBtn ;
+	private JButton previousBtn ;
 
 	private JScrollPane courseTableScroll;
 	private JLabel selectedCourseLabel ;
@@ -60,24 +62,24 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		});
 		contentPane.add(courseTable);
 
-		viewBtn = new JButton("View");
-		viewBtn.setBounds(426, 125, 117, 29);
+		viewBtn = new JButton("Next");
+		viewBtn.setBounds(262, 325, 117, 29);
 		contentPane.add(viewBtn);
 
 		editBtn = new JButton("Edit...");
-		editBtn.setBounds(426, 166, 117, 29);
+		editBtn.setBounds(426, 125, 117, 29);
 		contentPane.add(editBtn);
 
 		addBtn = new JButton("Add new");
-		addBtn.setBounds(400, 305, 117, 29);
+		addBtn.setBounds(426, 207, 117, 29);
 		contentPane.add(addBtn);
 
 		deleteBtn = new JButton("Delete");
-		deleteBtn.setBounds(426, 207, 117, 29);
+		deleteBtn.setBounds(426, 166, 117, 29);
 		contentPane.add(deleteBtn);
 
 		courseTableScroll= new JScrollPane(courseTable);
-		courseTableScroll.setBounds(31, 69, 362, 221);
+		courseTableScroll.setBounds(31, 68, 383, 245);
 		contentPane.add(courseTableScroll);
 
 		selectedCourseField = new JTextField();
@@ -93,6 +95,15 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 
 
 		viewBtn.setEnabled(false);  // enabled when a semester is selected
+		
+		previousBtn = new JButton("Previous");
+		previousBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
+			}
+		});
+		previousBtn.setBounds(57, 322, 117, 29);
+		contentPane.add(previousBtn);
 		addActions();
 	}
 
@@ -118,6 +129,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AddCourseFrame next = new AddCourseFrame(backend);
+				next.setLocationRelativeTo(null);
 				next.setVisible(true);
 			}
 		});
@@ -129,12 +141,16 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 
 	// Open the course menu frame next
 	public void openNext() {
-		CourseMenuFrame next = new CourseMenuFrame(backend);
+		ViewGradeFrame next = new ViewGradeFrame(backend) ;
+		next.setLocationRelativeTo(null);
 		next.setVisible(true);
 		dispose();
 	}
 
 	public void openPrevious() {
+		SemesterFrame previous = new SemesterFrame(backend) ;
+		previous.setLocationRelativeTo(null);
+		previous.setVisible(true);
 		dispose();
 	}
 }

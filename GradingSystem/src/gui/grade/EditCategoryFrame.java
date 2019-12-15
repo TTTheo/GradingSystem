@@ -38,6 +38,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JButton AddNewBtn;
 	private JTextField textField;
 	private JButton ApplyChangesButton;
+	private JButton CancelButton ;
 	private final Action action = new SwingAction();
 
 	private Course course;
@@ -92,7 +93,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		ApplyChangesButton.setBounds(116, 522, 129, 35);
 		contentPane.add(ApplyChangesButton);
 		
-		JButton CancelButton = new JButton("Cancel");
+		CancelButton = new JButton("Cancel");
+		
 		CancelButton.setForeground(Color.RED);
 		CancelButton.setBounds(326, 522, 129, 35);
 		contentPane.add(CancelButton);
@@ -190,6 +192,11 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
+		CancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
+			}
+		});
 		ApplyChangesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Extract information from the table and put them back to the Coruse instance accordingly
@@ -309,6 +316,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		ViewGradeFrame previousFrame = new ViewGradeFrame(backend) ;
+		previousFrame.setLocationRelativeTo(null);
 		dispose();
 	}
 	private class SwingAction extends AbstractAction {

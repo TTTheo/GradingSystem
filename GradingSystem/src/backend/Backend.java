@@ -218,6 +218,10 @@ public class Backend {
 	public void addStudentToCourse(Student student, Course course) throws SQLException {
 		studentDao.insertStudentCourse(student.getSid(), course.getCourseId());
 	}
+	
+	public void withdrawStudentfromCourse(Student student, Course course) throws SQLException {
+		studentDao.deleteStudentCourse(student.getSid(), course.getCourseId());
+	}
 
 	// Get all students in a course
 	public ArrayList<Student> getAllStudents(Course course) throws SQLException {
