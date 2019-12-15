@@ -39,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 
 public class ViewGradeFrame extends JFrame implements FrameActions{
@@ -132,7 +133,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		scrollPane.setBounds(190, 78, 617, 402);
 		contentPane.add(scrollPane);
 		
-//		grades=backend.getAllGrade(); TODO
+		try {
+			grades=backend.getAllGrade();
+		} catch (SQLException e1) {
+			alert(e1
+					.toString());
+			e1.printStackTrace();
+		} 
         try {
 			students=backend.getAllStudents(course);
 		} catch (SQLException e) {
@@ -178,41 +185,49 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		panel.setLayout(new GridLayout(10, 0, 0, 0));
 		
 		btnApply = new JButton("Apply");
+		btnApply.setBackground(SystemColor.controlHighlight);
 		btnApply.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnApply.setBounds(51, 497, 97, 29);
 		contentPane.add(btnApply);
 		
 		btnStatistic = new JButton("Statistic");
+		btnStatistic.setBackground(SystemColor.controlHighlight);
 		btnStatistic.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnStatistic.setBounds(843, 117, 145, 29);
 		contentPane.add(btnStatistic);
 		
 		btnCalculateFinal = new JButton("Calculate Final");
+		btnCalculateFinal.setBackground(SystemColor.controlHighlight);
 		btnCalculateFinal.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCalculateFinal.setBounds(843, 171, 145, 29);
 		contentPane.add(btnCalculateFinal);
 		
 		btnCurveFinalGrade = new JButton("Curve Final");
+		btnCurveFinalGrade.setBackground(SystemColor.controlHighlight);
 		btnCurveFinalGrade.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCurveFinalGrade.setBounds(843, 223, 145, 29);
 		contentPane.add(btnCurveFinalGrade);
 		
 		btnCancel = new JButton("Back");
+		btnCancel.setBackground(SystemColor.controlHighlight);
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnCancel.setBounds(843, 497, 145, 29);
 		contentPane.add(btnCancel);
 		
 		btnEditStudents = new JButton("Edit Students");
+		btnEditStudents.setBackground(SystemColor.controlHighlight);
 		btnEditStudents.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnEditStudents.setBounds(843, 317, 145, 29);
 		contentPane.add(btnEditStudents);
 		
 		btnEditCategory = new JButton("Edit Category");
+		btnEditCategory.setBackground(SystemColor.controlHighlight);
 		btnEditCategory.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnEditCategory.setBounds(843, 371, 145, 29);
 		contentPane.add(btnEditCategory);
 		
 		btnRecordGrade = new JButton("Record Grade");
+		btnRecordGrade.setBackground(SystemColor.controlHighlight);
 		btnRecordGrade.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnRecordGrade.setBounds(843, 423, 145, 29);
 		contentPane.add(btnRecordGrade);
@@ -242,7 +257,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
                 		for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(sid)&&grades.get(k).getPid()==(pid)) {
 								String comment=grades.get(k).getComment();
-								if(comment!=null) {
+								if(comment!=null&&!isBlankString(comment)) {
 									judge=true;
 									ViewComment view=new ViewComment(comment);
 									view.setVisible(true);
@@ -307,6 +322,8 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				PickPartFrame pick=new PickPartFrame(backend);
 				pick.setLocationRelativeTo(null);
 				pick.setVisible(true);
+				dispose();
+				
 			}
 		});
 		
@@ -342,34 +359,63 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		
 		btnStatistic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				double median;
+				double median = 0;
 				double average;
 				double deviation;
-				if(finals!=null) {
-					double totalGrade=0;
-					for(int i=0;i<finals.length;i++) {
-						totalGrade+=Double.parseDouble(finals[i]);
-					}
-					average=totalGrade/finals.length;
-					String[] tempfinals=finals;
-					Arrays.sort(tempfinals);
-					double size=tempfinals.length;
-					if(size/2==0) {
-						median=(Double.parseDouble(tempfinals[(int) (size/2)])+Double.parseDouble(tempfinals[(int) (size/2-1)]))/2;
-					}else {
-						double index=size/2-0.5;
-						median=Double.parseDouble(tempfinals[(int)index]);
-					}
-					double cal=0;
-					for(int i=0;i<finals.length;i++) {
-						cal+=Double.parseDouble(finals[i])-average;
-					}
-					deviation=Math.sqrt(cal/finals.length);
-					double statistic[]= {average,median,deviation};
-					ShowStatisticFrame show=new ShowStatisticFrame(statistic);
-					show.setVisible(true);
-				}else {
+				if(finals==null) {
 					alert("Calculate final first!");
+				}else {
+					if(curve==null) {
+						double totalGrade=0;
+						for(int i=0;i<finals.length;i++) {
+							totalGrade+=Double.parseDouble(finals[i]);
+						}
+						average=totalGrade/finals.length;
+						String[] tempfinals=finals;
+						Arrays.sort(tempfinals);
+						int size=tempfinals.length;
+						if(size%2==0) {
+							median=(Double.parseDouble(tempfinals[size/2])+Double.parseDouble(tempfinals[size/2-1]))/2;
+							//System.out.println(median+"!");
+						}else if(size%2==1){
+							int index=size/2;
+							median=Double.parseDouble(tempfinals[index]);
+							//System.out.println(median+",");
+						}
+						double cal=0;
+						for(int i=0;i<finals.length;i++) {
+							cal+=Double.parseDouble(finals[i])-average;
+						}
+						deviation=Math.sqrt(cal/finals.length);
+						double statistic[]= {average,median,deviation};
+						ShowStatisticFrame show=new ShowStatisticFrame(statistic);
+						show.setVisible(true);
+					}else {
+						double totalGrade=0;
+						for(int i=0;i<curve.length;i++) {
+							totalGrade+=Double.parseDouble(curve[i]);
+						}
+						average=totalGrade/curve.length;
+						String[] tempfinals=curve;
+						Arrays.sort(tempfinals);
+						int size=tempfinals.length;
+						if(size%2==0) {
+							median=(Double.parseDouble(tempfinals[size/2])+Double.parseDouble(tempfinals[size/2-1]))/2;
+							//System.out.println(median+"!");
+						}else if(size%2==1){
+							int index=size/2;
+							median=Double.parseDouble(tempfinals[index]);
+							//System.out.println(median+",");
+						}
+						double cal=0;
+						for(int i=0;i<curve.length;i++) {
+							cal+=Double.parseDouble(curve[i])-average;
+						}
+						deviation=Math.sqrt(cal/curve.length);
+						double statistic[]= {average,median,deviation};
+						ShowStatisticFrame show=new ShowStatisticFrame(statistic);
+						show.setVisible(true);
+					}
 				}
 				
 			}
@@ -467,6 +513,10 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		this.curve=curve;
 	}
 	
+	boolean isBlankString(String string) {    
+		return string == null || string.trim().isEmpty();
+	}
+	
 	public DefaultTableModel setNewModel() {
 		boolean finalExist=false;
 		boolean curveExist=false;
@@ -508,7 +558,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								String comment=grades.get(k).getComment();
-								if(comment!=null) {
+								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
 									index.add(commentindex);
 								}
@@ -550,7 +600,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								String comment=grades.get(k).getComment();
-								if(comment!=null) {
+								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
 									index.add(commentindex);
 								}
@@ -587,7 +637,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								String comment=grades.get(k).getComment();
-								if(comment!=null) {
+								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
 									index.add(commentindex);
 								}
@@ -620,7 +670,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
 								data[i][j]=String.valueOf(grades.get(k).getGrade());
 								String comment=grades.get(k).getComment();
-								if(comment!=null) {
+								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
 									index.add(commentindex);
 								}
@@ -644,21 +694,21 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 				for(int i=0; i<table.getRowCount(); i++){
 					if (row == i){
-					this.setBackground(Color.white);
+						this.setBackground(Color.white);
 					}
-					}
-					for(String[] rowAndCol : index){
+				}
+				for(String[] rowAndCol : index){
 					int _row= Integer.valueOf(rowAndCol[0]);
 					int _col= Integer.valueOf(rowAndCol[1]);
 
 					if( _row == row && _col == col) {
-					this.setBackground(Color.yellow);
+						this.setBackground(Color.yellow);
 					}
-					}
+				}
 					//this.setText(value.toString());
-					return this;
-					}
-			};
+				return this;
+			}
+		 };
 	}
 
 	
