@@ -46,7 +46,7 @@ public class ShowStatisticFrame extends JFrame {
 		lblMedian.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblMedian.setBounds(256, 161, 349, 29);
 		contentPane.add(lblMedian);
-		lblAverage.setText("Median: "+statistic[1]);
+		lblMedian.setText("Median: "+statistic[1]);
 		
 		lblStandardDeviation = new JLabel("Standard deviation: ");
 		lblStandardDeviation.setFont(new Font("Tahoma", Font.PLAIN, 17));
