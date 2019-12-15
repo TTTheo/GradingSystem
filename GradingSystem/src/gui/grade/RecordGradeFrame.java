@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -73,7 +74,8 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         course = backend.getCourse();
         category = backend.getCategory();
 		part = backend.getPart();
-
+		
+		//System.out.print(course.getName()+" "+category.getName()+" "+part.getName());
 		setBackground(new Color(255, 248, 220));
 		setBounds(100, 100, 933, 584);
 		contentPane = new JPanel();
@@ -158,6 +160,13 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				{"Emma", "U10",String.valueOf(grades.get(1).getGrade())},
 				{"Jerry","U11",String.valueOf(grades.get(2).getGrade())}};*/
 		try {
+			grades=backend.getPartGrades(part);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
 			students=backend.getAllStudents(course);
 		} catch (SQLException e) {
 			alert(e.toString());
@@ -166,12 +175,30 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				/*String[][] datas= {{"Mary", "U09",""},
 				{"Emma", "U10",""},
 				{"Jerry","U11",""}};*/
-		String datas[][]=new String[students.size()][columnNames.length];
+		/*String datas[][]=new String[students.size()][columnNames.length];
 		for(int i=0;i<students.size();i++) {
-			datas[i][0]=students.get(i).getFname();
+			datas[i][0]=students.get(i).getFname()+" "+students.get(i).getLname();
 			datas[i][1]=students.get(i).getSid();
+			for(int j=0;j<grades.size();j++) {
+				if(grades.get(j).getPid() == (part.getPid())&&grades.get(j).getSid().equals(datas[i][1])){
+					datas[i][2]=String.valueOf(grades.get(j).getGrade());
+				}
+			}
+		}*/
+		
+		data=new String[students.size()][columnNames.length];
+		for(int i=0;i<students.size();i++) {
+			data[i][0]=students.get(i).getFname()+" "+students.get(i).getLname();
+			data[i][1]=students.get(i).getSid();
+			for(int j=0;j<grades.size();j++) {
+				if(grades.get(j).getPid() == (part.getPid())&&grades.get(j).getSid().equals(data[i][1])){
+					data[i][2]=String.valueOf(grades.get(j).getGrade());
+				}
+			}
 		}
-		this.data=datas;
+		
+		
+		//this.data=datas;
 
 		tableModel=new DefaultTableModel(this.data,columnNames){
 			 public boolean isCellEditable(int row, int column){
@@ -256,9 +283,17 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		textField.addKeyListener(new KeyListener(){   
 			public void keyPressed(KeyEvent arg0) {    
 				if(arg0.getKeyChar()==KeyEvent.VK_ENTER){  
-					if(!textField.getText().equals("")) {
-						updateScore();
-					}			 
+					int selectedRowIndex = table.getSelectedRow();
+					if(selectedRowIndex==-1) {
+						alert("Please select a student!");
+					}else {
+						if(!textField.getText().equals("")||!isNumeric(textField.getText())) {
+							updateScore();
+							alert("Save grade!");
+						}else {
+							alert("Please input numbers!");
+						}
+					}
 					//System.out.println("!!!!");
 				}   
 			};   
@@ -270,23 +305,32 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			}  
 		});
 		
-		textField_2.addKeyListener(new KeyListener(){   
+		textField_1.addKeyListener(new KeyListener(){   
 			public void keyPressed(KeyEvent arg0) {    
 				if(arg0.getKeyChar()==KeyEvent.VK_ENTER){  
-					if(!textField.getText().equals("")) {
-						String comment=textField_2.getText();
+					//if(!textField_1.getText().equals("")) {
+						String comment=textField_1.getText();
 						int selectedRowIndex = table.getSelectedRow();
 				        String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
 				        for(int i=0;i<grades.size();i++) {
 				        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
+				        		//if(comment.equals("")) {
+				        			//comment=null;
+				        		//}
 				        		grades.get(i).setComment(comment);
 //				        		gradeBack.updateGrade(grades.get(i)); TODO
+				        		try {
+	        						  backend.updateGrade(grades.get(i));
+	        					  } catch (SQLException e1) {
+	        						  // TODO Auto-generated catch block
+	        						  e1.printStackTrace();
+	        					 }
 				        		alert("Save comment!");
 				        	}
 				        }
 					}			 
 					//System.out.println("!!!!");
-				}   
+				//}   
 			};   
 			public void keyReleased(KeyEvent arg0) {    
 				// TODO 
@@ -331,8 +375,16 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
         					  grades.get(i).setGrade(newScore);
 //        					  gradeBack.updateGrade(grades.get(i)); TODO
+        					  try {
+        						  backend.updateGrade(grades.get(i));
+        					  } catch (SQLException e1) {
+        						  // TODO Auto-generated catch block
+        						  e1.printStackTrace();
+        					  }
         					  data[i][2]=String.valueOf(newScore);
-        					  table.updateUI();
+        					  tableModel=(DefaultTableModel) table.getModel();
+        					  tableModel.setDataVector(data,columnNames);
+        					  tableModel.fireTableStructureChanged();
         					  break;
         				  }
         			  }
@@ -367,8 +419,17 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
         					  grades.get(i).setGrade(newScore);
 //        					  gradeBack.updateGrade(grades.get(i)); TODO
+        					  try {
+        						  backend.updateGrade(grades.get(i));
+        					  } catch (SQLException e1) {
+        						  // TODO Auto-generated catch block
+        						  e1.printStackTrace();
+        					  }
         					  data[i][2]=String.valueOf(newScore);
-        					  table.updateUI();
+        					  //table.updateUI();
+        					  tableModel=(DefaultTableModel) table.getModel();
+        					  tableModel.setDataVector(data,columnNames);
+        					  tableModel.fireTableStructureChanged();
         					  break;
         				  }
         			  }
@@ -388,11 +449,15 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
    	 	// Get the semester at the selected row index
         int selectedRowIndex = table.getSelectedRow();
         String selectedName = tableModel.getValueAt(selectedRowIndex,0).toString();
-        String selectedScore=tableModel.getValueAt(selectedRowIndex, 2).toString();
+        if(tableModel.getValueAt(selectedRowIndex, 2)!=null) {
+        	String selectedScore=tableModel.getValueAt(selectedRowIndex, 2).toString();
+        	textField.setText(selectedScore);
+        }
         stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
         for(int i=0;i<grades.size();i++) {
         	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(stuID)) {
         		String comment=grades.get(i).getComment();
+        		//System.out.println(comment);
         		if(comment!=null) {
         			textField_1.setText(comment);
         		}
@@ -400,26 +465,53 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         }
         // set the selected row data into jtextfields
         textField_2.setText(selectedName);
-        textField.setText(selectedScore);
+        
 	}
+	
+
+
+
+	public static boolean isNumeric(String str)
+	{
+	  try{
+	     Integer.parseInt(str);
+	     return true;
+	  }catch(NumberFormatException e){
+		  return false;
+	  }
+	}
+
+
 	
 	public void updateScore() {
 		int selectedRowIndex = table.getSelectedRow();
 		stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
 		String stuName=textField_2.getText();
-		double newScore=Double.valueOf(textField.getText());
-		int partID=part.getPid();
-		for(int i=0;i<grades.size();i++) {
-			if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {
-				grades.get(i).setGrade(newScore);
-//				gradeBack.updateGrade(grades.get(i)); TODO
-				this.data[i][2]=String.valueOf(newScore);
-				DefaultTableModel dtm2=(DefaultTableModel)table.getModel();
-				dtm2.setDataVector(this.data,columnNames);
-				dtm2.fireTableStructureChanged();//jt.updateUI();
-				break;
+		String score=textField.getText();
+			double newScore=Double.valueOf(textField.getText());
+			int partID=part.getPid();
+			//System.out.println(partID+stuID);
+			for(int i=0;i<grades.size();i++) {
+				if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {	
+					//System.out.println(newScore);
+					grades.get(i).setGrade(newScore);
+	//				gradeBack.updateGrade(grades.get(i)); TODO
+					 try {
+						  backend.updateGrade(grades.get(i));
+					  } catch (SQLException e1) {
+						  // TODO Auto-generated catch block
+						  e1.printStackTrace();
+					  }
+					 
+					this.data[i][2]=String.valueOf(newScore);
+					//System.out.println(this.data[i][2]);
+					tableModel=(DefaultTableModel) table.getModel();
+					tableModel.setDataVector(data,columnNames);
+					tableModel.fireTableStructureChanged();
+					break;
+				}
 			}
-		}
+		
 		//Grade newgrade=new Grade(stuID,partID,newScore);
 	}
 
@@ -429,6 +521,29 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
     }
 
 	public void openNext() {
+		int selectedRowIndex = table.getSelectedRow();
+		String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+		if(selectedRowIndex!=-1) {
+			updateScore();
+			if(!textField_1.getText().equals("")) {
+				String comment=textField_1.getText();
+				if(comment!=null) {
+			        for(int i=0;i<grades.size();i++) {
+			        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
+			        		grades.get(i).setComment(comment);
+	//		        		gradeBack.updateGrade(grades.get(i)); TODO
+			        		try {
+								  backend.updateGrade(grades.get(i));
+							  } catch (SQLException e1) {
+								  // TODO Auto-generated catch block
+								  e1.printStackTrace();
+							  }
+			        		//alert("Save comment!");
+			        	}
+			        }
+				}
+			}	
+		}
 		ViewGradeFrame next = new ViewGradeFrame(backend);
 		next.setVisible(true);
 		dispose();
