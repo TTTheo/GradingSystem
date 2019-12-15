@@ -8,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
+import gui.AddCategoryFrame;
 import gui.AddPartFrame;
 import gui.FrameActions;
 import gui.SemesterFrame;
@@ -36,6 +37,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
 	private JButton AddNewBtn;
+	private JButton NewCategoryButton;
 	private JTextField textField;
 	private JButton ApplyChangesButton;
 	private JButton CancelButton ;
@@ -71,7 +73,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		courseId = backend.getCourse().getCourseId();
 		this.generateTable(course);
 		
-		AddNewBtn = new JButton("Add New");
+		AddNewBtn = new JButton("Add Part");
 		AddNewBtn.setBounds(605, 212, 129, 35);
 		contentPane.add(AddNewBtn);
 		
@@ -98,6 +100,10 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		CancelButton.setForeground(Color.RED);
 		CancelButton.setBounds(326, 522, 129, 35);
 		contentPane.add(CancelButton);
+		
+		NewCategoryButton = new JButton("Add Category");
+		NewCategoryButton.setBounds(605, 268, 129, 35);
+		contentPane.add(NewCategoryButton);
 	}
 	
 	public void generateTable(Course course) {
@@ -299,6 +305,14 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		AddNewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AddPartFrame newFrame = new AddPartFrame(backend);
+				newFrame.setVisible(true);
+				dispose();
+			}
+		});
+		
+		NewCategoryButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddCategoryFrame newFrame = new AddCategoryFrame(backend, backend.getCourse(), 1);
 				newFrame.setVisible(true);
 				dispose();
 			}
