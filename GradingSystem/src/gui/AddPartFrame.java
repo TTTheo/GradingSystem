@@ -30,7 +30,7 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	private JTextField textField;
 	private JTextField textField_1;
 	private JLabel lblCategory;	
-	private JComboBox comboBox;	
+	private JComboBox<String> comboBox;	
 	private JLabel lblNameOfPart;		
 	private JLabel lblPercentage;
 	private JLabel lblFullScore;
@@ -43,7 +43,6 @@ public class AddPartFrame extends JFrame implements FrameActions{
 	PartDao partDAO = new PartDao();
 	ArrayList<Category> categoryList = new ArrayList<Category>();
 	ArrayList<Part> partList = new ArrayList<Part>();
-	ArrayList<String> cNameList = new ArrayList<String>();
 
 	private Backend backend;
 	/**
@@ -57,6 +56,11 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		try {
+			categoryList = c.getCategories(c.getCourse());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		init();
 		addActions();
 	}
@@ -67,16 +71,11 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		lblCategory.setBounds(65, 62, 104, 23);
 		contentPane.add(lblCategory);
 		
-		//ArrayList<String> cNameList = new ArrayList<String>();
-		try {
-			categoryList = categoryDAO.getAll(courseID);
-		} catch (SQLException e1) {
-			System.out.println("Failed to extract CATEGROIES from the DB!");
-		}
+		comboBox = new JComboBox<String>();
 		for (Category c : categoryList) {
-			cNameList.add(c.getName());
+			comboBox.addItem(c.getName());
+			//System.out.println("Executed~~");
 		}
-		comboBox = new JComboBox(cNameList.toArray());
 		comboBox.setBounds(65, 98, 423, 31);
 		contentPane.add(comboBox);
 		
@@ -100,16 +99,6 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		btnAdd = new JButton("Add");
-		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnAdd.setBounds(395, 435, 93, 23);
-		contentPane.add(btnAdd);
-		
-		btnNewButton = new JButton("Back");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnNewButton.setBounds(65, 434, 97, 25);
-		contentPane.add(btnNewButton);
-		
 		lblFullScore = new JLabel("Full Score:");
 		lblFullScore.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblFullScore.setBounds(65, 335, 97, 31);
@@ -119,6 +108,16 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		textField_2.setBounds(65, 382, 423, 31);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
+		
+		btnAdd = new JButton("Add");
+		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnAdd.setBounds(395, 435, 93, 23);
+		contentPane.add(btnAdd);
+		
+		btnNewButton = new JButton("Back");
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		btnNewButton.setBounds(65, 434, 97, 25);
+		contentPane.add(btnNewButton);
 	}
 	
 	public void addActions(){
@@ -127,10 +126,10 @@ public class AddPartFrame extends JFrame implements FrameActions{
 				String categoryName = (String) comboBox.getSelectedItem();
 				for (Category c : categoryList) {
 					if (c.getName().equals(categoryName)) {
-						Part newPart = new Part(lblNameOfPart.getText(), 
+						Part newPart = new Part(textField.getText(), 
 												c.getCid(), 
-												Double.parseDouble(lblFullScore.getText()), 
-												Double.parseDouble(lblPercentage.getText()));
+												Double.parseDouble(textField_2.getText()), 
+												Double.parseDouble(textField_1.getText()));
 						try {
 							partDAO.insert(newPart);
 						} catch (SQLException e1) {

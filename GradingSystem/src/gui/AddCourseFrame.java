@@ -9,7 +9,9 @@ import javax.swing.border.EmptyBorder;
 
 import backend.Backend;
 import dao.CourseDao;
+import objects.Category;
 import objects.Course;
+import objects.Part;
 import objects.Semester;
 
 import javax.swing.JLabel;
@@ -78,7 +80,11 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		comboBox = new JComboBox();
+		comboBox = new JComboBox<String>();
+		comboBox.addItem(" ");
+		for (Course c : backend.getAllCourses(backend.getSemester())) {
+			comboBox.addItem(c.getCourseId());
+		}
 		comboBox.setBackground(SystemColor.control);
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		comboBox.setBounds(76, 205, 361, 34);
@@ -102,17 +108,31 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 			public void actionPerformed(ActionEvent e) {
 				String courseId = textField.getText();
 				Course newCourse = new Course(courseId, backend.getSemester().getSemesterId());
-				int categoryNum = Integer.parseInt(textField_1.getText());  // Input validation is low priority
-
 				try {
 					backend.addCourse(newCourse);
-
+					
 					// Ideally we would be able to add categories all in one
 					// frame and remove the need for newCourse and categoryNum
-					AddCategoryFrame nextFrame = new AddCategoryFrame(backend, newCourse, categoryNum);
-					nextFrame.setLocationRelativeTo(null);
-					nextFrame.setVisible(true);
-					dispose();
+					if (comboBox.getSelectedItem().equals(" ")) {
+						int categoryNum = Integer.parseInt(textField_1.getText());  // Input validation is low priority
+						AddCategoryFrame nextFrame = new AddCategoryFrame(backend, newCourse, categoryNum);
+						nextFrame.setLocationRelativeTo(null);
+						nextFrame.setVisible(true);
+						dispose();
+					} else {
+						for (Category c : backend.getCategories(backend.getCourse((String)comboBox.getSelectedItem()))) {
+								Category newCategory = new Category(c.getName(), c.getPartNum(), courseId, c.getPercentage());
+								backend.addCategory(newCategory);
+								for (Part p : backend.getParts(c)) {
+									Part newPart = new Part(p.getName(), newCategory.getCid(), p.getTotalScore(), p.getPercentage());
+									backend.addPart(newPart);
+								}
+						}
+						AllCoursesFrame nextFrame = new AllCoursesFrame(backend);
+						nextFrame.setLocationRelativeTo(null);
+						nextFrame.setVisible(true);
+						dispose();
+					}
 				} catch (SQLException e1) {
 					alert(e1.toString());
 					e1.printStackTrace();
