@@ -88,6 +88,19 @@ public class PickPartFrame extends JFrame implements FrameActions{
 		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		comboBox_1.setBounds(112, 256, 328, 33);
 		contentPane.add(comboBox_1);
+		
+		// Updates the combo boxes whenever a category is selected
+		
+		for (Category category: categories) {
+			if(comboBox.getSelectedItem().equals(category.getName())){
+				parts = category.getPartList();
+			}
+		}
+
+		comboBox_1.removeAllItems();
+		for (Part part: parts) {
+			comboBox_1.addItem(part.getName());
+		}	
 
 		btnNext = new JButton("Next");
 		btnNext.setBackground(SystemColor.controlHighlight);
@@ -103,7 +116,6 @@ public class PickPartFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
-	   	// Updates the combo boxes whenever a category is selected
 		comboBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -119,6 +131,7 @@ public class PickPartFrame extends JFrame implements FrameActions{
 				}
 			}
 		});
+
 
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
