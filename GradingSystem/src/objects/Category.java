@@ -10,6 +10,10 @@ public class Category {
 	private double percentage;
 	private ArrayList<Part> partList;
 
+	public Category(String name) {
+		this(name, 0, "", 0.0);
+	}
+
 	// cid gets set when you insert into the database.
 	public Category (String name, int partNum, String courseId, double percentage) {
 		this.name = name;

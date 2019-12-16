@@ -109,11 +109,10 @@ public class Backend {
 		return semesterDao.getAll();
 	}
 	
-	//////////////////
 	public void deleteSemester(Semester s)throws SQLException {
 		semesterDao.delete(s);
 	}
-	///////////////////
+
 	public void updateSemester(Semester s)throws SQLException {
 		semesterDao.update(s);
 	}
@@ -171,7 +170,7 @@ public class Backend {
 			throw e;
 		}
 	}
-	/////////////////////
+
 	public void deleteCourse(Course course) throws SQLException {
 		try {
 			courseDao.insert(course);
@@ -186,7 +185,7 @@ public class Backend {
 			throw e;
 		}
 	}
-	/////////////
+
 	public boolean updateCourse(Course course) {
 		if (course == null) return false;
 		try {
@@ -219,7 +218,12 @@ public class Backend {
 			}
 		}
 	}
-	/////////////////
+
+	// Don't update any parts
+	public void updateCategory(Category category) throws SQLException {
+		categoryDao.update(category);
+	}
+
 	public void deleteCategory(Category category) throws SQLException {
 		categoryDao.delete(category);
 		ArrayList<Part> parts = category.getPartList();

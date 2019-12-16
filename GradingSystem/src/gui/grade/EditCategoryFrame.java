@@ -8,10 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
-import gui.AddCategoryFrame;
-import gui.AddPartFrame;
-import gui.FrameActions;
-import gui.SemesterFrame;
+import gui.*;
 import objects.Category;
 import objects.Course;
 import objects.Part;
@@ -38,8 +35,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
-	private JButton AddNewBtn;
-	private JButton NewCategoryButton;
+	private JButton editBtn;
 	private JTextField textField;
 	private JButton ApplyChangesButton;
 	private JButton CancelButton ;
@@ -75,34 +71,35 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		courseId = backend.getCourse().getCourseId();
 		this.generateTable(course);
 		
-		AddNewBtn = new JButton("Add Part");
-		AddNewBtn.setBackground(SystemColor.controlHighlight);
-		AddNewBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		AddNewBtn.setBounds(605, 212, 143, 35);
-		contentPane.add(AddNewBtn);
+		editBtn = new JButton("Edit");
+		editBtn.setBackground(SystemColor.controlHighlight);
+		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		editBtn.setBounds(590, 312, 143, 35);
+		contentPane.add(editBtn);
 		
 		JLabel CourseNameLabel = new JLabel(courseId);
 		CourseNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		CourseNameLabel.setBounds(28, 46, 163, 26);
 		contentPane.add(CourseNameLabel);
 		
-		JLabel lblNewLabel = new JLabel("Selected:");
+		JLabel lblNewLabel = new JLabel("Use Previous Structure:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblNewLabel.setBounds(605, 118, 103, 17);
+		lblNewLabel.setBounds(575, 118, 250, 17);
 		contentPane.add(lblNewLabel);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		textField.setEditable(false);
-		textField.setBounds(605, 145, 143, 35);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
+
 		ApplyChangesButton = new JButton("Apply Changes");
 		ApplyChangesButton.setBackground(SystemColor.controlHighlight);
 		ApplyChangesButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		ApplyChangesButton.setBounds(116, 522, 157, 35);
 		contentPane.add(ApplyChangesButton);
+
+
+//		textField = new JTextField();
+//		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+//		textField.setEditable(false);
+//		textField.setBounds(605, 145, 143, 35);
+//		contentPane.add(textField);
+//		textField.setColumns(10);
 		
 		CancelButton = new JButton("Cancel");
 		CancelButton.setBackground(SystemColor.controlHighlight);
@@ -112,11 +109,6 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		CancelButton.setBounds(326, 522, 129, 35);
 		contentPane.add(CancelButton);
 		
-		NewCategoryButton = new JButton("Add Category");
-		NewCategoryButton.setBackground(SystemColor.controlHighlight);
-		NewCategoryButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		NewCategoryButton.setBounds(605, 268, 143, 35);
-		contentPane.add(NewCategoryButton);
 	}
 	
 	public void generateTable(Course course) {
@@ -171,18 +163,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				}
 		}
 		
-		/*
-	     * Don't need to implement this method unless your table's
-	     * editable.
-	     */
 	    public boolean isCellEditable(int row, int col) {
-	        //Note that the data/cell address is constant,
-	        //no matter where the cell appears onscreen.
-	        if (col < 2) {
-	            return false;
-	        } else {
-	            return true;
-	        }
+			return false;
 	    }
 
 		@Override
@@ -211,6 +193,14 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
+		editBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CategoryFrame next = new CategoryFrame(backend) ;
+				next.setLocationRelativeTo(null);
+				next.setVisible(true);
+				dispose();
+			}
+		});
 		CancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPrevious();
@@ -315,28 +305,12 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 			}
 		});
 		
-		AddNewBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AddPartFrame newFrame = new AddPartFrame(backend);
-				newFrame.setVisible(true);
-				dispose();
-			}
-		});
-		
-		NewCategoryButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AddCategoryFrame newFrame = new AddCategoryFrame(backend, backend.getCourse(), 1);
-				newFrame.setVisible(true);
-				dispose();
-			}
-		});
 	}
 	
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
 		dispose();
 	}

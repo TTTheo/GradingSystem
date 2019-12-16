@@ -57,19 +57,9 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		lblSemesterName.setBounds(57, 20, 135, 37);
 		contentPane.add(lblSemesterName);
 
-		//courses.add(new Course("cs530",2));
-		//courses.add(new Course("cs640",3));
-		//Course demo = new Course("cs591", 1);
-		//course=demo;
-		data = backend.getAllCourses(semester);
-		/*try {
-			data = backend.getAllCourses(semester);
-		} catch (SQLException e) {
-			//data = new ArrayList<>();
-			//data.add(demo);
-		}*/
 
-		//tableModel = new CourseTableModel(data, columnNames);
+		data = backend.getAllCourses(semester);
+
 		tableModel = new CourseTableModel(data, columnNames);
 		courseTable = new JTable(tableModel);  // Create JTable with custom model
 		courseTable.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -140,7 +130,7 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		selectedCourse = tableModel.getCourseAt(selectedRowIndex);
 
 		// set the selected row data into jtextfields
-		String courseInfo = selectedCourse.getName();
+		String courseInfo = selectedCourse.getCourseId();
 		selectedCourseField.setText(courseInfo);
 		viewBtn.setEnabled(true);
 	}
@@ -210,8 +200,6 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 				next.setVisible(true);
 			}
 		});
-		
-		
 	}
 	
 	public void alert(String message){
