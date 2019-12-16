@@ -8,6 +8,10 @@ public class Part {
 	private double percentage;
 
 	// pid gets set when you insert it into the database
+	public Part(String name) {
+	    this(name, 0, 0.0, 0.0);
+	}
+
 	public Part(String name, int cid, double totalScore, double percentage) {
 		this.cid = cid ;
 		this.name = name;

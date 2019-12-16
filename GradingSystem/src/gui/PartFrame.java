@@ -2,15 +2,13 @@ package gui;
 
 import javax.swing.*;
 
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import backend.* ;
-import gui.grade.EditCategoryFrame;
-import objects.Category;
+import objects.Part;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -19,30 +17,30 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.Font;
 import java.awt.SystemColor;
-public class CategoryFrame extends JFrame implements FrameActions, TableModelListener {
+
+public class PartFrame extends JFrame implements FrameActions, TableModelListener {
 
     private JPanel contentPane;
 
-    private JTable categoryTable;
-    private CategoryTableModel tableModel ;
+    private JTable partTable;
+    private PartTableModel tableModel ;
 
     private JLabel categoryMenuLabel ;
-    private JLabel selectedCategoryLabel ;
+    private JLabel selectedPartLabel ;
 
-    private JButton viewBtn ;
     private JButton editBtn ;
     private JButton deleteBtn ;
     private JButton addBtn ;
 
-    private JScrollPane categoryTableScrollPane ;
-    private JTextField selectedCategoryField;
-    private Category selectedCategory;
+    private JScrollPane partTableScrollPane ;
+    private JTextField selectedPartField;
+    private Part selectedPart;
     private JButton btnBack;
 
-    private ArrayList<Category> data=new ArrayList<Category>();
-    private final String[] columnNames = { "Name", "Percentage", "Number of Parts"};
+    private ArrayList<Part> data=new ArrayList<Part>();
+    private final String[] columnNames = { "Name", "Percentage", "Max Score"};
     private Backend backend;
-    public CategoryFrame(Backend backend) {
+    public PartFrame(Backend backend) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 893, 574);
         contentPane = new JPanel();
@@ -52,37 +50,29 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
         this.backend=backend;
 
         try {
-            data = backend.getCategories(backend.getCourse());
+            data = backend.getParts(backend.getCategory());
         } catch (SQLException e) {
             alert(e.toString());
             e.printStackTrace();
         }
 
-        tableModel = new CategoryTableModel(data, columnNames);
+        tableModel = new PartTableModel(data, columnNames);
         tableModel.addTableModelListener(this);  // This class listens to updates
-        categoryTable = new JTable(tableModel);  // Create JTable with custom model
+        partTable = new JTable(tableModel);  // Create JTable with custom model
+        partTable.setFont(new Font("Tahoma", Font.PLAIN, 17));
 
-
-        categoryTable.setFont(new Font("Tahoma", Font.PLAIN, 17));
-
-        categoryTable.setBounds(52, 69, 333, 221);
-        categoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        partTable.setBounds(52, 69, 333, 221);
+        partTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMouseClicked(evt);
             }
         });
-        contentPane.add(categoryTable);
+        contentPane.add(partTable);
 
-        categoryMenuLabel = new JLabel("Category Menu");
+        categoryMenuLabel = new JLabel("Part Menu");
         categoryMenuLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
         categoryMenuLabel.setBounds(31, 27, 135, 37);
         contentPane.add(categoryMenuLabel);
-
-        viewBtn = new JButton("View");
-        viewBtn.setBackground(SystemColor.controlHighlight);
-        viewBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        viewBtn.setBounds(700, 142, 130, 37);
-        contentPane.add(viewBtn);
 
         editBtn = new JButton("Edit");
         editBtn.setBackground(SystemColor.controlHighlight);
@@ -102,24 +92,22 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
         deleteBtn.setBounds(700, 273, 130, 37);
         contentPane.add(deleteBtn);
 
-        categoryTableScrollPane = new JScrollPane(categoryTable);
-        categoryTableScrollPane.setBounds(31, 69, 599, 336);
-        contentPane.add(categoryTableScrollPane);
+        partTableScrollPane = new JScrollPane(partTable);
+        partTableScrollPane.setBounds(31, 69, 599, 336);
+        contentPane.add(partTableScrollPane);
 
-        selectedCategoryField = new JTextField();
-        selectedCategoryField.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        selectedCategoryField.setEditable(false);
-        selectedCategoryField.setBounds(700, 92, 130, 26);
-        contentPane.add(selectedCategoryField);
-        selectedCategoryField.setColumns(10);
+        selectedPartField = new JTextField();
+        selectedPartField.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        selectedPartField.setEditable(false);
+        selectedPartField.setBounds(700, 92, 130, 26);
+        contentPane.add(selectedPartField);
+        selectedPartField.setColumns(10);
 
-        selectedCategory = null;
-        selectedCategoryLabel = new JLabel("Selected Category");
-        selectedCategoryLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        selectedCategoryLabel.setBounds(700, 53, 163, 26);
-        contentPane.add(selectedCategoryLabel);
-
-        viewBtn.setEnabled(false);
+        selectedPart = null;
+        selectedPartLabel = new JLabel("Selected Part");
+        selectedPartLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        selectedPartLabel.setBounds(700, 53, 163, 26);
+        contentPane.add(selectedPartLabel);
 
         btnBack = new JButton("Back");
         btnBack.setBackground(SystemColor.controlHighlight);
@@ -130,17 +118,12 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
     }
 
     public void addActions(){
-        editBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-
         addBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Category added = new Category("New category");
-                added.setCourseId(backend.getCourse().getCourseId());
+                Part added = new Part("New Part");
+                added.setCid(backend.getCategory().getCid());
                 try {
-                    backend.addCategory(added);  // this sets the CID
+                    backend.addPart(added);  // this sets the CID
                 } catch (SQLException ex) {
                     alert(ex.toString());
                     ex.printStackTrace();
@@ -149,26 +132,19 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
             }
         });
 
-        viewBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                backend.setCategory(selectedCategory);
-                openNext();
-            }
-        });
-
         deleteBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int selectedRowIndex = categoryTable.getSelectedRow();
-                selectedCategory = tableModel.getCategoryAt(selectedRowIndex);
+                int selectedRowIndex = partTable.getSelectedRow();
+                selectedPart = tableModel.getPartAt(selectedRowIndex);
                 // set the selected row data into jtextfields
-                String semesterInfo = selectedCategory.toString();
-                selectedCategoryField.setText(semesterInfo);
+                String semesterInfo = selectedPart.toString();
+                selectedPartField.setText(semesterInfo);
                 try {
-                    backend.deleteCategory(selectedCategory);
+                    backend.deletePart(selectedPart);
                 } catch (SQLException ex) {
                     alert(ex.toString());
                 }
-                tableModel.deleteRow(selectedCategory);
+                tableModel.deleteRow(selectedPart);
             }
         });
 
@@ -181,51 +157,47 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
 
     public void jTableMouseClicked(java.awt.event.MouseEvent evt) {
         // Get the semester at the selected row index
-        int selectedRowIndex = categoryTable.getSelectedRow();
-        selectedCategory = tableModel.getCategoryAt(selectedRowIndex);
+        int selectedRowIndex = partTable.getSelectedRow();
+        selectedPart = tableModel.getPartAt(selectedRowIndex);
 
         // set the selected row data into jtextfields
-        String categoryInfo = selectedCategory.getName();
-        selectedCategoryField.setText(categoryInfo);
-        viewBtn.setEnabled(true);
+        String partInfo = selectedPart.getName();
+        selectedPartField.setText(partInfo);
     }
 
     public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
 
-    // Open course view next
+    // No next frame
     public void openNext() {
-        PartFrame next = new PartFrame(backend);
-        next.setLocationRelativeTo(null);
-        next.setVisible(true);
         dispose();
     }
 
-    // Go back to the edit category frame
+    // Go back to the category frame
     public void openPrevious() {
-        EditCategoryFrame back = new EditCategoryFrame(backend);
+        CategoryFrame back = new CategoryFrame(backend);
         back.setLocationRelativeTo(null);
         back.setVisible(true);
         dispose();
     }
 
     // Listen to changes in the table and update the DB accordingly
-	public void tableChanged(TableModelEvent e) {
-		int row = e.getFirstRow();
-		int type = e.getType();
+    public void tableChanged(TableModelEvent e) {
+        int row = e.getFirstRow();
+        int type = e.getType();
 
-		Category changed = tableModel.getCategoryAt(row);
-		try {
-		    // Insert is already handled by the Add button
+        Part changed = tableModel.getPartAt(row);
+        try {
+            // Insert is already handled by the Add button
             if (type == TableModelEvent.UPDATE) {
-                backend.updateCategory(changed);
+                backend.updatePart(changed);
             } else if (type == TableModelEvent.DELETE) {
-                backend.deleteCategory(changed);
+                backend.deletePart(changed);
             }
         } catch (SQLException ex) {
-		    alert(ex.toString());
-		    ex.printStackTrace();
+            alert(ex.toString());
+            ex.printStackTrace();
         }
-	}
+    }
 }

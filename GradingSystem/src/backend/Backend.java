@@ -245,6 +245,12 @@ public class Backend {
 	public void addPart(Part part) throws SQLException {
 		partDao.insert(part);
 	}
+
+	// Don't update any parts
+	public void updatePart(Part part) throws SQLException {
+		partDao.update(part);
+	}
+
 	////////////////////
 	public void deletePart(Part part) throws SQLException {
 		partDao.delete(part);
