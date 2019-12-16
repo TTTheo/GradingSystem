@@ -99,30 +99,9 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 			System.out.print(course.getCourseId());
 			category= backend.getCategories(course);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		/*category.add(new Category("Homework",3,"C01",20));
-		ArrayList<Part> partList=new ArrayList<Part>();
-//		partList.add(new Part("P01","homework1","C01",100,30));
-//		partList.add(new Part("P02","homework2","C01",100,30));
-//		partList.add(new Part("P03","homework3","C01",100,40));
-		category.get(0).setPartList(partList);
-		category.add(new Category("Exam",2,"C02",20));
-		ArrayList<Part> partList2=new ArrayList<Part>();
-//		partList2.add(new Part("P04","midterm","C02",100,60));
-//		partList2.add(new Part("P05","final","C02", 100,40));
-		category.get(1).setPartList(partList2);
-		category.add(new Category("Attending",1,"C03",20));
-		ArrayList<Part> partList3=new ArrayList<Part>();
-//		partList3.add(new Part("P06","attending","C04",5,100));
-		category.get(2).setPartList(partList3);
-		category.add(new Category("Bonus",1,"C04",0));
-		ArrayList<Part> partList4=new ArrayList<Part>();
-		partList4.add(new Part("P07","bonus","C04",10,100));
-		category.get(3).setPartList(partList4);*/
-
 		lblCourseName = new JLabel("Course name");
 		lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblCourseName.setBounds(62, 35, 118, 16);
@@ -146,20 +125,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
         	alert(e.toString());
         	e.printStackTrace();
 		}
-		/*grades.add(new Grade("U09","P01",50));
-		grades.add(new Grade("U10","P01",89));
-		grades.add(new Grade("U11","P01",100));
-		students.add(new Student("Jerry","U09"));
-		students.add(new Student("Emma","U10"));
-		students.add(new Student("Lisa","U11"));
-		grades.add(new Grade("U09","P02",20));
-		grades.add(new Grade("U10","P02",40));
-		grades.add(new Grade("U11","P02",88));
-		grades.add(new Grade("U09","P05",87));
-		grades.add(new Grade("U10","P05",89));
-		grades.add(new Grade("U11","P05",88));*/
-		
-		//ArrayList<Part> parts=new ArrayList<Part>();
+
 		for(int i=0;i<category.size();i++) {
 			for(int j=0;j<category.get(i).getPartList().size();j++) {
 				parts.add(category.get(i).getPartList().get(j));
