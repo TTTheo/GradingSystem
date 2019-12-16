@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 
 import backend.Backend;
 import gui.grade.RecordGradeFrame;
+import gui.grade.ViewGradeFrame;
 
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -172,11 +173,15 @@ public class PickPartFrame extends JFrame implements FrameActions{
 	// Open the semester frame next
 	public void openNext() {
 		RecordGradeFrame next = new RecordGradeFrame(backend);
+		next.setLocationRelativeTo(null);
 		next.setVisible(true);
 		dispose();
 	}
 
 	public void openPrevious() {
+		ViewGradeFrame prevframe = new ViewGradeFrame(backend) ;
+		prevframe.setLocationRelativeTo(null);
+		prevframe.setVisible(true);
 		dispose();
 	}
 }

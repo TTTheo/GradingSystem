@@ -199,16 +199,23 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 						backend.addStudent(student);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
+						
 					}
 				}
 				try {		
 					backend.addStudentToCourse(student, course);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
+					alert("Student Id taken, please try another one!") ;
 					e1.printStackTrace();
+					return ;
 				}
 				reload() ;
+				fnameField.setText("");
+				lnameField.setText("");
+				idField.setText("");
 			}
 		});
 

@@ -564,6 +564,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 			}	
 		//}
 		ViewGradeFrame next = new ViewGradeFrame(backend);
+		next.setLocationRelativeTo(null);
 		next.setVisible(true);
 		dispose();
 	}
@@ -571,6 +572,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	// This is the first window, no previous window exists
 	public void openPrevious() {
 		ViewGradeFrame next=new ViewGradeFrame(backend);
+		next.setLocationRelativeTo(null);
 		next.setVisible(true);
 		dispose();
 	}
