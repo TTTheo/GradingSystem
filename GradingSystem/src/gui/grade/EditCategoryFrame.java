@@ -319,6 +319,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	public void openPrevious() {
 		ViewGradeFrame previousFrame = new ViewGradeFrame(backend) ;
 		previousFrame.setLocationRelativeTo(null);
+		previousFrame.setVisible(true);
 		dispose();
 	}
 	private class SwingAction extends AbstractAction {

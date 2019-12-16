@@ -272,6 +272,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend);
 				manageStu.setLocationRelativeTo(null);
 				manageStu.setVisible(true);
+				dispose();
 			}
 		});
 		
@@ -280,6 +281,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				EditCategoryFrame edit=new EditCategoryFrame(backend);
 				edit.setLocationRelativeTo(null);
 				edit.setVisible(true);
+				dispose() ;
 			}
 		});
 		

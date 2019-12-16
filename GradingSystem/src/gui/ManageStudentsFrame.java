@@ -305,6 +305,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	public void openPrevious() {
 		ViewGradeFrame prevFrame = new ViewGradeFrame(backend) ;
 		prevFrame.setLocationRelativeTo(null);
+		prevFrame.setVisible(true);
 		dispose();
 	}
 }
