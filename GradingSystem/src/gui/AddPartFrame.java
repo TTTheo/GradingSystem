@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 public class AddPartFrame extends JFrame implements FrameActions{
 
@@ -110,11 +111,13 @@ public class AddPartFrame extends JFrame implements FrameActions{
 		textField_2.setColumns(10);
 		
 		btnAdd = new JButton("Add");
+		btnAdd.setBackground(SystemColor.controlHighlight);
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnAdd.setBounds(395, 435, 93, 23);
 		contentPane.add(btnAdd);
 		
 		btnNewButton = new JButton("Back");
+		btnNewButton.setBackground(SystemColor.controlHighlight);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnNewButton.setBounds(65, 434, 97, 25);
 		contentPane.add(btnNewButton);

@@ -23,6 +23,7 @@ import objects.Category;
 import objects.Course;
 import objects.Part;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 public class AddCategoryFrame extends JFrame implements FrameActions{
 
@@ -105,19 +106,22 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		scrollPane.setViewportView(table);
 		
 		btnNext = new JButton("Next");
+		btnNext.setBackground(SystemColor.controlHighlight);
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnNext.setBounds(423, 534, 93, 23);
 		contentPane.add(btnNext);
 		
 		btnSetParts = new JButton("Set parts");
+		btnSetParts.setBackground(SystemColor.controlHighlight);
 		btnSetParts.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnSetParts.setBounds(391, 262, 125, 23);
+		btnSetParts.setBounds(391, 262, 125, 30);
 		contentPane.add(btnSetParts);
 		
 		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
 		
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnBack.setBounds(50, 533, 97, 25);
+		btnBack.setBounds(50, 533, 97, 24);
 		contentPane.add(btnBack);
 		
 		JLabel lblNewLabel = new JLabel("Category Left to Create: " + (categoryLeft - 1));

@@ -48,6 +48,7 @@ public class CurveGradeFrame extends JFrame implements FrameActions{
 	
 	public void init(){
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(180, 164, 303, 34);
 		contentPane.add(textField);
 		textField.setColumns(10);

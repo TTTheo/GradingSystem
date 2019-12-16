@@ -66,6 +66,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		contentPane.add(lblNumberOfCategories);
 		
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(76, 98, 361, 32);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -76,6 +77,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 		contentPane.add(lblApplyOldStructure);
 		
 		textField_1 = new JTextField();
+		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_1.setBounds(76, 327, 361, 32);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
