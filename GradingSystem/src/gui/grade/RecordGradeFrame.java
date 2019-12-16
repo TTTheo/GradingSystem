@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.SystemColor;
 
 public class RecordGradeFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
@@ -79,7 +80,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		setBackground(new Color(255, 248, 220));
 		setBounds(100, 100, 933, 584);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(248, 248, 255));
+		contentPane.setBackground(SystemColor.control);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -99,6 +100,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		contentPane.add(lblScore);
 		
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(619, 206, 118, 32);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -115,24 +117,26 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		contentPane.add(lblComment);
 		
 		textField_1 = new JTextField();
+		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_1.setBounds(619, 285, 243, 160);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		btnPrevious = new JButton("Cancel");
 		btnPrevious.setForeground(new Color(0, 0, 0));
-		btnPrevious.setBackground(new Color(211, 211, 211));
+		btnPrevious.setBackground(SystemColor.controlHighlight);
 		btnPrevious.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnPrevious.setBounds(50, 471, 118, 32);
 		contentPane.add(btnPrevious);
 		
 		btnNext = new JButton("Save");
-		btnNext.setBackground(new Color(192, 192, 192));
+		btnNext.setBackground(SystemColor.controlHighlight);
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnNext.setBounds(749, 471, 113, 32);
 		contentPane.add(btnNext);
 		
 		textField_2 = new JTextField();
+		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_2.setEditable(false);
 		textField_2.setBounds(619, 116, 243, 32);
 		contentPane.add(textField_2);

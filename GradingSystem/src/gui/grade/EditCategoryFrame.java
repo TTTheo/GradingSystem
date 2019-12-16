@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import java.awt.Font;
+import java.awt.SystemColor;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
@@ -53,7 +55,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 627);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -74,35 +76,46 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		this.generateTable(course);
 		
 		AddNewBtn = new JButton("Add Part");
-		AddNewBtn.setBounds(605, 212, 129, 35);
+		AddNewBtn.setBackground(SystemColor.controlHighlight);
+		AddNewBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		AddNewBtn.setBounds(605, 212, 143, 35);
 		contentPane.add(AddNewBtn);
 		
 		JLabel CourseNameLabel = new JLabel(courseId);
-		CourseNameLabel.setBounds(28, 46, 163, 16);
+		CourseNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		CourseNameLabel.setBounds(28, 46, 163, 26);
 		contentPane.add(CourseNameLabel);
 		
 		JLabel lblNewLabel = new JLabel("Selected:");
-		lblNewLabel.setBounds(605, 119, 79, 16);
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel.setBounds(605, 118, 103, 17);
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setEditable(false);
-		textField.setBounds(605, 145, 130, 26);
+		textField.setBounds(605, 145, 143, 35);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		ApplyChangesButton = new JButton("Apply Changes");
-		ApplyChangesButton.setBounds(116, 522, 129, 35);
+		ApplyChangesButton.setBackground(SystemColor.controlHighlight);
+		ApplyChangesButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		ApplyChangesButton.setBounds(116, 522, 157, 35);
 		contentPane.add(ApplyChangesButton);
 		
 		CancelButton = new JButton("Cancel");
+		CancelButton.setBackground(SystemColor.controlHighlight);
+		CancelButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
-		CancelButton.setForeground(Color.RED);
+		CancelButton.setForeground(Color.BLACK);
 		CancelButton.setBounds(326, 522, 129, 35);
 		contentPane.add(CancelButton);
 		
 		NewCategoryButton = new JButton("Add Category");
-		NewCategoryButton.setBounds(605, 268, 129, 35);
+		NewCategoryButton.setBackground(SystemColor.controlHighlight);
+		NewCategoryButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		NewCategoryButton.setBounds(605, 268, 143, 35);
 		contentPane.add(NewCategoryButton);
 	}
 	

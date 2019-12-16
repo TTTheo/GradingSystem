@@ -11,6 +11,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
 
 public class ShowStatisticFrame extends JFrame {
 
@@ -55,6 +56,7 @@ public class ShowStatisticFrame extends JFrame {
 		lblStandardDeviation.setText("Standard deviation: "+statistic[2]);
 		
 		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnBack.setBounds(292, 329, 97, 25);
 		contentPane.add(btnBack);
