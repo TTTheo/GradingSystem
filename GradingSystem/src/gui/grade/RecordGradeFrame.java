@@ -469,8 +469,8 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(stuID)) {
         		String comment=grades.get(i).getComment();
         		//System.out.println(comment);
-        		if(comment==null&&comment.equals("")) {
-        			textField_1.setText(null);
+        		if(comment==null||isBlankString(comment)) {
+        			textField_1.setText("");
         		}else {
         			textField_1.setText(comment);
         		}

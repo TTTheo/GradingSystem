@@ -556,7 +556,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					}else {
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
-								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								double grade=grades.get(k).getGrade();
+								double totalscore=parts.get(j-2).getTotalScore();
+								if(grade<0) {
+									data[i][j]=String.valueOf((totalscore+grades.get(k).getGrade())/totalscore*100);
+								}else {
+									data[i][j]=String.valueOf(grades.get(k).getGrade()/totalscore*100);
+								}
 								String comment=grades.get(k).getComment();
 								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
@@ -598,7 +604,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					}else {
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
-								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								double grade=grades.get(k).getGrade();
+								double totalscore=parts.get(j-2).getTotalScore();
+								if(grade<0) {
+									data[i][j]=String.valueOf((totalscore+grades.get(k).getGrade())/totalscore*100);
+								}else {
+									data[i][j]=String.valueOf(grades.get(k).getGrade()/totalscore*100);
+								}
 								String comment=grades.get(k).getComment();
 								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
@@ -635,7 +647,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					}else {
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
-								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								double grade=grades.get(k).getGrade();
+								double totalscore=parts.get(j-2).getTotalScore();
+								if(grade<0) {
+									data[i][j]=String.valueOf((totalscore+grades.get(k).getGrade())/totalscore*100);
+								}else {
+									data[i][j]=String.valueOf(grades.get(k).getGrade()/totalscore*100);
+								}
 								String comment=grades.get(k).getComment();
 								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
@@ -668,7 +686,13 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 					}else {
 						for(int k=0;k<grades.size();k++) {
 							if(grades.get(k).getSid().equals(students.get(i).getSid())&&grades.get(k).getPid() == parts.get(j-2).getPid()) {
-								data[i][j]=String.valueOf(grades.get(k).getGrade());
+								double grade=grades.get(k).getGrade();
+								double totalscore=parts.get(j-2).getTotalScore();
+								if(grade<0) {
+									data[i][j]=String.valueOf((totalscore+grades.get(k).getGrade())/totalscore*100);
+								}else {
+									data[i][j]=String.valueOf(grades.get(k).getGrade()/totalscore*100);
+								}
 								String comment=grades.get(k).getComment();
 								if(comment!=null&&!isBlankString(comment)) {
 									String[] commentindex= {String.valueOf(i),String.valueOf(j)};
@@ -728,7 +752,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 						if(grades.get(l).getSid().equals(ID)&&grades.get(l).getPid() == part.getPid()){
 							if(grades.get(l).getGrade()<0) {
 								double grade=(part.getTotalScore()+grades.get(l).getGrade())/part.getTotalScore()*100;
-								categoryfinal+=grade*Ppercentage;
+								categoryfinal+=grade*Ppercentage/100;
 							}else {
 								double grade=grades.get(l).getGrade()/part.getTotalScore()*100;
 								categoryfinal+=grade*Ppercentage/100;
