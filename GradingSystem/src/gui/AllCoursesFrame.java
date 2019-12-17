@@ -139,8 +139,8 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		editBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for(int i=0;i<courseTable.getRowCount();i++) {
-					String name=(String) courseTable.getValueAt(i, 0);
-					String newid=(String) courseTable.getValueAt(i, 1);
+					String name= "" + courseTable.getValueAt(i, 0);
+					String newid= "" + courseTable.getValueAt(i, 1);
 					boolean courseExist=false;
 					for(Course course: data) {
 						if(course.getCourseId().equals(data.get(i))) {

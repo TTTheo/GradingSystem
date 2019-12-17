@@ -173,7 +173,7 @@ public class Backend {
 
 	public void deleteCourse(Course course) throws SQLException {
 		try {
-			courseDao.insert(course);
+			courseDao.delete(course);
 			ArrayList<Category> cats = course.getCategories();
 			if (cats != null) {
 				for (Category cat : cats) {
