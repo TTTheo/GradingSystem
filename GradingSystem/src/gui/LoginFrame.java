@@ -76,7 +76,7 @@ public class LoginFrame extends JFrame implements FrameActions {
 		signupBtn.setBounds(463, 333, 116, 32);
 		contentPane.add(signupBtn);
 		
-		welcomeLabel = new JLabel("Welcom to Grading System");
+		welcomeLabel = new JLabel("Welcome to GradeBuddy");
 		welcomeLabel.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		welcomeLabel.setBounds(198, 49, 251, 57);
 		contentPane.add(welcomeLabel);

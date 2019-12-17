@@ -87,23 +87,11 @@ public class SemesterFrame extends JFrame implements FrameActions {
 		viewBtn.setBounds(700, 142, 130, 37);
 		contentPane.add(viewBtn);
 
-		editBtn = new JButton("Edit");
-		editBtn.setBackground(SystemColor.controlHighlight);
-		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		editBtn.setBounds(700, 207, 130, 37);
-		contentPane.add(editBtn);
-
 		addBtn = new JButton("Add new");
 		addBtn.setBackground(SystemColor.controlHighlight);
 		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		addBtn.setBounds(513, 429, 117, 37);
 		contentPane.add(addBtn);
-
-		deleteBtn = new JButton("Delete");
-		deleteBtn.setBackground(SystemColor.controlHighlight);
-		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		deleteBtn.setBounds(700, 273, 130, 37);
-		contentPane.add(deleteBtn);
 
 		semesterTableScrollPane = new JScrollPane(semesterTable);
 		semesterTableScrollPane.setBounds(31, 69, 599, 336);
@@ -154,33 +142,6 @@ public class SemesterFrame extends JFrame implements FrameActions {
 
 	// Handle Add and View, TODO: delete and edit
 	public void addActions(){	
-		editBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for(int i=0;i<semesterTable.getRowCount();i++) {
-					String newyear=(String) semesterTable.getValueAt(i, 0);
-					String newterm=(String) semesterTable.getValueAt(i, 1);
-					boolean semesterExist=false;
-					for(Semester semester:data) {
-						if(semester.getTerm().equals(newterm)&&semester.getYear().equals(Integer.parseInt(newyear))) {
-							alert("This semester exist!");
-							semesterExist=true;
-						}
-					}
-					if(!semesterExist) {
-						data.get(i).setTerm(newterm);
-						data.get(i).setYear(Integer.parseInt(newyear));
-						try {
-							backend.updateSemester(data.get(i));
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-				}
-				
-				
-			}
-		});
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String term = termField.getText().trim();
@@ -228,22 +189,7 @@ public class SemesterFrame extends JFrame implements FrameActions {
 			}
 		});
 		
-		deleteBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		        int selectedRowIndex = semesterTable.getSelectedRow();
-		        selectedSemester = tableModel.getSemesterAt(selectedRowIndex);
-		        // set the selected row data into jtextfields
-		        String semesterInfo = selectedSemester.toString();
-		        selectedSemesterField.setText(semesterInfo);
-				try {
-				   backend.deleteSemester(selectedSemester);
-				} catch (SQLException ex) {
-					alert(ex.toString());
-				}
-				tableModel.deleteRow(selectedSemester);
-			}
-		});
-		
+
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPrevious();

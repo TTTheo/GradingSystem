@@ -25,8 +25,17 @@ public class Student {
 	    this(fname, lname, sid, email);
 		this.courses = courses;
 	}
-	
-	public String toString() {
+
+    public Student(String fname) {
+		this(fname, "", "" );
+		this.courses = new ArrayList<>();
+    }
+
+    public void addCourse(Course c) {
+		courses.add(c);
+	}
+
+    public String toString() {
 		return fname + " " + lname ;
 	}
 	public String getEmail() {

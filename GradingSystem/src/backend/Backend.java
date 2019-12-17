@@ -269,6 +269,16 @@ public class Backend {
 		return parts;
 	}
 
+	// Get all parts for a course
+	public ArrayList<Part> getParts(Course c) throws SQLException {
+		ArrayList<Part> allParts = new ArrayList<>();
+		ArrayList<Category> allCategories = getCategories(c);
+		for (Category cat: allCategories) {
+			allParts.addAll(cat.getPartList());
+		}
+		return allParts;
+	}
+
 	public void addPart(Part part) throws SQLException {
 		partDao.insert(part);
 	}
@@ -314,6 +324,10 @@ public class Backend {
 	// Delete all traces of student from db TODO: cascade delete grades
 	public void deleteStudent(Student student) throws SQLException {
     	studentDao.delete(student);
+	}
+
+	public void updateStudent(Student student) {
+		studentDao.update(student);
 	}
 
 	/* Grade Methods Start (Untested) */

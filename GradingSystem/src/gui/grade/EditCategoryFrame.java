@@ -271,7 +271,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
-		ViewGradeFrame previousFrame = new ViewGradeFrame(backend) ;
+		GradeBuddy previousFrame = new GradeBuddy(backend) ;
 		previousFrame.setLocationRelativeTo(null);
 		previousFrame.setVisible(true);
 		dispose();

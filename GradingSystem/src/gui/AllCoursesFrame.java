@@ -1,5 +1,6 @@
 package gui;
 
+import gui.grade.GradeBuddy;
 import gui.grade.ViewGradeFrame;
 import objects.Course;
 import objects.Semester;
@@ -24,9 +25,6 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 	private CourseTableModel tableModel ;
 
 	private JButton viewBtn ;
-	private JButton editBtn ;
-	private JButton deleteBtn ;
-	private JButton addBtn ;
 
 	private JScrollPane courseTableScroll;
 	private JLabel selectedCourseLabel ;
@@ -78,24 +76,6 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 		viewBtn.setBounds(649, 172, 130, 37);
 		contentPane.add(viewBtn);
 
-		editBtn = new JButton("Edit");
-		editBtn.setBackground(SystemColor.controlHighlight);
-		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		editBtn.setBounds(649, 236, 130, 37);
-		contentPane.add(editBtn);
-
-		addBtn = new JButton("Add new");
-		addBtn.setBackground(SystemColor.controlHighlight);
-		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		addBtn.setBounds(649, 373, 130, 37);
-		contentPane.add(addBtn);
-
-		deleteBtn = new JButton("Delete");
-		deleteBtn.setBackground(SystemColor.controlHighlight);
-		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		deleteBtn.setBounds(649, 308, 130, 37);
-		contentPane.add(deleteBtn);
-
 		courseTableScroll= new JScrollPane(courseTable);
 		courseTableScroll.setBounds(31, 69, 588, 357);
 		contentPane.add(courseTableScroll);
@@ -136,34 +116,6 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 	}
 
 	public void addActions(){
-		editBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for(int i=0;i<courseTable.getRowCount();i++) {
-					String name= "" + courseTable.getValueAt(i, 0);
-					String newid= "" + courseTable.getValueAt(i, 1);
-					boolean courseExist=false;
-					for(Course course: data) {
-						if(course.getCourseId().equals(data.get(i))) {
-							courseExist=true;
-							alert("This ID exists!");
-							break;
-						}
-					}
-					if(!courseExist) {
-						data.get(i).setName(name);
-						data.get(i).setCourseId(newid);
-						backend.updateCourse(data.get(i));
-					}
-					/*try {
-						backend.updateCourse(data.get(i));
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}*/
-				}
-			}
-		});
-		
 		viewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				backend.setCourse(selectedCourse);
@@ -176,39 +128,15 @@ public class AllCoursesFrame extends JFrame implements FrameActions{
 				openPrevious();
 			}
 		});
-		
-		deleteBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				 int selectedRowIndex = courseTable.getSelectedRow();
-				 selectedCourse = tableModel.getCourseAt(selectedRowIndex);
-			        // set the selected row data into jtextfields
-			        String semesterInfo = selectedCourse.toString();
-			        selectedCourseField.setText(semesterInfo);	
-			        try {
-			        	backend.deleteCourse(selectedCourse);
-					} catch (SQLException ex) {
-						alert(ex.toString());
-					}
-					tableModel.deleteRow(selectedCourse);
-			}
-		});
-		
-		addBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AddCourseFrame next = new AddCourseFrame(backend);
-				next.setLocationRelativeTo(null);
-				next.setVisible(true);
-			}
-		});
 	}
-	
+
 	public void alert(String message){
         JOptionPane.showMessageDialog(null, message);
     }
 
 	// Open the course menu frame next
 	public void openNext() {
-		ViewGradeFrame next = new ViewGradeFrame(backend) ;
+		GradeBuddy next = new GradeBuddy(backend) ;
 		next.setLocationRelativeTo(null);
 		next.setVisible(true);
 		dispose();
