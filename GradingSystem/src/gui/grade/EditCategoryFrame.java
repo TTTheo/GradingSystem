@@ -69,10 +69,10 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		courseId = backend.getCourse().getCourseId();
 		this.generateTable(course);
 		
-		editBtn = new JButton("Edit");
+		editBtn = new JButton("Click here to Edit");
 		editBtn.setBackground(SystemColor.controlHighlight);
 		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		editBtn.setBounds(116, 522, 157, 35);
+		editBtn.setBounds(326, 522, 180, 35);
 		contentPane.add(editBtn);
 		
 		JLabel CourseNameLabel = new JLabel(courseId);
@@ -97,7 +97,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		CancelButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
 		CancelButton.setForeground(Color.BLACK);
-		CancelButton.setBounds(326, 522, 129, 35);
+		CancelButton.setBounds(116, 522, 157, 35);
 		contentPane.add(CancelButton);
 		
 	}

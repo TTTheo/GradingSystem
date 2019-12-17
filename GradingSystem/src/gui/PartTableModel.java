@@ -72,7 +72,7 @@ public class PartTableModel extends AbstractTableModel {
             case 1:
                 double newPercent = (Double) value;
                 if (getTotalPercent() + newPercent > 100.0) {
-                    alert("Percentage do not add to 100!");
+                    alert("Percentages do not add to 100!");
                     return; // don't update and don't fire
                 }
                 c.setPercentage(newPercent);

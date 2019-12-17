@@ -251,7 +251,6 @@ public class Backend {
 		partDao.update(part);
 	}
 
-	////////////////////
 	public void deletePart(Part part) throws SQLException {
 		partDao.delete(part);
 	}

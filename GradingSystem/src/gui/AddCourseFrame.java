@@ -122,6 +122,7 @@ public class AddCourseFrame extends JFrame implements FrameActions{
 						nextFrame.setVisible(true);
 						dispose();
 					} else {
+
 						for (Category c : backend.getCategories(backend.getCourse((String)comboBox.getSelectedItem()))) {
 								Category newCategory = new Category(c.getName(), c.getPartNum(), courseId, c.getPercentage());
 								backend.addCategory(newCategory);
