@@ -108,6 +108,14 @@ public class Backend {
 	public ArrayList<Semester> getAllSemesters() throws SQLException {
 		return semesterDao.getAll();
 	}
+	
+	public void deleteSemester(Semester s)throws SQLException {
+		semesterDao.delete(s);
+	}
+
+	public void updateSemester(Semester s)throws SQLException {
+		semesterDao.update(s);
+	}
 
 	/* Course Methods Start */
 
@@ -116,6 +124,26 @@ public class Backend {
 		ArrayList<Course> courses = null;
 		try {
 			courses = courseDao.getAll(semester);  // will never be null
+			for (Course course : courses) {
+				// Get all the categories of this course
+				ArrayList<Category> cats = getCategories(course);
+				course.setCategories(cats);
+
+				// Get all the students of this course
+				ArrayList<Student> students = getAllStudents(course);
+				course.setStudents(students);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return courses;
+	}
+
+	// Gets every single course
+	public ArrayList<Course> getAllCourses() {
+		ArrayList<Course> courses = null;
+		try {
+			courses = courseDao.getAll();
 			for (Course course : courses) {
 				// Get all the categories of this course
 				ArrayList<Category> cats = getCategories(course);
@@ -163,6 +191,21 @@ public class Backend {
 		}
 	}
 
+	public void deleteCourse(Course course) throws SQLException {
+		try {
+			courseDao.delete(course);
+			ArrayList<Category> cats = course.getCategories();
+			if (cats != null) {
+				for (Category cat : cats) {
+					deleteCategory(cat);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	public boolean updateCourse(Course course) {
 		if (course == null) return false;
 		try {
@@ -196,6 +239,28 @@ public class Backend {
 		}
 	}
 
+	// Don't update any parts
+	public void updateCategory(Category category) throws SQLException {
+		categoryDao.update(category);
+	}
+
+	public void deleteCategory(Category category) throws SQLException {
+		categoryDao.delete(category);
+		ArrayList<Part> parts = category.getPartList();
+		if (parts != null) {
+			for (Part part : parts) {
+				deletePart(part);
+			}
+		}
+	}
+
+	// Deletes all categories for a course
+	public void deleteAllCategories(Course course) throws SQLException {
+		for (Category c: getCategories(course)) {
+		    deleteCategory(c);
+		}
+	}
+
 	/* Part Methods Start */
 
 	// Get all parts for a category
@@ -204,8 +269,27 @@ public class Backend {
 		return parts;
 	}
 
+	// Get all parts for a course
+	public ArrayList<Part> getParts(Course c) throws SQLException {
+		ArrayList<Part> allParts = new ArrayList<>();
+		ArrayList<Category> allCategories = getCategories(c);
+		for (Category cat: allCategories) {
+			allParts.addAll(cat.getPartList());
+		}
+		return allParts;
+	}
+
 	public void addPart(Part part) throws SQLException {
 		partDao.insert(part);
+	}
+
+	// Don't update any parts
+	public void updatePart(Part part) throws SQLException {
+		partDao.update(part);
+	}
+
+	public void deletePart(Part part) throws SQLException {
+		partDao.delete(part);
 	}
 
 	/* Student Methods Start */
@@ -240,6 +324,10 @@ public class Backend {
 	// Delete all traces of student from db TODO: cascade delete grades
 	public void deleteStudent(Student student) throws SQLException {
     	studentDao.delete(student);
+	}
+
+	public void updateStudent(Student student) {
+		studentDao.update(student);
 	}
 
 	/* Grade Methods Start (Untested) */

@@ -100,4 +100,21 @@ public class StudentDao extends Dao<Student> {
         executeUpdate(query);
     }
 
+    public boolean update(Student student) {
+        String query = String.format(
+                "UPDATE Student SET fname = '%s', lname = '%s' WHERE sid = '%s'",
+                student.getFname(),
+                student.getLname(),
+                student.getSid()
+        );
+
+        try {
+            executeUpdate(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return false ;
+        }
+        return true ;
+    }
+
 }

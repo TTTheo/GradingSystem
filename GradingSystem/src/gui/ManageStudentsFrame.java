@@ -69,6 +69,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 		init();
 		addActions();
 	}
+	
 	public void reload() {
 		ArrayList<Student> data = null;
 		try {
@@ -199,16 +200,23 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 						backend.addStudent(student);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
+						
 					}
 				}
 				try {		
 					backend.addStudentToCourse(student, course);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
+					alert("Student Id taken, please try another one!") ;
 					e1.printStackTrace();
+					return ;
 				}
 				reload() ;
+				fnameField.setText("");
+				lnameField.setText("");
+				idField.setText("");
 			}
 		});
 
@@ -228,56 +236,53 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 			}
 		});
 
-//		btnImportStudent.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				try {
-//					jxl.Workbook wb=null;
-//					InputStream is = new FileInputStream("C://Users//82585//Desktop//students.xls");
-//		            wb = Workbook.getWorkbook(is);
-//
-//		            int sheetSize = wb.getNumberOfSheets();
-//		            Sheet sheet = wb.getSheet(0);
-//		            int row_total = sheet.getRows();
-//		            for (int j = 0; j < row_total; j++) {
-//		                if(j == 0){
-//		                    Cell[] cells = sheet.getRow(j);
-//		                    //System.out.println(cells[0].getContents());
-//		                    //System.out.println(cells[1].getContents());
-//		                    //System.out.println(cells[2].getContents());
-//		                }else {
-//                            Cell[] student = sheet.getRow(j);
-//                            Student newStudent = new Student(student[0].getContents(), student[1].getContents(), student[2].getContents(), student[3].getContents());
-//                            students.add(newStudent);
-//                            try {
-//								backend.addStudent(newStudent);
-//								backend.addStudentToCourse(newStudent, course);
-//							} catch (SQLException ex) {
-//								alert(ex.toString());
-//								ex.printStackTrace();
-//							}
-//			                //students.add(new Student(student[0].getContents(),student[1].getContents()));
-//			             //   System.out.println(students.get(j-1).getFname());
-//		                   // System.out.println(students.get(j-1).getSid());
-//		                    //System.out.println(students.get(j-1).getEmail());
-//		                }
-//		            }
-//		            data=new String[students.size()][3];
-//		            for(int i=0;i<students.size();i++) {
-//		            	data[i][1]=students.get(i).getLname();
-//		            	data[i][2]=students.get(i).getSid();
-//		            	data[i][3]=students.get(i).getEmail();
-//          			}
-//		            tableModel=new DefaultTableModel(data,columnNames);
-//		            table.setModel(tableModel);
-//		            alert("Add successfully!");
-//		        }catch (IOException ex) {
-//		            // TODO Auto-generated catch block
-//		            ex.printStackTrace();
-//		        } catch (BiffException ex){
-//		            ex.printStackTrace();
-//		        }
-//			}
-//		});
+		btnImportStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					jxl.Workbook wb=null;
+					InputStream is = new FileInputStream("/Users/dj_yourfriend/Workspace/1.0/data.xls");
+		            wb = Workbook.getWorkbook(is);
+
+		            int sheetSize = wb.getNumberOfSheets();
+		            Sheet sheet = wb.getSheet(0);
+		            int row_total = sheet.getRows();
+		            for (int j = 0; j < row_total; j++) {
+		                if(j == 0){
+		                    Cell[] cells = sheet.getRow(j);
+		                    //System.out.println(cells[0].getContents());
+		                    //System.out.println(cells[1].getContents());
+		                    //System.out.println(cells[2].getContents());
+		                }else {
+                            Cell[] student = sheet.getRow(j);
+                            Student newStudent = new Student(student[0].getContents(), student[1].getContents(), student[2].getContents());
+                            students.add(newStudent);
+                            try {
+								backend.addStudent(newStudent);
+								backend.addStudentToCourse(newStudent, course);
+							} catch (SQLException ex) {
+								alert(ex.toString());
+								ex.printStackTrace();
+							}
+			                //students.add(new Student(student[0].getContents(),student[1].getContents()));
+			             //   System.out.println(students.get(j-1).getFname());
+		                   // System.out.println(students.get(j-1).getSid());
+		                    //System.out.println(students.get(j-1).getEmail());
+		                }
+		            }
+		            ArrayList<Student> data = students;
+		            
+		            final String[] columnNames= {"First Name","Last Name","ID"};
+		    		tableModel = new StudentTableModel(data, columnNames);
+		    		studentTable.setModel(tableModel);
+		            alert("Import successfully!");
+		        }catch (IOException ex) {
+		            // TODO Auto-generated catch block
+		            ex.printStackTrace();
+		        } catch (BiffException ex){
+		            ex.printStackTrace();
+		        }
+			}
+		});
 
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -298,6 +303,7 @@ public class ManageStudentsFrame extends JFrame implements FrameActions{
 	public void openPrevious() {
 		ViewGradeFrame prevFrame = new ViewGradeFrame(backend) ;
 		prevFrame.setLocationRelativeTo(null);
+		prevFrame.setVisible(true);
 		dispose();
 	}
 }

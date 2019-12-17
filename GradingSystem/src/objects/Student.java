@@ -26,6 +26,18 @@ public class Student {
 		this.courses = courses;
 	}
 
+    public Student(String fname) {
+		this(fname, "", "" );
+		this.courses = new ArrayList<>();
+    }
+
+    public void addCourse(Course c) {
+		courses.add(c);
+	}
+
+    public String toString() {
+		return fname + " " + lname ;
+	}
 	public String getEmail() {
 		return email;
 	}

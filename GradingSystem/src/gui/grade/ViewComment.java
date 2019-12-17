@@ -11,6 +11,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
 
 public class ViewComment extends JFrame {
 
@@ -20,7 +21,7 @@ public class ViewComment extends JFrame {
 	 * Create the frame.
 	 */
 	public ViewComment(String comment) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 437);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -34,12 +35,14 @@ public class ViewComment extends JFrame {
 		lblComment.setText(comment);
 		
 		JButton btnYes = new JButton("Back");
+		btnYes.setBackground(SystemColor.controlHighlight);
+		btnYes.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnYes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		btnYes.setBounds(241, 326, 97, 25);
+		btnYes.setBounds(241, 326, 97, 38);
 		contentPane.add(btnYes);
 	}
 }

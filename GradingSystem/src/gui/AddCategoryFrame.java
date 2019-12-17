@@ -18,10 +18,12 @@ import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
 import gui.grade.EditCategoryFrame;
+import gui.grade.ViewGradeFrame;
 import objects.Category;
 import objects.Course;
 import objects.Part;
 import java.awt.Font;
+import java.awt.SystemColor;
 
 public class AddCategoryFrame extends JFrame implements FrameActions{
 
@@ -104,27 +106,39 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		scrollPane.setViewportView(table);
 		
 		btnNext = new JButton("Next");
+		btnNext.setBackground(SystemColor.controlHighlight);
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnNext.setBounds(423, 534, 93, 23);
 		contentPane.add(btnNext);
 		
 		btnSetParts = new JButton("Set parts");
+		btnSetParts.setBackground(SystemColor.controlHighlight);
 		btnSetParts.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnSetParts.setBounds(391, 262, 125, 23);
+		btnSetParts.setBounds(391, 262, 125, 30);
 		contentPane.add(btnSetParts);
 		
 		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
+		
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		btnBack.setBounds(50, 533, 97, 25);
+
+		btnBack.setBounds(50, 533, 97, 24);
 		contentPane.add(btnBack);
 		
-		JLabel lblNewLabel = new JLabel("Category Left to Create: " + categoryLeft);
+		JLabel lblNewLabel = new JLabel("Category Left to Create: " + (categoryLeft - 1));
+
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblNewLabel.setBounds(308, 497, 208, 30);
 		contentPane.add(lblNewLabel);
 	}
 	
 	public void addActions(){
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPrevious();
+			}
+		});
+		
 		btnSetParts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int partNum = 0;
@@ -251,6 +265,9 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
+		EditCategoryFrame prevframe = new EditCategoryFrame(backend) ;
+		prevframe.setLocationRelativeTo(null);
+		prevframe.setVisible(true);
 		dispose();
 	}
 }

@@ -66,6 +66,7 @@ public class PartDao extends Dao<Part>{
         return executeQuery(query);
     }
     
+    //////////////
     public boolean delete(Part p) {
     	String query = String.format(
         		"DELETE FROM Part WHERE pid = %d",
@@ -82,7 +83,7 @@ public class PartDao extends Dao<Part>{
     
     public boolean update(Part part) {
     	String query = String.format(
-        		"UPDATE Part SET name = '%s', total_score = %f', percentage = '%f' WHERE pid = %d",
+        		"UPDATE Part SET name = '%s', total_score = %f, percentage = %f WHERE pid = %d",
         		part.getName(),
         		part.getTotalScore(),
         		part.getPercentage(),

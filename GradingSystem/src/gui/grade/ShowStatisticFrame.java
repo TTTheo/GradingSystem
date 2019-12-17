@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
 
 public class ShowStatisticFrame extends JFrame {
 
@@ -30,6 +33,7 @@ public class ShowStatisticFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		init();
+		addAction();
 	}
 	
 	public void init() {
@@ -43,7 +47,7 @@ public class ShowStatisticFrame extends JFrame {
 		lblMedian.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblMedian.setBounds(256, 161, 349, 29);
 		contentPane.add(lblMedian);
-		lblAverage.setText("Median: "+statistic[1]);
+		lblMedian.setText("Median: "+statistic[1]);
 		
 		lblStandardDeviation = new JLabel("Standard deviation: ");
 		lblStandardDeviation.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -52,7 +56,17 @@ public class ShowStatisticFrame extends JFrame {
 		lblStandardDeviation.setText("Standard deviation: "+statistic[2]);
 		
 		btnBack = new JButton("Back");
+		btnBack.setBackground(SystemColor.controlHighlight);
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnBack.setBounds(292, 329, 97, 25);
 		contentPane.add(btnBack);
+	}
+	
+	public void addAction() {
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 	}
 }

@@ -1,45 +1,36 @@
 package gui.grade;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import backend.Backend;
 import dao.CategoryDao;
 import dao.PartDao;
-import gui.AddPartFrame;
-import gui.FrameActions;
-import gui.SemesterFrame;
+import gui.*;
 import objects.Category;
 import objects.Course;
 import objects.Part;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.JTable;
-
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+import java.awt.Font;
+import java.awt.SystemColor;
 
 public class EditCategoryFrame extends JFrame implements FrameActions{
 
 	private JPanel contentPane;
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
-	private JButton AddNewBtn;
-	private JTextField textField;
-	private JButton ApplyChangesButton;
+	private JButton editBtn;
+	private JButton applyBtn;
+	private JComboBox comboBox;
 	private JButton CancelButton ;
-	private final Action action = new SwingAction();
 
 	private Course course;
 	private String courseId;
@@ -51,7 +42,7 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		this.backend = backend;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 627);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,33 +62,47 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		courseId = backend.getCourse().getCourseId();
 		this.generateTable(course);
 		
-		AddNewBtn = new JButton("Add New");
-		AddNewBtn.setBounds(605, 212, 129, 35);
-		contentPane.add(AddNewBtn);
+		editBtn = new JButton("Click here to Edit");
+		editBtn.setBackground(SystemColor.controlHighlight);
+		editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		editBtn.setBounds(326, 522, 180, 35);
+		contentPane.add(editBtn);
 		
 		JLabel CourseNameLabel = new JLabel(courseId);
-		CourseNameLabel.setBounds(28, 46, 163, 16);
+		CourseNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		CourseNameLabel.setBounds(28, 46, 163, 26);
 		contentPane.add(CourseNameLabel);
 		
-		JLabel lblNewLabel = new JLabel("Selected:");
-		lblNewLabel.setBounds(605, 119, 79, 16);
+		JLabel lblNewLabel = new JLabel("Use Previous Structure:");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel.setBounds(575, 118, 250, 17);
 		contentPane.add(lblNewLabel);
+
+		comboBox = new JComboBox();
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		comboBox.setBounds(560, 150, 250, 33);
+		contentPane.add(comboBox);
+
+		// Populate combobox
+		comboBox.addItem("");
+		for(Course c: backend.getAllCourses()) {
+			comboBox.addItem(c.getCourseId());
+		}
+
+		applyBtn = new JButton("Apply previous");
+		applyBtn.setBackground(SystemColor.controlHighlight);
+		applyBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		applyBtn.setBounds(560, 200, 180, 35);
+		contentPane.add(applyBtn);
+
+		CancelButton = new JButton("Back");
+		CancelButton.setBackground(SystemColor.controlHighlight);
+		CancelButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setBounds(605, 145, 130, 26);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		ApplyChangesButton = new JButton("Apply Changes");
-		ApplyChangesButton.setBounds(116, 522, 129, 35);
-		contentPane.add(ApplyChangesButton);
-		
-		CancelButton = new JButton("Cancel");
-		
-		CancelButton.setForeground(Color.RED);
-		CancelButton.setBounds(326, 522, 129, 35);
+		CancelButton.setForeground(Color.BLACK);
+		CancelButton.setBounds(116, 522, 157, 35);
 		contentPane.add(CancelButton);
+		
 	}
 	
 	public void generateTable(Course course) {
@@ -152,18 +157,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 				}
 		}
 		
-		/*
-	     * Don't need to implement this method unless your table's
-	     * editable.
-	     */
 	    public boolean isCellEditable(int row, int col) {
-	        //Note that the data/cell address is constant,
-	        //no matter where the cell appears onscreen.
-	        if (col < 2) {
-	            return false;
-	        } else {
-	            return true;
-	        }
+			return false;
 	    }
 
 		@Override
@@ -192,115 +187,73 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
+		applyBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String selected = (String) comboBox.getSelectedItem();
+				if (selected.equals("") || selected.equals(course.getCourseId())) {
+					alert("Select a valid course first");
+					return;
+				}
+
+				// First delete all current categories and parts
+				System.out.println("item state changed");
+                try {
+                	backend.deleteAllCategories(course);
+				}
+                catch (SQLException ex) {
+                	alert(ex.toString());
+                	ex.printStackTrace();
+				}
+
+			    Course selectedCourse = backend.getCourse(selected);
+				ArrayList<Category> categories = new ArrayList<Category>();
+			    try {
+					categories = backend.getCategories(selectedCourse);
+				} catch (SQLException ex) {
+			    	alert(ex.toString());
+			    	ex.printStackTrace();
+				}
+
+			    // Copy the categories for this category
+				for (Category c : categories) {
+					Category newCategory = new Category(
+						c.getName(),
+						c.getPartNum(),
+						courseId,
+						c.getPercentage()
+					);
+					try {
+						backend.addCategory(newCategory);
+						for (Part p : backend.getParts(c)) {
+							Part newPart = new Part(
+								p.getName(),
+								newCategory.getCid(),
+								p.getTotalScore(),
+								p.getPercentage()
+							);
+							backend.addPart(newPart);
+						}
+					} catch (SQLException ex) {
+						alert(ex.toString());
+						ex.printStackTrace();
+					}
+				}
+				EditCategoryFrame refresh = new EditCategoryFrame(backend);
+				refresh.setLocationRelativeTo(null);
+				dispose();
+				refresh.setVisible(true);
+			}
+		});
+
+		editBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    openNext();
+			}
+		});
+
 		CancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPrevious();
-			}
-		});
-		ApplyChangesButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//Extract information from the table and put them back to the Coruse instance accordingly
-				CategoryDao categoryDAO = new CategoryDao();
-				PartDao partDAO = new PartDao();
-				ArrayList<Category> categoryList = new ArrayList<Category>();
-				ArrayList<Part> partList = new ArrayList<Part>();
-				try {
-					categoryList = categoryDAO.getAll(courseId);
-				} catch (SQLException e1) {
-					System.out.println("Failed to extract CATEGROIES from the DB!");
-				}
-				int currentCID = 0;
-				int partNum = 0;
-				for (int rowNum = 0; rowNum < CategoryTable.getRowCount(); rowNum++) {
-					if (CategoryTable.getValueAt(rowNum, 0) != null) {//then this row is for a category
-						//
-						String categoryName = (String) CategoryTable.getValueAt(rowNum, 0);
-						for (Category c : categoryList) {
-							if (c.getName().equalsIgnoreCase(categoryName)) {
-								currentCID = c.getCid();
-								partNum = c.getPartNum();
-							} else {
-								System.out.println("Failed to match Front-End course with DB!");
-							}
-						}
-						double categoryPercent = 0.0;
-						try {
-							categoryPercent = (double) CategoryTable.getValueAt(rowNum, 2);
-						} catch (ClassCastException e1) {
-							categoryPercent = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 2));
-						}
-						Category cToUpdate = new Category(categoryName, partNum, courseId, categoryPercent);
-						cToUpdate.setCid(currentCID);
-						categoryDAO.update(cToUpdate);
-						//
-					} else {//then this row is for a part
-						try {
-							partList = partDAO.getAll(currentCID);
-						} catch (SQLException e2) {
-							System.out.println("Failed to extract PARTS from the DB!");
-						}
-						String partName = (String) CategoryTable.getValueAt(rowNum, 1);
-						int currentPID = 0;
-						for (Part p : partList) {
-							if (p.getName().equalsIgnoreCase(partName)) {
-								currentPID = p.getPid();
-							} else {
-								System.out.println("Failed to match Front-End Part with DB!");
-							}
-						}
-						double percentage = 0.0;
-						double totalScore = 0.0;
-						try {
-							percentage = (double) CategoryTable.getValueAt(rowNum, 2);
-						} catch (ClassCastException e1) {
-							percentage = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 2));
-						}
-						try {
-							totalScore = (double) CategoryTable.getValueAt(rowNum, 3);
-						} catch (ClassCastException e1) {
-							totalScore = Double.parseDouble((String) CategoryTable.getValueAt(rowNum, 3));
-						}
-						Part pToUpdate = new Part(partName,
-												  currentCID,
-												  totalScore,
-												  percentage);
-						pToUpdate.setPid(currentPID);
-						partDAO.update(pToUpdate);
-					}		
-				}
-				double c_PercentageSum = 0;
-				for (Category c : categoryList) {
-					double c_Percentage = c.getPercentage();
-					int c_ID = c.getCid();
-					c_PercentageSum += c_Percentage;
-					double p_PercentageSum = 0;
-					try {
-						for (Part p : partDAO.getAll(c_ID)) {
-							p_PercentageSum += p.getPercentage();
-							if (p_PercentageSum > c_Percentage) {
-								JOptionPane.showMessageDialog(null, "Percentages of all Parts DON'T add up, please EDIT THEM");
-								return;
-							}
-						}
-					} catch (SQLException e1) {
-						System.out.println("Failed to match Front-End CATEGORY with DB!");
-					}
-				}
-				if (c_PercentageSum > 100) {
-					JOptionPane.showMessageDialog(null, "Percentages of all Categories DON'T add up, please EDIT THEM");
-					return;
-				}
-				EditCategoryFrame refresh = new EditCategoryFrame(backend);
-				refresh.setVisible(true);
-				dispose();
-			}
-		});
-		
-		AddNewBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AddPartFrame newFrame = new AddPartFrame(backend);
-				newFrame.setVisible(true);
-				dispose();
 			}
 		});
 	}
@@ -309,23 +262,18 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
         JOptionPane.showMessageDialog(null, message);
     }
 
-	// Open the semester frame next
 	public void openNext() {
+		CategoryFrame next = new CategoryFrame(backend);
+		next.setLocationRelativeTo(null);
+		next.setVisible(true);
 		dispose();
 	}
 
 	// This is the first window, no previous window exists
 	public void openPrevious() {
-		ViewGradeFrame previousFrame = new ViewGradeFrame(backend) ;
+		GradeBuddy previousFrame = new GradeBuddy(backend) ;
 		previousFrame.setLocationRelativeTo(null);
+		previousFrame.setVisible(true);
 		dispose();
-	}
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
 	}
 }

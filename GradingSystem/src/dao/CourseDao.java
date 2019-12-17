@@ -39,6 +39,19 @@ public class CourseDao extends Dao<Course>{
         );
         executeUpdate(query);
     }
+    
+    ///////////////////
+    public void delete(Course course) throws SQLException {
+
+        String query = String.format(
+                "DELETE FROM Course WHERE course_id = '%s' and semester_id =  %d and name = '%s'",
+                course.getCourseId(),
+                course.getSemesterId(),
+                course.getName()
+        );
+        executeUpdate(query);
+    }
+    
 
     // Get EVERY course (in all semesters)
     public ArrayList<Course> getAll() throws SQLException {
