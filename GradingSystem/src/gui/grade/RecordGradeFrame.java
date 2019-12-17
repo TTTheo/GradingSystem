@@ -1,10 +1,8 @@
 package gui.grade;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import backend.Backend;
 import gui.FrameActions;
 import objects.Category;
@@ -12,7 +10,6 @@ import objects.Course;
 import objects.Grade;
 import objects.Part;
 import objects.Student;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -22,7 +19,6 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -37,8 +33,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.SystemColor;
-
 public class RecordGradeFrame extends JFrame implements FrameActions{
 	private JPanel contentPane;
 	private JTextField textField;
@@ -70,7 +64,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	 */
 	public RecordGradeFrame(Backend backend) {
         this.backend = backend;
-
         // Get the course, category, and part that we are grading
         course = backend.getCourse();
         category = backend.getCategory();
@@ -80,7 +73,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		setBackground(new Color(255, 248, 220));
 		setBounds(100, 100, 933, 584);
 		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.control);
+		contentPane.setBackground(new Color(248, 248, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -100,7 +93,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		contentPane.add(lblScore);
 		
 		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField.setBounds(619, 206, 118, 32);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -117,26 +109,24 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		contentPane.add(lblComment);
 		
 		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_1.setBounds(619, 285, 243, 160);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
 		btnPrevious = new JButton("Cancel");
 		btnPrevious.setForeground(new Color(0, 0, 0));
-		btnPrevious.setBackground(SystemColor.controlHighlight);
+		btnPrevious.setBackground(new Color(211, 211, 211));
 		btnPrevious.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnPrevious.setBounds(50, 471, 118, 32);
 		contentPane.add(btnPrevious);
 		
 		btnNext = new JButton("Save");
-		btnNext.setBackground(SystemColor.controlHighlight);
+		btnNext.setBackground(new Color(192, 192, 192));
 		btnNext.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnNext.setBounds(749, 471, 113, 32);
 		contentPane.add(btnNext);
 		
 		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		textField_2.setEditable(false);
 		textField_2.setBounds(619, 116, 243, 32);
 		contentPane.add(textField_2);
@@ -146,7 +136,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		scrollPane.setBounds(50, 72, 514, 374);
 		contentPane.add(scrollPane);
 		
-
 		//Semester demo = new Semester("Fall", 2019);
 		//ArrayList<Semester> data;
 		/*try {
@@ -203,7 +192,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		
 		
 		//this.data=datas;
-
 		tableModel=new DefaultTableModel(this.data,columnNames){
 			 public boolean isCellEditable(int row, int column){
 				 if(column==2) {
@@ -264,7 +252,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
                 return retValue;
             }
 		};
-
 		table.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(table);
 		rewriteKeys();
@@ -350,7 +337,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 				// TODO    
 			}  
 		});
-
 		btnPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPrevious();
@@ -374,40 +360,48 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	          @Override
 	          public void actionPerformed(ActionEvent e){
 	        	  if(table.getSelectedRow()+1<table.getRowCount()){
+	        		  //int row=table.getSelectedRow();
         			  table.editCellAt(table.getSelectedRow()+1,2);
 	        		  table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
-	        		  int row=table.getSelectedRow();
+	        		  int row=table.getEditingRow();
+	        		  //int column=table.getSelectedColumn();
 	        		  setNameScore();
 	        		  editValue=tableModel.getValueAt(row-1, 2).toString();
+	        		  System.out.println(editValue);
 		        	  //System.out.print(editValue);
 		        	  if(editValue.equals("")) {
 	        			  //updateScore();
 	        		  }else {
-		        	  stuID=tableModel.getValueAt(row-1, 1).toString();	
-        			  double newScore=Double.parseDouble(editValue);
-        			  int partID=part.getPid();
-        			  for(int i=0;i<grades.size();i++) {
-        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
-        					  grades.get(i).setGrade(newScore);
-//        					  gradeBack.updateGrade(grades.get(i)); TODO
-        					  try {
-        						  backend.updateGrade(grades.get(i));
-        					  } catch (SQLException e1) {
-        						  // TODO Auto-generated catch block
-        						  e1.printStackTrace();
-        					  }
-        					  data[i][2]=String.valueOf(newScore);
-        					  tableModel=(DefaultTableModel) table.getModel();
-        					  tableModel.setDataVector(data,columnNames);
-        					  tableModel.fireTableStructureChanged();
-        					  break;
-        				  }
-        			  }
-        			  table.editCellAt(table.getSelectedRow(),2);
-        			  table.setRowSelectionInterval(table.getSelectedRow(), table.getSelectedRow());
-        			  //table.editCellAt(row,2);
-        			 // System.out.println(table.getSelectedRow()+" "+table.getSelectedColumn());
+			        	  stuID=tableModel.getValueAt(row-1, 1).toString();	
+	        			  double newScore=Double.parseDouble(editValue);
+	        			  int partID=part.getPid();
+	        			  for(int i=0;i<grades.size();i++) {
+	        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
+	        					  grades.get(i).setGrade(newScore);
+	//        					  gradeBack.updateGrade(grades.get(i)); TODO
+	        					  try {
+	        						  backend.updateGrade(grades.get(i));
+	        					  } catch (SQLException e1) {
+	        						  // TODO Auto-generated catch block
+	        						  e1.printStackTrace();
+	        					  }
+	        					  data[i][2]=String.valueOf(newScore);
+	        					 // System.out.println(newScore);
+	        					  tableModel=(DefaultTableModel) table.getModel();
+	        					  tableModel.setDataVector(data,columnNames);
+	        					  tableModel.fireTableStructureChanged();
+	        					  break;
+	        				  }
+	        			  }
+	        			  table.editCellAt(row,2);
+	        			 // System.out.println(table.getSelectedRow());
+	        			  table.setRowSelectionInterval(row, row);
+	        			  //System.out.println(table.getSelectedRow());
+	        			 // table.editCellAt(table.getSelectedRow(),column);
+	        			  //table.editCellAt(row,2);
+	        			 System.out.println(table.getSelectedRow()+" "+table.getSelectedColumn());
 	        	  }
+		        	  
 	        	  }
 	          }
 		});
@@ -427,29 +421,31 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 		        	  if(editValue.equals("")) {
 	        			  //updateScore();
 	        		  }else {
-		        	  stuID=tableModel.getValueAt(table.getSelectedRow()+1, 1).toString();	
-        			  double newScore=Double.parseDouble(editValue);
-        			  int partID=part.getPid();
-        			  for(int i=0;i<grades.size();i++) {
-        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
-        					  grades.get(i).setGrade(newScore);
-//        					  gradeBack.updateGrade(grades.get(i)); TODO
-        					  try {
-        						  backend.updateGrade(grades.get(i));
-        					  } catch (SQLException e1) {
-        						  // TODO Auto-generated catch block
-        						  e1.printStackTrace();
-        					  }
-        					  data[i][2]=String.valueOf(newScore);
-        					  //table.updateUI();
-        					  tableModel=(DefaultTableModel) table.getModel();
-        					  tableModel.setDataVector(data,columnNames);
-        					  tableModel.fireTableStructureChanged();
-        					  break;
-        				  }
-        			  }
-        			  table.setRowSelectionInterval(row, row);
-        			  table.editCellAt(row,2);
+			        	  stuID=tableModel.getValueAt(table.getSelectedRow()+1, 1).toString();	
+	        			  double newScore=Double.parseDouble(editValue);
+	        			  int partID=part.getPid();
+	        			  for(int i=0;i<grades.size();i++) {
+	        				  if(grades.get(i).getPid() == (partID)&&grades.get(i).getSid().equals(stuID)) {
+	        					  grades.get(i).setGrade(newScore);
+	        					  //gradeBack.updateGrade(grades.get(i)); 
+	        					  try {
+	        						  backend.updateGrade(grades.get(i));
+	        					  } catch (SQLException e1) {
+	        						  // TODO Auto-generated catch block
+	        						  e1.printStackTrace();
+	        					  }
+	        					  data[i][2]=String.valueOf(newScore);
+	        					  //table.updateUI();
+	        					  tableModel=(DefaultTableModel) table.getModel();
+	        					  tableModel.setDataVector(data,columnNames);
+	        					  tableModel.fireTableStructureChanged();
+	        					  break;
+	        				  }
+	        			  }
+	        			  table.setRowSelectionInterval(row, row);
+	        			 // table.focus();
+	        			  table.editCellAt(row,2);
+	        			  System.out.print("!!!");
 	        		  }
 		        	  
 	        	  }
@@ -457,7 +453,6 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	          
 		});
 		table.setActionMap(up);
-
 	}
 	
 	public void setNameScore() {
@@ -484,101 +479,90 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
         textField_2.setText(selectedName);
         
 	}
-	
-
-
-
-	public static boolean isNumeric(String str)
-	{
-	  try{
-	     Integer.parseInt(str);
-	     return true;
-	  }catch(NumberFormatException e){
-		  return false;
-	  }
-	}
-
-
-	
-	public void updateScore() {
-		int selectedRowIndex = table.getSelectedRow();
-		stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
-		String stuName=textField_2.getText();
-		String score=textField.getText();
-			double newScore=Double.valueOf(textField.getText());
-			int partID=part.getPid();
-			//System.out.println(partID+stuID);
-			for(int i=0;i<grades.size();i++) {
-				if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {	
-					//System.out.println(newScore);
-					grades.get(i).setGrade(newScore);
-	//				gradeBack.updateGrade(grades.get(i)); TODO
-					 try {
-						  backend.updateGrade(grades.get(i));
-					  } catch (SQLException e1) {
-						  // TODO Auto-generated catch block
-						  e1.printStackTrace();
-					  }
-					 
-					this.data[i][2]=String.valueOf(newScore);
-					//System.out.println(this.data[i][2]);
-					tableModel=(DefaultTableModel) table.getModel();
-					tableModel.setDataVector(data,columnNames);
-					tableModel.fireTableStructureChanged();
-					break;
-				}
-			}
-		
-		//Grade newgrade=new Grade(stuID,partID,newScore);
-	}
-
-	
-	public void alert(String message){
-        JOptionPane.showMessageDialog(null, message);
+    	
+    	public static boolean isNumeric(String str)
+    	{
+    	  try{
+    	     Integer.parseInt(str);
+    	     return true;
+    	  }catch(NumberFormatException e){
+    		  return false;
+    	  }
+    	}
+    	
+    	public void updateScore() {
+    		int selectedRowIndex = table.getSelectedRow();
+    		stuID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+    		String stuName=textField_2.getText();
+    		String score=textField.getText();
+    			double newScore=Double.valueOf(textField.getText());
+    			int partID=part.getPid();
+    			//System.out.println(partID+stuID);
+    			for(int i=0;i<grades.size();i++) {
+    				if(grades.get(i).getPid() == partID &&grades.get(i).getSid().equals(stuID)) {	
+    					//System.out.println(newScore);
+    					grades.get(i).setGrade(newScore);
+    	//				gradeBack.updateGrade(grades.get(i)); TODO
+    					 try {
+    						  backend.updateGrade(grades.get(i));
+    					  } catch (SQLException e1) {
+    						  // TODO Auto-generated catch block
+    						  e1.printStackTrace();
+    					  }
+    					 
+    					this.data[i][2]=String.valueOf(newScore);
+    					//System.out.println(this.data[i][2]);
+    					tableModel=(DefaultTableModel) table.getModel();
+    					tableModel.setDataVector(data,columnNames);
+    					tableModel.fireTableStructureChanged();
+    					break;
+    				}
+    			}
+    		
+    		//Grade newgrade=new Grade(stuID,partID,newScore);
+    	}
+    	
+    	public void alert(String message){
+            JOptionPane.showMessageDialog(null, message);
+        }
+    	public void openNext() {
+    		int selectedRowIndex = table.getSelectedRow();
+    		String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
+    		if(selectedRowIndex!=-1) {
+    			updateScore();
+    			//if(!textField_1.getText().equals("")) {
+    				String comment=textField_1.getText();
+    				if(comment!=null) {
+    			        for(int i=0;i<grades.size();i++) {
+    			        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
+    			        		if(isBlankString(comment)) {
+    			        			grades.get(i).setComment("");
+    			        			System.out.println(".....");
+    			        		}else {
+    			        			grades.get(i).setComment(comment);
+    			        		}
+    			        		//grades.get(i).setComment(comment);
+    	//		        		gradeBack.updateGrade(grades.get(i)); TODO
+    			        		try {
+    								  backend.updateGrade(grades.get(i));
+    							  } catch (SQLException e1) {
+    								  // TODO Auto-generated catch block
+    								  e1.printStackTrace();
+    							  }
+    			        		//alert("Save comment!");
+    			        	}
+    			        }
+    				}
+    			}	
+    		//}
+    		ViewGradeFrame next = new ViewGradeFrame(backend);
+    		next.setVisible(true);
+    		dispose();
+    	}
+    	// This is the first window, no previous window exists
+    	public void openPrevious() {
+    		ViewGradeFrame next=new ViewGradeFrame(backend);
+    		next.setVisible(true);
+    		dispose();
+    	}
     }
-
-	public void openNext() {
-		int selectedRowIndex = table.getSelectedRow();
-		String ID=tableModel.getValueAt(selectedRowIndex, 1).toString();
-		if(selectedRowIndex!=-1) {
-			updateScore();
-			//if(!textField_1.getText().equals("")) {
-				String comment=textField_1.getText();
-				if(comment!=null) {
-			        for(int i=0;i<grades.size();i++) {
-			        	if(grades.get(i).getPid() == (part.getPid())&&grades.get(i).getSid().equals(ID)) {
-			        		if(isBlankString(comment)) {
-			        			grades.get(i).setComment("");
-			        			System.out.println(".....");
-			        		}else {
-			        			grades.get(i).setComment(comment);
-			        		}
-			        		//grades.get(i).setComment(comment);
-	//		        		gradeBack.updateGrade(grades.get(i)); TODO
-			        		try {
-								  backend.updateGrade(grades.get(i));
-							  } catch (SQLException e1) {
-								  // TODO Auto-generated catch block
-								  e1.printStackTrace();
-							  }
-			        		//alert("Save comment!");
-			        	}
-			        }
-				}
-			}	
-		//}
-		ViewGradeFrame next = new ViewGradeFrame(backend);
-		next.setLocationRelativeTo(null);
-		next.setVisible(true);
-		dispose();
-	}
-
-	// This is the first window, no previous window exists
-	public void openPrevious() {
-		ViewGradeFrame next=new ViewGradeFrame(backend);
-		next.setLocationRelativeTo(null);
-		next.setVisible(true);
-		dispose();
-	}
-}
-
