@@ -1,6 +1,7 @@
 package gui;
 
 import objects.Category;
+import objects.Part;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -73,11 +74,15 @@ public class CategoryTableModel extends AbstractTableModel {
                 c.setName((String) value);
                 break;
             case 1:
-                if ((Double) value > 100.0) {
-                    alert("Percentage cannot be over 100!");
-                    return; // don't update and don't fire
+                double oldPercent = c.getPercentage();
+                double newPercent = (Double) value;
+                c.setPercentage(newPercent);
+                if (getTotalPercent() > 100.0) {
+                    alert("Percentages do not add to 100!");
+                    c.setPercentage(oldPercent);
+                    return; // don't fire
                 }
-                c.setPercentage((Double) value);
+                // else, everything is fine
                 break;
         }
         fireTableCellUpdated(row, col);
@@ -99,6 +104,14 @@ public class CategoryTableModel extends AbstractTableModel {
         int index=categories.indexOf(c);
         categories.remove(index);
         fireTableRowsDeleted(index, index);
+    }
+
+    public double getTotalPercent() {
+        double total = 0.0;
+        for (Category c: categories) {
+            total += c.getPercentage();
+        }
+        return total;
     }
 
     public void alert(String message){

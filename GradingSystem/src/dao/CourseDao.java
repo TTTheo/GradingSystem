@@ -44,7 +44,7 @@ public class CourseDao extends Dao<Course>{
     public void delete(Course course) throws SQLException {
 
         String query = String.format(
-                "DELETE FROM Course (course_id, semester_id, name) VALUES ('%s', %d, '%s')",
+                "DELETE FROM Course WHERE course_id = '%s' and semester_id =  %d and name = '%s'",
                 course.getCourseId(),
                 course.getSemesterId(),
                 course.getName()

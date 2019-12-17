@@ -28,9 +28,8 @@ public class PartFrame extends JFrame implements FrameActions, TableModelListene
     private JLabel categoryMenuLabel ;
     private JLabel selectedPartLabel ;
 
-    private JButton editBtn ;
-    private JButton deleteBtn ;
     private JButton addBtn ;
+    private JButton deleteBtn ;
 
     private JScrollPane partTableScrollPane ;
     private JTextField selectedPartField;
@@ -73,12 +72,6 @@ public class PartFrame extends JFrame implements FrameActions, TableModelListene
         categoryMenuLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
         categoryMenuLabel.setBounds(31, 27, 135, 37);
         contentPane.add(categoryMenuLabel);
-
-        editBtn = new JButton("Edit");
-        editBtn.setBackground(SystemColor.controlHighlight);
-        editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        editBtn.setBounds(700, 207, 130, 37);
-        contentPane.add(editBtn);
 
         addBtn = new JButton("Add new");
         addBtn.setBackground(SystemColor.controlHighlight);
@@ -134,17 +127,19 @@ public class PartFrame extends JFrame implements FrameActions, TableModelListene
 
         deleteBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int selectedRowIndex = partTable.getSelectedRow();
-                selectedPart = tableModel.getPartAt(selectedRowIndex);
-                // set the selected row data into jtextfields
-                String semesterInfo = selectedPart.toString();
-                selectedPartField.setText(semesterInfo);
+                // Delete the selected row
+                if (selectedPart == null) {
+                    return;
+                }
                 try {
                     backend.deletePart(selectedPart);
                 } catch (SQLException ex) {
                     alert(ex.toString());
+                    ex.printStackTrace();
                 }
                 tableModel.deleteRow(selectedPart);
+                selectedPart = null;
+                selectedPartField.setText("");
             }
         });
 
@@ -187,13 +182,11 @@ public class PartFrame extends JFrame implements FrameActions, TableModelListene
         int row = e.getFirstRow();
         int type = e.getType();
 
-        Part changed = tableModel.getPartAt(row);
         try {
-            // Insert is already handled by the Add button
+            // Insert and delete are already handled by the Add button
             if (type == TableModelEvent.UPDATE) {
+                Part changed = tableModel.getPartAt(row);
                 backend.updatePart(changed);
-            } else if (type == TableModelEvent.DELETE) {
-                backend.deletePart(changed);
             }
         } catch (SQLException ex) {
             alert(ex.toString());

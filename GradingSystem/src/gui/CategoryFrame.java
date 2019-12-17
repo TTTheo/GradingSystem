@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -30,7 +29,6 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
     private JLabel selectedCategoryLabel ;
 
     private JButton viewBtn ;
-    private JButton editBtn ;
     private JButton deleteBtn ;
     private JButton addBtn ;
 
@@ -81,14 +79,8 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
         viewBtn = new JButton("View");
         viewBtn.setBackground(SystemColor.controlHighlight);
         viewBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        viewBtn.setBounds(700, 142, 130, 37);
+        viewBtn.setBounds(700, 207, 130, 37);
         contentPane.add(viewBtn);
-
-        editBtn = new JButton("Edit");
-        editBtn.setBackground(SystemColor.controlHighlight);
-        editBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        editBtn.setBounds(700, 207, 130, 37);
-        contentPane.add(editBtn);
 
         addBtn = new JButton("Add new");
         addBtn.setBackground(SystemColor.controlHighlight);
@@ -130,11 +122,6 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
     }
 
     public void addActions(){
-        editBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-
         addBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Category added = new Category("New category");
@@ -158,17 +145,17 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
 
         deleteBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int selectedRowIndex = categoryTable.getSelectedRow();
-                selectedCategory = tableModel.getCategoryAt(selectedRowIndex);
-                // set the selected row data into jtextfields
-                String semesterInfo = selectedCategory.toString();
-                selectedCategoryField.setText(semesterInfo);
+                if (selectedCategory == null) {
+                    return;
+                }
                 try {
                     backend.deleteCategory(selectedCategory);
                 } catch (SQLException ex) {
                     alert(ex.toString());
                 }
                 tableModel.deleteRow(selectedCategory);
+                selectedCategory = null;
+                selectedCategoryField.setText("");
             }
         });
 
@@ -215,13 +202,11 @@ public class CategoryFrame extends JFrame implements FrameActions, TableModelLis
 		int row = e.getFirstRow();
 		int type = e.getType();
 
-		Category changed = tableModel.getCategoryAt(row);
 		try {
-		    // Insert is already handled by the Add button
+		    // Insert and Delete are already handled by their buttons
             if (type == TableModelEvent.UPDATE) {
+                Category changed = tableModel.getCategoryAt(row);
                 backend.updateCategory(changed);
-            } else if (type == TableModelEvent.DELETE) {
-                backend.deleteCategory(changed);
             }
         } catch (SQLException ex) {
 		    alert(ex.toString());
