@@ -363,8 +363,8 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	        		  //int row=table.getSelectedRow();
         			  table.editCellAt(table.getSelectedRow()+1,2);
 	        		  table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
-	        		  int row=table.getEditingRow();
-	        		  //int column=table.getSelectedColumn();
+	        		  int row=table.getSelectedRow();
+	        		  int column=table.getSelectedColumn();
 	        		  setNameScore();
 	        		  editValue=tableModel.getValueAt(row-1, 2).toString();
 	        		  System.out.println(editValue);
@@ -394,11 +394,7 @@ public class RecordGradeFrame extends JFrame implements FrameActions{
 	        				  }
 	        			  }
 	        			  table.editCellAt(row,2);
-	        			 // System.out.println(table.getSelectedRow());
 	        			  table.setRowSelectionInterval(row, row);
-	        			  //System.out.println(table.getSelectedRow());
-	        			 // table.editCellAt(table.getSelectedRow(),column);
-	        			  //table.editCellAt(row,2);
 	        			 System.out.println(table.getSelectedRow()+" "+table.getSelectedColumn());
 	        	  }
 		        	  
