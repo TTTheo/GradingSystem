@@ -129,6 +129,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 		for(int i=0;i<category.size();i++) {
 			for(int j=0;j<category.get(i).getPartList().size();j++) {
 				parts.add(category.get(i).getPartList().get(j));
+				System.out.println(category.get(i).getPartList().get(j).getTotalScore());
 			}
 		}
 		tableModel=setNewModel();
@@ -272,6 +273,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				ManageStudentsFrame manageStu=new ManageStudentsFrame(backend);
 				manageStu.setLocationRelativeTo(null);
 				manageStu.setVisible(true);
+				dispose();
 			}
 		});
 		
@@ -280,6 +282,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 				EditCategoryFrame edit=new EditCategoryFrame(backend);
 				edit.setLocationRelativeTo(null);
 				edit.setVisible(true);
+				dispose() ;
 			}
 		});
 		
