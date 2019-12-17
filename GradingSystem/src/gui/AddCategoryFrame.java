@@ -121,10 +121,12 @@ public class AddCategoryFrame extends JFrame implements FrameActions{
 		btnBack.setBackground(SystemColor.controlHighlight);
 		
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 17));
+
 		btnBack.setBounds(50, 533, 97, 24);
 		contentPane.add(btnBack);
 		
 		JLabel lblNewLabel = new JLabel("Category Left to Create: " + (categoryLeft - 1));
+
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblNewLabel.setBounds(308, 497, 208, 30);
 		contentPane.add(lblNewLabel);
