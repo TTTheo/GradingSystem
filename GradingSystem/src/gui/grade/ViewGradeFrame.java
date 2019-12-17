@@ -227,6 +227,7 @@ public class ViewGradeFrame extends JFrame implements FrameActions{
 								if(comment!=null&&!isBlankString(comment)) {
 									judge=true;
 									ViewComment view=new ViewComment(comment);
+									view.setLocationRelativeTo(null);
 									view.setVisible(true);
 									break;
 								}else {

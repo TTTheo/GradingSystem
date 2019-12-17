@@ -25,7 +25,10 @@ public class Student {
 	    this(fname, lname, sid, email);
 		this.courses = courses;
 	}
-
+	
+	public String toString() {
+		return fname + " " + lname ;
+	}
 	public String getEmail() {
 		return email;
 	}
