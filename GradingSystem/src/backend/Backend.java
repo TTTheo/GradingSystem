@@ -139,6 +139,26 @@ public class Backend {
 		return courses;
 	}
 
+	// Gets every single course
+	public ArrayList<Course> getAllCourses() {
+		ArrayList<Course> courses = null;
+		try {
+			courses = courseDao.getAll();
+			for (Course course : courses) {
+				// Get all the categories of this course
+				ArrayList<Category> cats = getCategories(course);
+				course.setCategories(cats);
+
+				// Get all the students of this course
+				ArrayList<Student> students = getAllStudents(course);
+				course.setStudents(students);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return courses;
+	}
+
 	// Get a course by it's course id (eg. "cs591")
 	// Populates the course's categories (and parts) as well
 	public Course getCourse(String courseId) {
@@ -231,6 +251,13 @@ public class Backend {
 			for (Part part : parts) {
 				deletePart(part);
 			}
+		}
+	}
+
+	// Deletes all categories for a course
+	public void deleteAllCategories(Course course) throws SQLException {
+		for (Category c: getCategories(course)) {
+		    deleteCategory(c);
 		}
 	}
 

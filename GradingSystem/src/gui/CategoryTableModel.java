@@ -74,12 +74,15 @@ public class CategoryTableModel extends AbstractTableModel {
                 c.setName((String) value);
                 break;
             case 1:
+                double oldPercent = c.getPercentage();
                 double newPercent = (Double) value;
-                if (getTotalPercent() + newPercent > 100.0) {
-                    alert("Percentages do not add to 100!");
-                    return; // don't update and don't fire
-                }
                 c.setPercentage(newPercent);
+                if (getTotalPercent() > 100.0) {
+                    alert("Percentages do not add to 100!");
+                    c.setPercentage(oldPercent);
+                    return; // don't fire
+                }
+                // else, everything is fine
                 break;
         }
         fireTableCellUpdated(row, col);

@@ -1,7 +1,6 @@
 package gui.grade;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
@@ -13,20 +12,13 @@ import objects.Category;
 import objects.Course;
 import objects.Part;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.JTable;
-
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import java.awt.Font;
 import java.awt.SystemColor;
 
@@ -36,7 +28,8 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	private JTable CategoryTable;
 	private JScrollPane scrollPane;		
 	private JButton editBtn;
-	private JTextField textField;
+	private JButton applyBtn;
+	private JComboBox comboBox;
 	private JButton CancelButton ;
 
 	private Course course;
@@ -85,13 +78,23 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 		lblNewLabel.setBounds(575, 118, 250, 17);
 		contentPane.add(lblNewLabel);
 
-//		textField = new JTextField();
-//		textField.setFont(new Font("Tahoma", Font.PLAIN, 17));
-//		textField.setEditable(false);
-//		textField.setBounds(605, 145, 143, 35);
-//		contentPane.add(textField);
-//		textField.setColumns(10);
-		
+		comboBox = new JComboBox();
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		comboBox.setBounds(560, 150, 250, 33);
+		contentPane.add(comboBox);
+
+		// Populate combobox
+		comboBox.addItem("");
+		for(Course c: backend.getAllCourses()) {
+			comboBox.addItem(c.getCourseId());
+		}
+
+		applyBtn = new JButton("Apply previous");
+		applyBtn.setBackground(SystemColor.controlHighlight);
+		applyBtn.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		applyBtn.setBounds(560, 200, 180, 35);
+		contentPane.add(applyBtn);
+
 		CancelButton = new JButton("Back");
 		CancelButton.setBackground(SystemColor.controlHighlight);
 		CancelButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -184,14 +187,70 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
 	}
 	
 	public void addActions(){
-		editBtn.addActionListener(new ActionListener() {
+		applyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CategoryFrame next = new CategoryFrame(backend) ;
-				next.setLocationRelativeTo(null);
-				next.setVisible(true);
+				String selected = (String) comboBox.getSelectedItem();
+				if (selected.equals("") || selected.equals(course.getCourseId())) {
+					alert("Select a valid course first");
+					return;
+				}
+
+				// First delete all current categories and parts
+				System.out.println("item state changed");
+                try {
+                	backend.deleteAllCategories(course);
+				}
+                catch (SQLException ex) {
+                	alert(ex.toString());
+                	ex.printStackTrace();
+				}
+
+			    Course selectedCourse = backend.getCourse(selected);
+				ArrayList<Category> categories = new ArrayList<Category>();
+			    try {
+					categories = backend.getCategories(selectedCourse);
+				} catch (SQLException ex) {
+			    	alert(ex.toString());
+			    	ex.printStackTrace();
+				}
+
+			    // Copy the categories for this category
+				for (Category c : categories) {
+					Category newCategory = new Category(
+						c.getName(),
+						c.getPartNum(),
+						courseId,
+						c.getPercentage()
+					);
+					try {
+						backend.addCategory(newCategory);
+						for (Part p : backend.getParts(c)) {
+							Part newPart = new Part(
+								p.getName(),
+								newCategory.getCid(),
+								p.getTotalScore(),
+								p.getPercentage()
+							);
+							backend.addPart(newPart);
+						}
+					} catch (SQLException ex) {
+						alert(ex.toString());
+						ex.printStackTrace();
+					}
+				}
+				EditCategoryFrame refresh = new EditCategoryFrame(backend);
+				refresh.setLocationRelativeTo(null);
 				dispose();
+				refresh.setVisible(true);
 			}
 		});
+
+		editBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    openNext();
+			}
+		});
+
 		CancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPrevious();
@@ -204,6 +263,9 @@ public class EditCategoryFrame extends JFrame implements FrameActions{
     }
 
 	public void openNext() {
+		CategoryFrame next = new CategoryFrame(backend);
+		next.setLocationRelativeTo(null);
+		next.setVisible(true);
 		dispose();
 	}
 
